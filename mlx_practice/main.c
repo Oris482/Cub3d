@@ -8,7 +8,7 @@
 #include <errno.h>
 #include <math.h>
 
-void	graphic_interface_init(t_info *info)
+void	graphic_resource_init(t_info *info)
 {
 	info->mlx_ptr = mlx_init();
 	info->win_ptr = \
@@ -160,7 +160,7 @@ int	main(int argc, char *argv[])
 	t_game	game;
 
 	init_game(argc, argv, &game);
-	graphic_interface_init(&game.info);
+	graphic_resource_init(&game.info);
 	loop(&game);
 	return (0);
 }
