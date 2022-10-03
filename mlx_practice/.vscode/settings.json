@@ -1,0 +1,8 @@
+{
+	"files.associations": {
+		"mlx.h": "c",
+		"cdefs.h": "c",
+		"mlx_opengl.h": "c"
+	},
+	"C_Cpp.errorSquiggles": "Disabled"
+}
