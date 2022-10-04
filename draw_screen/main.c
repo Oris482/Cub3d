@@ -1,45 +1,4 @@
-#include <math.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <stdio.h>
-#include <errno.h>
-#include <string.h>
-#include "mlx/mlx.h"
-#define PI M_PI
-#define MAP_WIDTH 10
-#define MAP_HEIGHT 10
-#define HALF_VIEW_ANGLE 30
-#define SCREEN_WIDTH 400
-#define SCREEN_HEIGHT SCREEN_WIDTH * 0.75
-
-enum e_direction
-{
-	NO = 1 << 0,
-	SO = 1 << 1,
-	EA = 1 << 2,
-	WE = 1 << 3
-};
-
-typedef struct s_ray_spot
-{
-	t_vector2	vec_hit_point;
-	double		distance;
-	int			hit_side;
-}	t_ray_spot;
-
-
-typedef struct s_vector2
-{
-	double	vec_x;
-	double	vec_y;
-}	t_vector2;
-
-
-typedef struct s_player
-{
-	t_vector2	vec_pos;
-	double		camera_angle;
-}	t_player;
+#include "./cub3d.h"
 
 void	init_player(t_player *player, int argc, char *argv[])
 {
@@ -68,7 +27,7 @@ void	init_player(t_player *player, int argc, char *argv[])
 	printf("%lf, %lf, %lf", player->vec_pos.vec_x, player->vec_pos.vec_y, player->camera_angle);
 }
 
-void	init_graphic_resource(void **mlx_ptr, void **win_ptr, t_ray_spot **spot)
+void	init_graphic_resource(void **mlx_ptr, void **win_ptr, t_ray **ray)
 {
 	*mlx_ptr = mlx_init();
 	if (*mlx_ptr == NULL)
@@ -82,8 +41,8 @@ void	init_graphic_resource(void **mlx_ptr, void **win_ptr, t_ray_spot **spot)
 		printf("mlx_new_window fail");
 		exit(1);
 	}
-	*spot = calloc(SCREEN_WIDTH, sizeof(t_ray_spot));
-	if (*spot == NULL)
+	*ray = calloc(SCREEN_WIDTH, sizeof(t_ray));
+	if (*ray == NULL)
 	{
 		perror(strerror(errno));
 		exit(errno);
@@ -153,7 +112,7 @@ int	main(int argc, char *argv[])
 	t_player	player;
 	void		*mlx_ptr;
 	void		*win_ptr;
-	t_ray_spot	*ray_spots;
+	t_ray		*ray;
 	// 맵은 벽포함 10 X 10의 사이즈로 가정함
 	static char	*map[] = {
 		"1111111111",
@@ -168,7 +127,7 @@ int	main(int argc, char *argv[])
 		"1111111111"
 	};
 	init_player(&player, argc, argv);
-	init_graphic_resource(&mlx_ptr, &win_ptr, &ray_spots);
-	render(&player, ray_spots, mlx_ptr, win_ptr);
+	init_graphic_resource(&mlx_ptr, &win_ptr, &ray);
+	render(&player, ray, mlx_ptr, win_ptr);
 	mlx_loop(mlx_ptr);
 }
