@@ -71,7 +71,7 @@ void	turn_view(t_game *game)
 
 int	main_loop(t_game *game)
 {
-	// printf("X : %f Y: %f Angle: %f\n", game->player.vec_pos.x, game->player.vec_pos.y, game->player.camera_angle);
+	printf("X : %f Y: %f Angle: %f\n", game->player.vec_pos.x, game->player.vec_pos.y, game->player.camera_angle);
 	// 여기서는 눌린 키가 있어야 그리기 때문에 스프라이트는 없다고 가정함.
 	if (game->pressed_keyset != 0)
 	{
