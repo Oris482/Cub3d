@@ -63,10 +63,19 @@ typedef struct s_player
 	double			rotate_speed;
 }	t_player;
 
+typedef struct	s_bg_data {
+	void	*img;
+	char	*addr;
+	int		bits_per_pixel;
+	int		line_length;
+	int		endian;
+}   t_bg_data;
+
 typedef struct s_game
 {
 	t_info			info;
 	t_player		player;
+	t_bg_data		bg_data;
 	unsigned int	pressed_keyset;
 	char			**map;
 	void			*texture[4];

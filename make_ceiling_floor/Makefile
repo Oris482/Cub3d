@@ -6,7 +6,8 @@ LFLAGS = -L${MLX_DIR} -lmlx -framework OpenGL -framework AppKit
 IFLAGS = -I${MLX_DIR}
 MLX_LIB = libmlx.dylib
 SRCS	= main.c	\
-			degree_utils.c
+			degree_utils.c	\
+			make_ceiling_floor_image.c
 
 OBJS = ${SRCS:.c=.o}
 
