@@ -179,8 +179,8 @@ int	main(int argc, char *argv[])
 	init_game(argc, argv, &game);
 	graphic_resource_init(&game.info);
 	make_ceiling_floor_image(&game);
-	y_top = 400;
-	y_bottom = 800;
+	y_top = 200;
+	y_bottom = 300;
 	x = 0;
 	while (x <= game.info.screen_x / 2)
 	{
@@ -189,7 +189,7 @@ int	main(int argc, char *argv[])
 	}
 	while (x <= game.info.screen_x)
 	{
-		draw_ceiling_floor(&game, x, (y_top - (game.info.screen_x / 12)) + ((x - (game.info.screen_x / 2)) / 4), (y_bottom - (game.info.screen_x / 12)) + ((x - (game.info.screen_x / 2)) / 4), 0.2);
+		draw_ceiling_floor(&game, x, (y_top - (game.info.screen_x / 12)) + ((x - (game.info.screen_x / 2)) / 6), (y_bottom - (game.info.screen_x / 12)) + ((x - (game.info.screen_x / 2)) / 6), 0.2);
 		x++;
 	}
 	mlx_put_image_to_window(game.info.mlx_ptr, game.info.win_ptr, game.bg_data.img, 0, 0);
