@@ -2,7 +2,7 @@
 
 void	exit_with_err(char *custom_msg, int exit_code)
 {
-	printf("ERROR: ");
+	printf("ERROR\n:");
 	if (custom_msg != NULL)
 		printf("%s\n", custom_msg);
 	else

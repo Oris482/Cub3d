@@ -104,13 +104,11 @@ void	draw_ceiling_floor(t_game *game, int x, int y_top, int y_bottom, double fog
 	if (y_top > 0)
 	{
 		set_range_y(y, y_top, 0);
-		printf("ceiling : x = %d y = %d to %d base_fog = %f\n", x, y_top, 0, fog_value);
 		pixel_put_to_img(&game->bg_data, x, y, 0x00FF0000, fog_value);
 	}
 	if (y_bottom < screen_y)
 	{
 		set_range_y(y, y_bottom, screen_y);
-		printf("floor : x = %d y = %d to %d base_fog = %f\n", x, y_bottom, screen_y, fog_value);
 		pixel_put_to_img(&game->bg_data, x, y, 0x0000FF00, fog_value);
 	}
 }

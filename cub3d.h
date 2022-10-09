@@ -6,6 +6,8 @@
 # define KEY_RELEASE_EVENT 3
 
 # include <math.h>
+# include <stdlib.h>
+# include <stdio.h>
 
 enum	e_keyset
 {
@@ -31,6 +33,22 @@ enum	e_key_code
 	KEY_LSHIFT = 57,
 	KEY_LA = 123,
 	KEY_RA = 124
+};
+
+enum	e_element_identifier
+{
+	EA = 0,
+	WE,
+	SO,
+	NO,
+	F,
+	C
+};
+
+enum	e_exit_status
+{
+	E_PERM = 1,
+	E_INVAL = 22,
 };
 
 typedef struct s_vector2
@@ -79,8 +97,10 @@ typedef struct s_game
 	unsigned int	pressed_keyset;
 	char			**map;
 	void			*texture[4];
+	int				texture_width;
+	int				texture_height;
 	unsigned int	floor_color;
-	unsigned int	ceilling_color;
+	unsigned int	ceiling_color;
 }	t_game;
 
 #endif

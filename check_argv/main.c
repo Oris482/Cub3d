@@ -10,7 +10,7 @@
 void    make_ceiling_floor_image(t_game *game);
 void	draw_ceiling_floor(t_game *game, int x, int y_top, int y_bottom, double fog_value);
 
-void	check_argv(int argc, char *argv[]);
+void	check_argv(int argc, char *argv[], t_game *game);
 
 void	graphic_resource_init(t_info *info)
 {
@@ -27,52 +27,6 @@ void	graphic_resource_init(t_info *info)
 												info->screen_y, "cub3D");
 }
 
-void	draw(t_game *game)
-{
-
-}
-
-t_vector2	get_move_angle(t_game *game, const unsigned int key)
-{
-	// t_vector2	vec_delta_move;
-	// double		x
-	// if ((pressed_key | KEY_W) != 0 && (pressed_key | KEY_S) == 0)
-	// {
-
-	// }
-	// else if ((pressed_key | KEY_W) 0= 0 && (pressed_key | KEY_S) != 0)
-	// {
-	// 	move_delta_x += game->player.move_speed * cos(game->player.camera_angle);
-	// 	move_delta_y += game->player.move_speed * sin(game->player.camera_angle);
-	// }
-	// if ((pressed_key | KEY_W) != 0 && (pressed_key | KEY_S) == 0)
-	// {
-	// 	move_delta_x += game->player.move_speed * cos(game->player.camera_angle);
-	// 	move_delta_y += game->player.move_speed * sin(game->player.camera_angle);
-	// }
-	// else if ((pressed_key | KEY_W) 0= 0 && (pressed_key | KEY_S) != 0)
-	// {
-	// 	move_delta_x += game->player.move_speed * cos(game->player.camera_angle);
-	// 	move_delta_y += game->player.move_speed * sin(game->player.camera_angle);
-	// }
-}
-
-void	move(t_game *game)
-{
-	const unsigned int	pressed_key = game->pressed_keyset;
-	double				mcamera_angle;
-	t_vector2			move_angle;
-	double				move_delta_x;
-	double				move_delta_y;
-
-	mcamera_angle = 0;
-}
-
-void	turn_view(t_game *game)
-{
-	// mlx_hook(game->info.win_ptr, 2, 1L << 0, )
-}
-
 int	main_loop(t_game *game)
 {
 	// printf("X : %f Y: %f Angle: %f\n", game->player.vec_pos.x, game->player.vec_pos.y, game->player.camera_angle);
@@ -83,14 +37,14 @@ int	main_loop(t_game *game)
 		// 	move_player(game);
 		// if (game->pressed_keyset | KEY_ARROW)
 		// 	rotate_player(game);
-		draw(game);
+		;
 	}
 	return (0);
 }
 
 int	exit_game(int exit_status)
 {
-	exit(0);
+	exit(exit_status);
 }
 
 int	ft_key_press(int key, t_game *game)
@@ -116,6 +70,7 @@ int	ft_key_press(int key, t_game *game)
 		*keyset_ptr |= KEYSET_RA;
 	if (key == KEY_LSHIFT)
 		*keyset_ptr |= KEYSET_LSHIFT;
+	return (0);
 }
 
 int	ft_key_release(int key, t_game *game)
@@ -136,6 +91,7 @@ int	ft_key_release(int key, t_game *game)
 		*keyset_ptr &= ~KEYSET_RA;
 	if (key == KEY_LSHIFT)
 		*keyset_ptr &= ~KEYSET_LSHIFT;
+	return (0);
 }
 
 void	loop(t_game *game)
@@ -158,17 +114,10 @@ void	init_game(int argc, char **argv, t_game *game)
 		[5] = "10000N0001",
 		[6] = "1111111111"
 	};
-	// if (argc != 2)
-	// {
-	// 	exit(22);
-	// 	perror(strerror(22));
-	// }
 	game->player.move_speed = 0.001;
 	game->player.rotate_speed = 0.01;
 	game->player.camera_angle = 0;
 	game->pressed_keyset = 0;
-	// 여기서 파일오픈해서 파싱해서 넣어야함.
-	game->map = (char **)tmp_map;
 }
 
 int	main(int argc, char *argv[])
@@ -178,9 +127,9 @@ int	main(int argc, char *argv[])
 	int		y_bottom;
 	int		x;
 
-	check_argv(argc, argv);
 	init_game(argc, argv, &game);
 	graphic_resource_init(&game.info);
+	check_argv(argc, argv, &game);
 	make_ceiling_floor_image(&game);
 	y_top = 200;
 	y_bottom = 300;
