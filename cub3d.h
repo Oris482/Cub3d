@@ -89,16 +89,21 @@ typedef struct	s_bg_data {
 	int		endian;
 }   t_bg_data;
 
+typedef struct	s_texture {
+	void	*img;
+	char	*filename;
+	int		texture_width;
+	int		texture_height;
+}	t_texture;
+
 typedef struct s_game
 {
 	t_info			info;
 	t_player		player;
 	t_bg_data		bg_data;
+	t_texture		texture[4];
 	unsigned int	pressed_keyset;
 	char			**map;
-	void			*texture[4];
-	int				texture_width;
-	int				texture_height;
 	unsigned int	floor_color;
 	unsigned int	ceiling_color;
 }	t_game;
