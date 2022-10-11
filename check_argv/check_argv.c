@@ -29,11 +29,16 @@ enum	e_rgb
 void	exit_with_err(char *custom_msg, int exit_code);
 size_t	ft_strlen(const char *s);
 char	*ft_strchr(const char *s, const char c);
-int	ft_strcmp(const char *s1, const char *s2);
+int		ft_strcmp(const char *s1, const char *s2);
 char	*ft_substr(const char *start, const char *end);
+char	*ft_strcpy(const char *s);
 char	*get_next_line(int fd);
-int create_trgb(unsigned char t, unsigned char r, \
+int		create_trgb(unsigned char t, unsigned char r, \
 								unsigned char g, unsigned char b);
+unsigned char	get_r(int trgb);
+unsigned char	get_g(int trgb);
+unsigned char	get_b(int trgb);
+
 
 void	seperate_by_key_value(char **pair, char *line)
 {
@@ -51,7 +56,6 @@ void	seperate_by_key_value(char **pair, char *line)
 	while (*line != '\0' && *line != '\n')
 		line++;
 	pair[VALUE] = ft_substr(start, line);
-	printf("%s : %s\n", pair[KEY], pair[VALUE]);
 }
 
 int	get_element_identifier(char *key)
@@ -72,16 +76,17 @@ int	get_element_identifier(char *key)
 		return (ERROR);
 }
 
-void	set_wall_texture(t_game *game, int element_identifier, char *texture_file)
+void	set_wall_texture(t_game *game, int element_identifier, \
+												char *texture_file)
 {
-	const void	*target = game->texture[element_identifier];
+	t_texture	*target;
 
-	printf("filename : %s\n", texture_file);
-	target = mlx_xpm_file_to_image(game->info.mlx_ptr, texture_file, \
-									&game->texture_width, &game->texture_height);
-	if (target == NULL)
+	target = &game->texture[element_identifier];
+	target->filename = ft_strcpy(texture_file);
+	target->img = mlx_xpm_file_to_image(game->info.mlx_ptr, texture_file, \
+								&target->texture_width, &target->texture_height);
+	if (target->img == NULL)
 		exit_with_err("can't open texture file", E_PERM);
-
 }
 
 unsigned char	get_color_value(char **rgb_str)
@@ -101,7 +106,8 @@ unsigned char	get_color_value(char **rgb_str)
 	return ((unsigned char)color_value);
 }
 
-void	set_floor_ceiling_color(t_game *game, int element_identifier, char *rgb_str)
+void	set_floor_ceiling_color(t_game *game, int element_identifier, \
+															char *rgb_str)
 {
 	unsigned int	*target;
 	unsigned char	color_value[3];
@@ -159,12 +165,10 @@ void	get_elements_info(int fd, unsigned char *elements_flag, t_game *game)
 		if (pair[KEY] == NULL)
 		{
 			free(line);
-			continue;
+			continue ;
 		}
-		else if (pair[VALUE] == NULL)
-			exit_with_err("not enough elements info or space is missing", E_PERM);
 		element_identifier = get_element_identifier(pair[KEY]);
-		if (element_identifier == ERROR)
+		if (element_identifier == ERROR || pair[VALUE] == NULL)
 			exit_with_err("invalid element source", E_PERM);
 		else if (*elements_flag & get_elements_flag_bit(element_identifier))
 			exit_with_err("duplicate element", E_PERM);
@@ -176,21 +180,15 @@ void	get_elements_info(int fd, unsigned char *elements_flag, t_game *game)
 		free(pair[KEY]);
 		free(pair[VALUE]);
 		free(line);
-		printf("flag = %d\n", *elements_flag);
 		if (*elements_flag == 0b00111111)
 			return ;
 	}
 }
 
-void	check_cub_elements(char *file, t_game *game)
+void	check_cub_elements(int fd, t_game *game)
 {
-	int				fd;
-	char			*line;
 	unsigned char	elements_flag;
 
-	fd = open(file, O_RDONLY);
-	if (fd == ERROR)
-		exit_with_err("fail to open file", E_PERM);
 	elements_flag = 0;
 	get_elements_info(fd, &elements_flag, game);
 	if (elements_flag != 0b00111111)
@@ -221,8 +219,17 @@ void	check_argv(int argc, char *argv[], t_game *game)
 	name_len = ft_strlen(filename);
 	if (name_len > 4 && ft_strcmp(&filename[name_len - 4], ".cub"))
 	{
-		check_cub_elements(argv[1], game);
+		fd = open(argv[1], O_RDONLY);
+		if (fd == ERROR)
+			exit_with_err("fail to open file", E_PERM);
+		check_cub_elements(fd, game);
 	}
 	else
 		exit_with_err("argument must be .cub file", E_INVAL);
+	printf("texture_ea: %s\naddress : %p | width/height : %d/%d\n", game->texture[EA].filename, game->texture[EA].img, game->texture[EA].texture_width, game->texture[EA].texture_height);
+	printf("texture_we: %s\naddress : %p | width/height : %d/%d\n", game->texture[WE].filename, game->texture[WE].img, game->texture[WE].texture_width, game->texture[WE].texture_height);
+	printf("texture_so: %s\naddress : %p | width/height : %d/%d\n", game->texture[SO].filename, game->texture[SO].img, game->texture[SO].texture_width, game->texture[SO].texture_height);
+	printf("texture_no: %s\naddress : %p | width/height : %d/%d\n", game->texture[NO].filename, game->texture[NO].img, game->texture[NO].texture_width, game->texture[NO].texture_height);
+	printf("floor_color: R %d G %d B %d\n", get_r(game->floor_color), get_g(game->floor_color), get_b(game->floor_color));
+	printf("ceiling_color: R %d G %d B %d\n", get_r(game->ceiling_color), get_g(game->ceiling_color), get_b(game->ceiling_color));
 }

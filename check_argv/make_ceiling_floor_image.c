@@ -5,14 +5,6 @@
 #define START	0
 #define END		1
 
-// typedef struct	s_bg_data {
-// 	void	*img;
-// 	char	*addr;
-// 	int		bits_per_pixel;
-// 	int		line_length;
-// 	int		endian;
-// }   t_bg_data;
-
 int create_trgb(unsigned char t, unsigned char r, \
 								unsigned char g, unsigned char b)
 {
@@ -84,16 +76,6 @@ void    make_ceiling_floor_image(t_game *game)
 														game->info.screen_y);
     game->bg_data.addr = mlx_get_data_addr(game->bg_data.img, &game->bg_data.bits_per_pixel, \
 										&game->bg_data.line_length, &game->bg_data.endian);
-	// set_range_y(y, 400, 200);
-	// x = 299;
-	// while (x++ <= 600)
-    // 	pixel_put_to_img(&bg_data, x, y, 0x00FF0000, 0.3);
-	// set_range_y(y, 400, 600);
-	// x = 299;
-	// while (x++ <= 600)
-    // 	pixel_put_to_img(&bg_data, x, y, 0x00FF0000, 0.3);
-    // mlx_put_image_to_window(game->info.mlx_ptr, game->info.win_ptr, bg_data->img, 0, 0);
-    // mlx_destroy_image(game->info.mlx_ptr, bg_data->img);
 }
 
 void	draw_ceiling_floor(t_game *game, int x, int y_top, int y_bottom, double fog_value)
@@ -104,11 +86,11 @@ void	draw_ceiling_floor(t_game *game, int x, int y_top, int y_bottom, double fog
 	if (y_top > 0)
 	{
 		set_range_y(y, y_top, 0);
-		pixel_put_to_img(&game->bg_data, x, y, 0x00FF0000, fog_value);
+		pixel_put_to_img(&game->bg_data, x, y, game->ceiling_color, fog_value);
 	}
 	if (y_bottom < screen_y)
 	{
 		set_range_y(y, y_bottom, screen_y);
-		pixel_put_to_img(&game->bg_data, x, y, 0x0000FF00, fog_value);
+		pixel_put_to_img(&game->bg_data, x, y, game->floor_color, fog_value);
 	}
 }

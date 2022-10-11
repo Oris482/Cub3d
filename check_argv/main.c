@@ -21,8 +21,8 @@ void	graphic_resource_init(t_info *info)
 	info->fov_h = 60.0;
 	info->fov_v = (double)info->screen_y / (double)info->screen_x \
 															* info->fov_h;
-	printf("%d %d\n", info->screen_x, info->screen_y);
-	printf("%f %f\n", info->fov_h, info->fov_v);
+	printf("screen_witdh : %d\nscreen_height : %d\n", info->screen_x, info->screen_y);
+	printf("fov_h : %f\nfov_v : %f\n", info->fov_h, info->fov_v);
 	info->win_ptr = mlx_new_window(info->mlx_ptr, info->screen_x, \
 												info->screen_y, "cub3D");
 }
@@ -129,8 +129,8 @@ int	main(int argc, char *argv[])
 
 	init_game(argc, argv, &game);
 	graphic_resource_init(&game.info);
-	check_argv(argc, argv, &game);
 	make_ceiling_floor_image(&game);
+	check_argv(argc, argv, &game);
 	y_top = 200;
 	y_bottom = 300;
 	x = 0;

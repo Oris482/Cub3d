@@ -66,3 +66,21 @@ char	*ft_substr(const char *start, const char *end)
 	}
 	return (ret);
 }
+
+char	*ft_strcpy(const char *s)
+{
+	size_t	len;
+	int		idx;
+	char	*ret;
+
+	len = ft_strlen(s);
+	ret = (char *)malloc(len + 1);
+	ret[len] = '\0';
+	idx = 0;
+	while (idx < len)
+	{
+		ret[idx] = s[idx];
+		idx++;
+	}
+	return (ret);
+}
