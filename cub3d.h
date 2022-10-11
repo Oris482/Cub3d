@@ -185,7 +185,7 @@ t_linked_map	*add_line_to_list(t_linked_map *linked_map, char *line);
 void			linked_map_to_arr(t_linked_map *linked_map, t_info *info);
 
 // check_map_elements.c
-void			read_map(int fd, t_info *info);
+void			read_map(int fd, t_info *info, t_player *player);
 void			check_map_surrounded_by_wall(char **map, int end_x, int end_y);
 
 // check_argv.c

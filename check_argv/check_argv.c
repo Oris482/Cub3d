@@ -23,7 +23,7 @@ void	check_argv(int argc, char *argv[], t_game *game)
 		check_texture_elements(fd, game);
 		printf("All texture elements loaded. Reading map...\n");
 		printf("*From now on duplicated texture will be considered error\n");
-		read_map(fd, &game->info);
+		read_map(fd, &game->info, &game->player);
 		check_map_surrounded_by_wall(game->info.map, \
 											game->info.map_x, game->info.map_y);
 		printf("Valid map. Start rendering...\n");

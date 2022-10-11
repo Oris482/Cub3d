@@ -1,25 +1,45 @@
 #include "cub3d.h"
 #include "ft_string.h"
 
-static void	_check_map_elements_flag(char *line, unsigned int *elements_flag)
+static void	_set_init_player(char c, t_player *player, int map_x, int map_y)
 {
-	while (*line)
+	player->vec_pos.x = map_x;
+	player->vec_pos.y = map_y;
+	if (c == 'E')
+		player->camera_angle = 0.0;
+	else if (c == 'W')
+		player->camera_angle = 180.0;
+	else if (c == 'S')
+		player->camera_angle = 90.0;
+	else if (c == 'N')
+		player->camera_angle = 270.0;
+}
+
+static void	_check_map_elements_flag(char *line, unsigned int *elements_flag, \
+													t_player *player, int map_y)
+{
+	int	map_x;
+
+	map_x = 0;
+	while (line[map_x])
 	{
-		if (*line == 'E' || *line == 'W' || *line == 'S' || *line == 'N')
+		if (line[map_x] == 'E' || line[map_x] == 'W' \
+			|| line[map_x] == 'S' || line[map_x] == 'N')
 		{
 			if (*elements_flag & PLAYER)
 				exit_with_err("duplicated player startpoint", E_PERM);
+			_set_init_player(line[map_x], player, map_x, map_y);
 			*elements_flag |= PLAYER;
 		}
-		else if (*line == '0' || *line == '1' || *line == ' ')
+		else if (line[map_x] == '0' || line[map_x] == '1' || line[map_x] == ' ')
 			;
 		else
 			exit_with_err("invalid map element", E_PERM);
-		line++;
+		map_x++;
 	}
 }
 
-void	read_map(int fd, t_info *info)
+void	read_map(int fd, t_info *info, t_player *player)
 {
 	unsigned int	elements_flag;
 	char			*line;
@@ -31,7 +51,7 @@ void	read_map(int fd, t_info *info)
 	while (line)
 	{
 		remove_newline(line);
-		_check_map_elements_flag(line, &elements_flag);
+		_check_map_elements_flag(line, &elements_flag, player, info->map_y);
 		info->map_y++;
 		linked_map = add_line_to_list(linked_map, line);
 		if (info->map_x < ft_strlen(line))

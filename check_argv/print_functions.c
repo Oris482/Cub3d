@@ -6,7 +6,7 @@
 /*   By: jaesjeon <jaesjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/11 19:05:36 by jaesjeon          #+#    #+#             */
-/*   Updated: 2022/10/11 21:37:25 by jaesjeon         ###   ########.fr       */
+/*   Updated: 2022/10/12 01:23:21 by jaesjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,27 +58,25 @@ void	print_map(char **map, int end_x, int end_y)
 void	print_game_info(t_game *game)
 {
 	const t_info	*info = &game->info;
+	const t_player	*player = &game->player;
 	const t_texture	*texture = game->texture;
 
-	printf("-------------------------------------------------------------\n");
-	printf("--------------------------VIEW INFO--------------------------\n");
-	printf("-------------------------------------------------------------\n");
+	printf("----------------------------------------------------------\n");
+	printf("------------------------VIEW INFO-------------------------\n\n");
 	printf("@ Window size\t:\t%d X %d\n", info->screen_x, info->screen_y);
 	printf("@ FOV_H\t\t:\t%f\n", info->fov_h);
 	printf("@ FOV_V\t\t:\t%f\n", info->fov_v);
-	printf("@ Map size\t:\t%d X %d\n", info->map_x, info->map_y);
+	printf("@ Player info\t:\tPosition[%d, %d], Camera angle[%.1f]\n", \
+		(int)player->vec_pos.x, (int)player->vec_pos.y, player->camera_angle);
+	printf("@ Map info\t:\t%d X %d\n", info->map_x, info->map_y);
 	print_map(info->map, info->map_x, info->map_y);
-	printf("-------------------------------------------------------------\n");
-	printf("-------------------------WALL TEXTURE------------------------\n");
-	printf("-------------------------------------------------------------\n");
+	printf("\n-----------------------WALL TEXTURE-----------------------\n\n");
 	_print_texture_info("@ EAST", texture[EA]);
 	_print_texture_info("@ WEST", texture[WE]);
 	_print_texture_info("@ SOUTH", texture[SO]);
 	_print_texture_info("@ NORTH", texture[NO]);
-	printf("-------------------------------------------------------------\n");
-	printf("----------------------FLOOR AND CEILING----------------------\n");
-	printf("-------------------------------------------------------------\n");
+	printf("\n--------------------FLOOR AND CEILING---------------------\n\n");
 	_print_rgb_info("@ FLOOR ", game->floor_color);
 	_print_rgb_info("@ CEILING", game->ceiling_color);
-	printf("-------------------------------------------------------------\n");
+	printf("\n----------------------------------------------------------\n");
 }
