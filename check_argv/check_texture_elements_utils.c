@@ -12,7 +12,7 @@ char	*get_filename_from_path(char *filename)
 	return (filename);
 }
 
-unsigned char	get_elements_flag_bit(int element_identifier)
+unsigned char	get_texture_elements_flag_bit(int element_identifier)
 {
 	if (element_identifier == EA)
 		return (EA_TEXTURE);
@@ -30,7 +30,7 @@ unsigned char	get_elements_flag_bit(int element_identifier)
 		return (ERROR);
 }
 
-int	get_element_identifier(char *key)
+int	get_texture_element_identifier(char *key)
 {
 	if (ft_strcmp(key, "EA"))
 		return (EA);

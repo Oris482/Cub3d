@@ -1,7 +1,7 @@
 CC = cc
 NAME = a.out
 CFLAGS = #-Wall -Wextra -Werror
-CFLAGS = -g
+CFLAGS = -g -fsanitize=address
 MLX_DIR = ../mlx
 LFLAGS = -L${MLX_DIR} -lmlx -framework OpenGL -framework AppKit
 IFLAGS = -I${MLX_DIR} -I. -I..
@@ -15,7 +15,10 @@ SRCS	= main.c	\
 			get_next_line.c	\
 			get_next_line_utils.c	\
 			utils.c	\
-			check_element_utils.c	\
+			check_map_elements.c	\
+			check_map_elements_utils.c	\
+			check_texture_elements.c	\
+			check_texture_elements_utils.c	\
 			rgb_utils.c
 
 OBJS = ${SRCS:.c=.o}

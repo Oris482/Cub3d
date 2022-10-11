@@ -52,7 +52,7 @@ char	*ft_substr(const char *start, const char *end)
 	len = end - start;
 	if (len == 0)
 		return (NULL);
-	ret = (char *)malloc(len + 1);
+	ret = (char *)my_malloc(len + 1);
 	ret[len] = '\0';
 	idx = 0;
 	while (idx < len)
@@ -70,7 +70,7 @@ char	*ft_strcpy(const char *s)
 	char	*ret;
 
 	len = ft_strlen(s);
-	ret = (char *)malloc(len + 1);
+	ret = (char *)my_malloc(len + 1);
 	ret[len] = '\0';
 	idx = 0;
 	while (idx < len)

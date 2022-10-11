@@ -11,6 +11,9 @@
 
 # define ERROR -1
 # define SUCCESS 1
+# define FAIL 0
+
+# define TRUE 1
 # define FALSE 0
 
 # define KEY	0
@@ -42,7 +45,7 @@ enum	e_key_code
 	KEY_RA = 124
 };
 
-enum	e_element_identifier
+enum	e_texture_identifier
 {
 	EA = 0,
 	WE,
@@ -52,7 +55,7 @@ enum	e_element_identifier
 	C
 };
 
-enum	e_cub_elements
+enum	e_texture_elements
 {
 	EA_TEXTURE = 1 << 0,
 	WE_TEXTURE = 1 << 1,
@@ -60,13 +63,20 @@ enum	e_cub_elements
 	NO_TEXTURE = 1 << 3,
 	FLOOR_COLOR = 1 << 4,
 	CEILING_COLOR = 1 << 5,
-	WALL = 1 << 6,
-	PLAYER = 1 << 7
+	ALL_TEXTURE_ELEMENTS = 0b00111111
+};
+
+enum	e_map_elements
+{
+	WALL = 1 << 0,
+	PLAYER = 1 << 1,
+	ALL_MAP_ELEMENTS = 0b00000011
 };
 
 enum	e_exit_status
 {
 	E_PERM = 1,
+	E_NOMEM = 12,
 	E_INVAL = 22,
 };
 
@@ -85,6 +95,8 @@ typedef struct s_info
 	double	fov_h;
 	double	fov_v;
 	char	**map;
+	int		map_x;
+	int		map_y;
 }	t_info;
 
 typedef struct s_controller
@@ -129,11 +141,14 @@ typedef struct s_game
 
 // utils.c
 void    		multi_free(void *ptr1, void *ptr2, void *ptr3, void *ptr4);
+void			*my_malloc(size_t len);
 void			ft_memset(void *ptr, unsigned char value, size_t size);
+void			remove_newline(char *line);
 
 // print_functions.c
 void			exit_with_err(char *custom_msg, int exit_code);
 void			print_game_info(t_game *game);
+void			print_map(char **map, int end_x, int end_y);
 
 // rgb_utils.c
 int				create_trgb(unsigned char t, unsigned char r, \
@@ -145,12 +160,19 @@ unsigned char	get_b(int trgb);
 // make_ceiling_floor_image.c
 void			draw_ceiling_floor(t_game *game, int x, int y_top, int y_bottom, double fog_value);
 
-// check_element_utils.c
+// check_texture_elements_utils.c
 char			*get_filename_from_path(char *filename);
-unsigned char	get_elements_flag_bit(int element_identifier);
-int				get_element_identifier(char *key);
+unsigned char	get_texture_elements_flag_bit(int element_identifier);
+int				get_texture_element_identifier(char *key);
 void			seperate_by_key_value(char **pair, char *line);
 unsigned char	get_color_value(char **rgb_str);
+
+// check_texture_elements.c
+void			get_texture_elements_info(int fd, unsigned char *elements_flag, t_game *game);
+
+// check_map_elements_utils.c
+
+// check_map_elements.c
 
 // check_argv.c
 void			check_argv(int argc, char *argv[], t_game *game);

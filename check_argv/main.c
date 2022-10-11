@@ -130,7 +130,7 @@ int	main(int argc, char *argv[])
 	int		x;
 
 	init_game(argc, argv, &game);
-	graphic_resource_init(&game.info);
+	graphic_resource_init(&game);
 	check_argv(argc, argv, &game);
 	print_game_info(&game);
 	y_top = 200;
