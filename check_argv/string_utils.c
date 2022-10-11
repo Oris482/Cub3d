@@ -1,8 +1,4 @@
-#include "../cub3d.h"
-
-#define ERROR -1
-#define SUCCESS 1
-#define FALSE 0
+#include "ft_string.h"
 
 size_t	ft_strlen(const char *s)
 {

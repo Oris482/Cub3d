@@ -9,6 +9,13 @@
 # include <stdlib.h>
 # include <stdio.h>
 
+# define ERROR -1
+# define SUCCESS 1
+# define FALSE 0
+
+# define KEY	0
+# define VALUE 1
+
 enum	e_keyset
 {
 	KEYSET_W = 1,
@@ -43,6 +50,18 @@ enum	e_element_identifier
 	NO,
 	F,
 	C
+};
+
+enum	e_cub_elements
+{
+	EA_TEXTURE = 1 << 0,
+	WE_TEXTURE = 1 << 1,
+	SO_TEXTURE = 1 << 2,
+	NO_TEXTURE = 1 << 3,
+	FLOOR_COLOR = 1 << 4,
+	CEILING_COLOR = 1 << 5,
+	WALL = 1 << 6,
+	PLAYER = 1 << 7
 };
 
 enum	e_exit_status
@@ -107,5 +126,33 @@ typedef struct s_game
 	unsigned int	floor_color;
 	unsigned int	ceiling_color;
 }	t_game;
+
+// utils.c
+void    		multi_free(void *ptr1, void *ptr2, void *ptr3, void *ptr4);
+void			ft_memset(void *ptr, unsigned char value, size_t size);
+
+// print_functions.c
+void			exit_with_err(char *custom_msg, int exit_code);
+void			print_game_info(t_game *game);
+
+// rgb_utils.c
+int				create_trgb(unsigned char t, unsigned char r, \
+								unsigned char g, unsigned char b);
+unsigned char	get_r(int trgb);
+unsigned char	get_g(int trgb);
+unsigned char	get_b(int trgb);
+
+// make_ceiling_floor_image.c
+void			draw_ceiling_floor(t_game *game, int x, int y_top, int y_bottom, double fog_value);
+
+// check_element_utils.c
+char			*get_filename_from_path(char *filename);
+unsigned char	get_elements_flag_bit(int element_identifier);
+int				get_element_identifier(char *key);
+void			seperate_by_key_value(char **pair, char *line);
+unsigned char	get_color_value(char **rgb_str);
+
+// check_argv.c
+void			check_argv(int argc, char *argv[], t_game *game);
 
 #endif

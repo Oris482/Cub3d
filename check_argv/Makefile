@@ -4,16 +4,19 @@ CFLAGS = #-Wall -Wextra -Werror
 CFLAGS = -g
 MLX_DIR = ../mlx
 LFLAGS = -L${MLX_DIR} -lmlx -framework OpenGL -framework AppKit
-IFLAGS = -I${MLX_DIR} -I.
+IFLAGS = -I${MLX_DIR} -I. -I..
 MLX_LIB = libmlx.dylib
 SRCS	= main.c	\
 			degree_utils.c	\
 			make_ceiling_floor_image.c	\
-			print_err.c	\
+			print_functions.c	\
 			check_argv.c	\
 			string_utils.c	\
 			get_next_line.c	\
-			get_next_line_utils.c
+			get_next_line_utils.c	\
+			utils.c	\
+			check_element_utils.c	\
+			rgb_utils.c
 
 OBJS = ${SRCS:.c=.o}
 

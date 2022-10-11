@@ -7,13 +7,13 @@
 #include <errno.h>
 #include <math.h>
 
-void    make_ceiling_floor_image(t_game *game);
-void	draw_ceiling_floor(t_game *game, int x, int y_top, int y_bottom, double fog_value);
-
-void	check_argv(int argc, char *argv[], t_game *game);
-
-void	graphic_resource_init(t_info *info)
+void	graphic_resource_init(t_game *game)
 {
+	t_info	*info;
+	int		idx;
+
+	ft_memset(game, 0, sizeof(t_game));
+	info = &game->info;
 	info->mlx_ptr = mlx_init();
 	mlx_get_screen_size(info->mlx_ptr, &info->screen_x, &info->screen_y);
 	info->screen_x *= 0.6;
@@ -21,10 +21,12 @@ void	graphic_resource_init(t_info *info)
 	info->fov_h = 60.0;
 	info->fov_v = (double)info->screen_y / (double)info->screen_x \
 															* info->fov_h;
-	printf("screen_witdh : %d\nscreen_height : %d\n", info->screen_x, info->screen_y);
-	printf("fov_h : %f\nfov_v : %f\n", info->fov_h, info->fov_v);
 	info->win_ptr = mlx_new_window(info->mlx_ptr, info->screen_x, \
 												info->screen_y, "cub3D");
+    game->bg_data.img = mlx_new_image(game->info.mlx_ptr, game->info.screen_x, \
+														game->info.screen_y);
+    game->bg_data.addr = mlx_get_data_addr(game->bg_data.img, &game->bg_data.bits_per_pixel, \
+										&game->bg_data.line_length, &game->bg_data.endian);
 }
 
 int	main_loop(t_game *game)
@@ -129,8 +131,8 @@ int	main(int argc, char *argv[])
 
 	init_game(argc, argv, &game);
 	graphic_resource_init(&game.info);
-	make_ceiling_floor_image(&game);
 	check_argv(argc, argv, &game);
+	print_game_info(&game);
 	y_top = 200;
 	y_bottom = 300;
 	x = 0;
