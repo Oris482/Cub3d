@@ -21,7 +21,7 @@ static void	_set_wall_texture(t_game *game, int element_identifier, \
 	if (target->img)
 		mlx_destroy_image(game->info.mlx_ptr, target->img);
 	target->img = mlx_xpm_file_to_image(game->info.mlx_ptr, texture_file, \
-								&target->texture_width, &target->texture_height);
+							&target->texture_width, &target->texture_height);
 	if (target->img == NULL)
 		exit_with_err("can't open texture file", E_PERM);
 }
@@ -52,7 +52,8 @@ static void	_set_floor_ceiling_color(t_game *game, int element_identifier, \
 	*target = create_trgb(0, color_value[R], color_value[G], color_value[B]);
 }
 
-void	get_texture_elements_info(int fd, unsigned char *elements_flag, t_game *game)
+static void	_get_texture_elements_info(int fd, \
+									unsigned char *elements_flag, t_game *game)
 {
 	char	*line;
 	char	*pair[2];
@@ -79,4 +80,14 @@ void	get_texture_elements_info(int fd, unsigned char *elements_flag, t_game *gam
 		*elements_flag |= get_texture_elements_flag_bit(element_identifier);
 		multi_free(pair[KEY], pair[VALUE], line, NULL);
 	}
+}
+
+void	check_texture_elements(int fd, t_game *game)
+{
+	unsigned char	elements_flag;
+
+	elements_flag = 0;
+	_get_texture_elements_info(fd, &elements_flag, game);
+	if (elements_flag != ALL_TEXTURE_ELEMENTS)
+		exit_with_err("some elements source missing", E_PERM);
 }

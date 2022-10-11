@@ -16,6 +16,9 @@
 # define TRUE 1
 # define FALSE 0
 
+#define START	0
+#define END		1
+
 # define KEY	0
 # define VALUE 1
 
@@ -79,6 +82,12 @@ enum	e_exit_status
 	E_NOMEM = 12,
 	E_INVAL = 22,
 };
+
+typedef struct s_linked_map
+{
+	char				*line;
+	struct s_linked_map	*next;
+}	t_linked_map;
 
 typedef struct s_vector2
 {
@@ -158,7 +167,7 @@ unsigned char	get_g(int trgb);
 unsigned char	get_b(int trgb);
 
 // make_ceiling_floor_image.c
-void			draw_ceiling_floor(t_game *game, int x, int y_top, int y_bottom, double fog_value);
+void			draw_ceiling_floor(t_game *game, int x, int wall_y[2], double fog_value);
 
 // check_texture_elements_utils.c
 char			*get_filename_from_path(char *filename);
@@ -168,11 +177,16 @@ void			seperate_by_key_value(char **pair, char *line);
 unsigned char	get_color_value(char **rgb_str);
 
 // check_texture_elements.c
-void			get_texture_elements_info(int fd, unsigned char *elements_flag, t_game *game);
+void			check_texture_elements(int fd, t_game *game);
 
 // check_map_elements_utils.c
+char			*get_map_first_line(int fd);
+t_linked_map	*add_line_to_list(t_linked_map *linked_map, char *line);
+void			linked_map_to_arr(t_linked_map *linked_map, t_info *info);
 
 // check_map_elements.c
+void			read_map(int fd, t_info *info);
+void			check_map_surrounded_by_wall(char **map, int end_x, int end_y);
 
 // check_argv.c
 void			check_argv(int argc, char *argv[], t_game *game);

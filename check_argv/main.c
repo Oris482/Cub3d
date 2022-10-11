@@ -1,5 +1,5 @@
-#include "../mlx/mlx.h"
-#include "../cub3d.h"
+#include "mlx.h"
+#include "cub3d.h"
 #include <stdlib.h>
 #include <unistd.h>
 #include <stdio.h>
@@ -107,15 +107,6 @@ void	loop(t_game *game)
 
 void	init_game(int argc, char **argv, t_game *game)
 {
-	static char* const	tmp_map[] = {
-		[0] = "1111111111",
-		[1] = "1001110001",
-		[2] = "1000000001",
-		[3] = "1000000001",
-		[4] = "1000000001",
-		[5] = "10000N0001",
-		[6] = "1111111111"
-	};
 	game->player.move_speed = 0.001;
 	game->player.rotate_speed = 0.01;
 	game->player.camera_angle = 0;
@@ -128,22 +119,27 @@ int	main(int argc, char *argv[])
 	int		y_top;
 	int		y_bottom;
 	int		x;
+	int		y[2];
 
 	init_game(argc, argv, &game);
 	graphic_resource_init(&game);
 	check_argv(argc, argv, &game);
 	print_game_info(&game);
 	y_top = 200;
-	y_bottom = 300;
+	y_bottom = 400;
 	x = 0;
 	while (x <= game.info.screen_x / 2)
 	{
-		draw_ceiling_floor(&game, x, y_top - (x / 6), y_bottom - (x / 6), 0.2);
+		y[START] = y_top - (x / 6);
+		y[END] = y_bottom - (x / 6);
+		draw_ceiling_floor(&game, x, y, 0.2);
 		x++;
 	}
 	while (x <= game.info.screen_x)
 	{
-		draw_ceiling_floor(&game, x, (y_top - (game.info.screen_x / 12)) + ((x - (game.info.screen_x / 2)) / 6), (y_bottom - (game.info.screen_x / 12)) + ((x - (game.info.screen_x / 2)) / 6), 0.2);
+		y[START] = (y_top - (game.info.screen_x / 12)) + ((x - (game.info.screen_x / 2)) / 6);
+		y[END] = (y_bottom - (game.info.screen_x / 12)) + ((x - (game.info.screen_x / 2)) / 6);
+		draw_ceiling_floor(&game, x, y, 0.2);
 		x++;
 	}
 	mlx_put_image_to_window(game.info.mlx_ptr, game.info.win_ptr, game.bg_data.img, 0, 0);

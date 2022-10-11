@@ -1,7 +1,7 @@
 CC = cc
 NAME = a.out
 CFLAGS = #-Wall -Wextra -Werror
-CFLAGS = -g -fsanitize=address
+CFLAGS = -g
 MLX_DIR = ../mlx
 LFLAGS = -L${MLX_DIR} -lmlx -framework OpenGL -framework AppKit
 IFLAGS = -I${MLX_DIR} -I. -I..
