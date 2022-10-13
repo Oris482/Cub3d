@@ -19,7 +19,8 @@ SRCS	= main.c	\
 			check_map_elements_utils.c	\
 			check_texture_elements.c	\
 			check_texture_elements_utils.c	\
-			rgb_utils.c
+			rgb_utils.c	\
+			make_minimap_image.c
 
 OBJS = ${SRCS:.c=.o}
 

@@ -15,6 +15,8 @@ void	graphic_resource_init(t_game *game)
 	ft_memset(game, 0, sizeof(t_game));
 	info = &game->info;
 	info->mlx_ptr = mlx_init();
+	if (info->mlx_ptr == NULL)
+		exit_with_err("mlx function error", E_PERM);
 	mlx_get_screen_size(info->mlx_ptr, &info->screen_x, &info->screen_y);
 	info->screen_x *= 0.6;
 	info->screen_y *= 0.7;
@@ -23,10 +25,12 @@ void	graphic_resource_init(t_game *game)
 															* info->fov_h;
 	info->win_ptr = mlx_new_window(info->mlx_ptr, info->screen_x, \
 												info->screen_y, "cub3D");
-    game->bg_data.img = mlx_new_image(game->info.mlx_ptr, game->info.screen_x, \
+    game->view_data.img = mlx_new_image(game->info.mlx_ptr, game->info.screen_x, \
 														game->info.screen_y);
-    game->bg_data.addr = mlx_get_data_addr(game->bg_data.img, &game->bg_data.bits_per_pixel, \
-										&game->bg_data.line_length, &game->bg_data.endian);
+	if (!info->win_ptr || !game->view_data.img)
+		exit_with_err("mlx function error", E_PERM);
+    game->view_data.addr = mlx_get_data_addr(game->view_data.img, &game->view_data.bits_per_pixel, \
+										&game->view_data.line_length, &game->view_data.endian);
 }
 
 int	main_loop(t_game *game)
@@ -142,7 +146,8 @@ int	main(int argc, char *argv[])
 		draw_ceiling_floor(&game, x, y, 0.2);
 		x++;
 	}
-	mlx_put_image_to_window(game.info.mlx_ptr, game.info.win_ptr, game.bg_data.img, 0, 0);
+	mlx_put_image_to_window(game.info.mlx_ptr, game.info.win_ptr, game.view_data.img, 0, 0);
+	make_minimap_image(&game);
 	loop(&game);
 	return (0);
 }

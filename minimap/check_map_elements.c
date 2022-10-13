@@ -26,12 +26,12 @@ static void	_check_map_elements_flag(char *line, unsigned int *elements_flag, \
 		if (line[map_x] == 'E' || line[map_x] == 'W' \
 			|| line[map_x] == 'S' || line[map_x] == 'N')
 		{
-			if (*elements_flag & PLAYER)
+			if (*elements_flag & PLAYER_ELEMENT)
 				exit_with_err("duplicated player startpoint", E_PERM);
 			_set_init_player(line[map_x], player, map_x, map_y);
-			*elements_flag |= PLAYER;
+			*elements_flag |= PLAYER_ELEMENT;
 		}
-		else if (line[map_x] == '0' || line[map_x] == '1' || line[map_x] == ' ')
+		else if (line[map_x] == RODE || line[map_x] == WALL || line[map_x] == NONE)
 			;
 		else
 			exit_with_err("invalid map element", E_PERM);
@@ -46,7 +46,7 @@ void	read_map(int fd, t_info *info, t_player *player)
 	t_linked_map	*linked_map;
 
 	line = get_map_first_line(fd);
-	elements_flag = WALL;
+	elements_flag = WALL_ELEMENT;
 	linked_map = NULL;
 	while (line)
 	{
@@ -74,13 +74,13 @@ void	check_map_surrounded_by_wall(char **map, int end_x, int end_y)
 		x = 0;
 		while (x < end_x)
 		{
-			if (map[y][x] == '0' || map[y][x] == 'E' || map[y][x] == 'W' \
+			if (map[y][x] == RODE || map[y][x] == 'E' || map[y][x] == 'W' \
 									|| map[y][x] == 'S' || map[y][x] == 'N')
 			{
 				if (x == 0 || x == end_x - 1 || y == 0 || y == end_y - 1)
 					exit_with_err("map is not surrounded by wall", E_PERM);
-				else if (map[y][x - 1] == ' ' || map[y][x + 1] == ' ' \
-							|| map[y - 1][x] == ' ' || map[y + 1][x] == ' ')
+				else if (map[y][x - 1] == NONE || map[y][x + 1] == NONE \
+							|| map[y - 1][x] == NONE || map[y + 1][x] == NONE)
 					exit_with_err("map is not surrounded by wall", E_PERM);
 			}
 			x++;
