@@ -1,33 +1,33 @@
 #include "cub3d.h"
 #include "mlx.h"
 
-void	put_one_square_pixels(t_minimap *minimap, int x, int y, \
-														unsigned int color)
+void	put_one_square_pixels_to_img(t_img_data *img_data, int pos[2], \
+												int pps, unsigned int color)
 {
-	const t_img_data	*img_data = &minimap->img_data;
 	char				*dst;
-	const int			init_x = x;
-	const int			end_x = x + minimap->pixel_per_square;
-	const int			end_y = y + minimap->pixel_per_square;
+	const int			init_x = pos[X];
+	const int			end_x = pos[X] + pps;
+	const int			end_y = pos[Y] + pps;
 
-	while (y < end_y)
+	while (pos[Y] < end_y)
 	{
-		x = init_x;
-		while (x < end_x)
+		pos[X] = init_x;
+		while (pos[X] < end_x)
 		{
-			dst = img_data->addr + (y * img_data->line_length + \
-									x * (img_data->bits_per_pixel / 8));
+			dst = img_data->addr + (pos[Y] * img_data->line_length + \
+									pos[X] * (img_data->bits_per_pixel / 8));
 			*(unsigned int *)dst = color;
-			x++;
+			pos[X] += 1;
 		}
-		y++;
+		pos[Y] += 1;
 	}
 }
 
-void	draw_minimap(t_info *info, t_minimap *minimap)
+void	put_pixels_to_minimap_img(t_info *info, t_minimap *minimap)
 {
 	int			idx_x;
 	int			idx_y;
+	int			pos[2];
 	const int	pps = minimap->pixel_per_square;
 
 	idx_y = 0;
@@ -36,17 +36,31 @@ void	draw_minimap(t_info *info, t_minimap *minimap)
 		idx_x = 0;
 		while (idx_x < info->map_x)
 		{
+			set_range(pos, idx_x * pps, idx_y * pps);
 			if (info->map[idx_y][idx_x] == WALL)
-				put_one_square_pixels(minimap, idx_x * pps, idx_y * pps, create_trgb(0, 0, 0, 0));
+				put_one_square_pixels_to_img(&minimap->map_img_data, pos, \
+													pps, create_trgb(0, 0, 0, 0));
 			else if (info->map[idx_y][idx_x] == NONE)
-				put_one_square_pixels(minimap, idx_x * pps, idx_y * pps, create_trgb(170, 0, 0, 0));
+				put_one_square_pixels_to_img(&minimap->map_img_data, pos, \
+													pps, create_trgb(170, 0, 0, 0));
 			else
-				put_one_square_pixels(minimap, idx_x * pps, idx_y * pps, create_trgb(0, 255, 255, 255));
+				put_one_square_pixels_to_img(&minimap->map_img_data, pos, \
+													pps, create_trgb(0, 255, 255, 255));
 			idx_x++;
 		}
 		idx_y++;
 	}
 }
+
+void	put_pixels_to_player_img(t_minimap *minimap)
+{
+	int	pos[2];
+
+	set_range(pos, 0, 0);
+	put_one_square_pixels_to_img(&minimap->player_img_data, pos, \
+							minimap->pixel_per_square, create_trgb(0,0,0,255));
+}
+
 
 void	calculate_minimap_size(t_info *info, t_minimap *minimap)
 {
@@ -73,17 +87,27 @@ void	calculate_minimap_size(t_info *info, t_minimap *minimap)
 void	make_minimap_image(t_game *game)
 {
 	t_minimap	*minimap;
-	t_img_data	*img_data;
+	t_img_data	*map_img_data;
+	t_img_data	*player_img_data;
 
 	minimap = &game->minimap;
-	img_data = &minimap->img_data;
+	map_img_data = &minimap->map_img_data;
 	calculate_minimap_size(&game->info, minimap);
-	img_data->img = mlx_new_image(game->info.mlx_ptr, \
+	map_img_data->img = mlx_new_image(game->info.mlx_ptr, \
 											minimap->width, minimap->height);
-	if (img_data->img == NULL)
+	if (map_img_data->img == NULL)
 		exit_with_err("mlx function error", E_PERM);
-	img_data->addr = mlx_get_data_addr(img_data->img, \
-		&img_data->bits_per_pixel, &img_data->line_length, &img_data->endian);
-	draw_minimap(&game->info, minimap);
-	mlx_put_image_to_window(game->info.mlx_ptr, game->info.win_ptr, minimap->img_data.img, 0, 0);
+	map_img_data->addr = mlx_get_data_addr(map_img_data->img, \
+		&map_img_data->bits_per_pixel, &map_img_data->line_length, \
+														&map_img_data->endian);
+	player_img_data = &minimap->player_img_data;
+	player_img_data->img = mlx_new_image(game->info.mlx_ptr, \
+						minimap->pixel_per_square, minimap->pixel_per_square);
+	if (player_img_data->img == NULL)
+		exit_with_err("mlx function error", E_PERM);
+	player_img_data->addr = mlx_get_data_addr(player_img_data->img, \
+		&player_img_data->bits_per_pixel, &player_img_data->line_length, \
+													&player_img_data->endian);
+	put_pixels_to_minimap_img(&game->info, minimap);
+	put_pixels_to_player_img(minimap);
 }

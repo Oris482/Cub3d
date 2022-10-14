@@ -145,7 +145,8 @@ typedef struct	s_texture {
 
 typedef struct s_minimap
 {
-	t_img_data	img_data;
+	t_img_data	map_img_data;
+	t_img_data	player_img_data;
 	int			width;
 	int			height;
 	int			pixel_per_square;
@@ -170,6 +171,10 @@ void			*my_malloc(size_t len);
 void			ft_memset(void *ptr, unsigned char value, size_t size);
 void			remove_newline(char *line);
 
+// degree_utils.c
+double			deg2rad(double degree);
+double			adjust_degree(double base_degree, double offset_degree);
+
 // print_functions.c
 void			exit_with_err(char *custom_msg, int exit_code);
 void			print_game_info(t_game *game);
@@ -183,6 +188,7 @@ unsigned char	get_g(int trgb);
 unsigned char	get_b(int trgb);
 
 // make_ceiling_floor_image.c
+void			set_range(int arg[2], int arg_start, int arg_end);
 void			draw_ceiling_floor(t_game *game, int x, int wall_y[2], double fog_value);
 
 // check_texture_elements_utils.c
@@ -207,7 +213,17 @@ void			check_map_surrounded_by_wall(char **map, int end_x, int end_y);
 // check_argv.c
 void			check_argv(int argc, char *argv[], t_game *game);
 
+// handle_player.c
+void    		move_player(t_game *game);
+void    		rotate_player(t_game *game);
+
 // make_minimap_imgae.c
+void			put_one_square_pixels_to_img(t_img_data *img_data, int pos[2], \
+													int pps, unsigned int color);
 void			make_minimap_image(t_game *game);
+
+// draw_minimap.c
+void			draw_minimap(t_game *game);
+
 
 #endif
