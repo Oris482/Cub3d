@@ -39,13 +39,13 @@ void	put_pixels_to_minimap_img(t_info *info, t_minimap *minimap)
 			set_range(pos, idx_x * pps, idx_y * pps);
 			if (info->map[idx_y][idx_x] == WALL)
 				put_one_square_pixels_to_img(&minimap->map_img_data, pos, \
-													pps, create_trgb(0, 0, 0, 0));
+												pps, create_trgb(0, 0, 0, 0));
 			else if (info->map[idx_y][idx_x] == NONE)
 				put_one_square_pixels_to_img(&minimap->map_img_data, pos, \
-													pps, create_trgb(170, 0, 0, 0));
+												pps, create_trgb(170, 0, 0, 0));
 			else
 				put_one_square_pixels_to_img(&minimap->map_img_data, pos, \
-													pps, create_trgb(0, 255, 255, 255));
+											pps, create_trgb(0, 255, 255, 255));
 			idx_x++;
 		}
 		idx_y++;
@@ -68,6 +68,7 @@ void	calculate_minimap_size(t_info *info, t_minimap *minimap)
 	const int		screen_x = info->screen_x;
 	const int		screen_y = info->screen_y;
 	
+	printf("Calculate minimap size based on screen size\n");
 	minimap_size[X] = info->map_x;
 	minimap_size[Y] = info->map_y;
 	while (minimap_size[X] < (screen_x * 0.3) && \
@@ -79,9 +80,8 @@ void	calculate_minimap_size(t_info *info, t_minimap *minimap)
 	minimap->width = info->map_x * (int)(minimap_size[X] / info->map_x);
 	minimap->height = info->map_y * (int)(minimap_size[Y] / info->map_y);
 	minimap->pixel_per_square = minimap_size[X] / info->map_x;
-	printf("x : %d, y : %d, ratio : %f\n", minimap->width, minimap->height, \
-						(double)(minimap->height) / (double)(minimap->width));
-	printf("pixels per one square : %d\n", minimap->pixel_per_square);
+	printf("Minimap size\t\t:\t%d X %d\n", minimap->width, minimap->height);
+	printf("pixels per one square\t:\t%d\n", minimap->pixel_per_square);
 }
 
 void	make_minimap_image(t_game *game)

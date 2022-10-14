@@ -35,20 +35,14 @@ void	graphic_resource_init(t_game *game)
 
 int	main_loop(t_game *game)
 {
-	// 여기서는 눌린 키가 있어야 그리기 때문에 스프라이트는 없다고 가정함.
 	if (game->pressed_keyset != 0)
 	{
 		mlx_put_image_to_window(game->info.mlx_ptr, game->info.win_ptr, game->view_data.img, 0, 0);
 		if (game->pressed_keyset & KEY_WASD)
-		{
-			printf("X : %f Y: %f Angle: %f\n", game->player.vec_pos.x, game->player.vec_pos.y, game->player.camera_angle);
-			move_player(game);
-		}
+			move_player(&game->player, game->info.map, game->pressed_keyset);
 		if (game->pressed_keyset & KEY_ARROW)
-		{
-			printf("X : %f Y: %f Angle: %f\n", game->player.vec_pos.x, game->player.vec_pos.y, game->player.camera_angle);
-			rotate_player(game);
-		}
+			rotate_player(&game->player, game->pressed_keyset);
+		printf("X : %f Y: %f Angle: %f\n", game->player.vec_pos.x, game->player.vec_pos.y, game->player.camera_angle);
 		draw_minimap(game);
 	}
 	return (0);
@@ -117,8 +111,8 @@ void	loop(t_game *game)
 
 void	init_game(int argc, char **argv, t_game *game)
 {
-	game->player.move_speed = 0.01;
-	game->player.rotate_speed = 0.01;
+	game->player.move_speed = 0.05;
+	game->player.rotate_speed = 1;
 	game->player.camera_angle = 0;
 	game->pressed_keyset = 0;
 }
