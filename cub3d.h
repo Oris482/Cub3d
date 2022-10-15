@@ -214,7 +214,7 @@ void			check_map_surrounded_by_wall(char **map, int end_x, int end_y);
 void			check_argv(int argc, char *argv[], t_game *game);
 
 // handle_player.c
-void    		move_player(t_player *player, char **map, unsigned int const pressed_keyset);
+void    		move_player(t_player *player, t_minimap *minimap, unsigned int const pressed_keyset);
 void			rotate_player(t_player *player, unsigned int const pressed_keyset);
 
 // make_minimap_imgae.c

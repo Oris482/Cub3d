@@ -39,10 +39,10 @@ int	main_loop(t_game *game)
 	{
 		mlx_put_image_to_window(game->info.mlx_ptr, game->info.win_ptr, game->view_data.img, 0, 0);
 		if (game->pressed_keyset & KEY_WASD)
-			move_player(&game->player, game->info.map, game->pressed_keyset);
+			move_player(&game->player, &game->minimap, game->pressed_keyset);
 		if (game->pressed_keyset & KEY_ARROW)
 			rotate_player(&game->player, game->pressed_keyset);
-		printf("X : %f Y: %f Angle: %f\n", game->player.vec_pos.x, game->player.vec_pos.y, game->player.camera_angle);
+		// printf("X : %f Y: %f Angle: %f\n", game->player.vec_pos.x, game->player.vec_pos.y, game->player.camera_angle);
 		draw_minimap(game);
 	}
 	return (0);
@@ -112,7 +112,7 @@ void	loop(t_game *game)
 void	init_game(int argc, char **argv, t_game *game)
 {
 	game->player.move_speed = 0.05;
-	game->player.rotate_speed = 1;
+	game->player.rotate_speed = 0.5;
 	game->player.camera_angle = 0;
 	game->pressed_keyset = 0;
 }
