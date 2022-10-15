@@ -136,12 +136,23 @@ typedef struct	s_texture {
 	int		texture_height;
 }	t_texture;
 
+typedef struct s_ray
+{
+	double		cast_angle;
+	int			hit_idx_x;
+	int			hit_idx_y;
+	int			hit_wall_side;
+	double		hit_texture_point;
+}	t_ray;
+
+
 typedef struct s_game
 {
 	t_info			info;
 	t_player		player;
 	t_bg_data		bg_data;
 	t_texture		texture[4];
+	t_ray			*ray_data;
 	unsigned int	pressed_keyset;
 	char			**map;
 	unsigned int	floor_color;
