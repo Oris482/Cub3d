@@ -139,11 +139,20 @@ typedef struct	s_texture {
 typedef struct s_ray
 {
 	double		cast_angle;
+	double		ray_length;
 	int			hit_idx_x;
 	int			hit_idx_y;
 	int			hit_wall_side;
 	double		hit_texture_point;
 }	t_ray;
+
+typedef struct s_ray_travel_data
+{
+	int		step_x;
+	int		step_y;
+	double	cur_x;
+	double	cur_y;
+}	t_ray_travel_data;
 
 
 typedef struct s_game
@@ -201,5 +210,11 @@ void			check_map_surrounded_by_wall(char **map, int end_x, int end_y);
 
 // check_argv.c
 void			check_argv(int argc, char *argv[], t_game *game);
+
+// ray_casting.c
+void	init_ray(t_game *game);
+
+//angle_utils.c
+double	degree_to_radian(double degree);
 
 #endif
