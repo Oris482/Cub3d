@@ -52,16 +52,6 @@ void	put_pixels_to_minimap_img(t_info *info, t_minimap *minimap)
 	}
 }
 
-void	put_pixels_to_player_img(t_minimap *minimap)
-{
-	int	pos[2];
-
-	set_range(pos, 0, 0);
-	put_one_square_pixels_to_img(&minimap->player_img_data, pos, \
-							minimap->pixel_per_square, create_trgb(0,0,0,255));
-}
-
-
 void	calculate_minimap_size(t_info *info, t_minimap *minimap)
 {
 	double			minimap_size[2];
@@ -100,14 +90,5 @@ void	make_minimap_image(t_game *game)
 	map_img_data->addr = mlx_get_data_addr(map_img_data->img, \
 		&map_img_data->bits_per_pixel, &map_img_data->line_length, \
 														&map_img_data->endian);
-	player_img_data = &minimap->player_img_data;
-	player_img_data->img = mlx_new_image(game->info.mlx_ptr, \
-						minimap->pixel_per_square, minimap->pixel_per_square);
-	if (player_img_data->img == NULL)
-		exit_with_err("mlx function error", E_PERM);
-	player_img_data->addr = mlx_get_data_addr(player_img_data->img, \
-		&player_img_data->bits_per_pixel, &player_img_data->line_length, \
-													&player_img_data->endian);
 	put_pixels_to_minimap_img(&game->info, minimap);
-	put_pixels_to_player_img(minimap);
 }

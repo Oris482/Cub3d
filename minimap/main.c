@@ -25,25 +25,29 @@ void	graphic_resource_init(t_game *game)
 															* info->fov_h;
 	info->win_ptr = mlx_new_window(info->mlx_ptr, info->screen_x, \
 												info->screen_y, "cub3D");
-    game->view_data.img = mlx_new_image(game->info.mlx_ptr, game->info.screen_x, \
-														game->info.screen_y);
+    game->view_data.img = mlx_new_image(game->info.mlx_ptr, \
+		game->info.screen_x, game->info.screen_y);
 	if (!info->win_ptr || !game->view_data.img)
 		exit_with_err("mlx function error", E_PERM);
-    game->view_data.addr = mlx_get_data_addr(game->view_data.img, &game->view_data.bits_per_pixel, \
-										&game->view_data.line_length, &game->view_data.endian);
+    game->view_data.addr = mlx_get_data_addr(game->view_data.img, \
+		&game->view_data.bits_per_pixel, &game->view_data.line_length, \
+		&game->view_data.endian);
 }
 
 int	main_loop(t_game *game)
 {
 	if (game->pressed_keyset != 0)
 	{
-		mlx_put_image_to_window(game->info.mlx_ptr, game->info.win_ptr, game->view_data.img, 0, 0);
 		if (game->pressed_keyset & KEY_WASD)
 			move_player(&game->player, &game->minimap, game->pressed_keyset);
 		if (game->pressed_keyset & KEY_ARROW)
 			rotate_player(&game->player, game->pressed_keyset);
 		// printf("X : %f Y: %f Angle: %f\n", game->player.vec_pos.x, game->player.vec_pos.y, game->player.camera_angle);
 		draw_minimap(game);
+		mlx_sync(MLX_SYNC_IMAGE_WRITABLE, game->view_data.img);
+		mlx_put_image_to_window(game->info.mlx_ptr, game->info.win_ptr, \
+													game->view_data.img, 0, 0);
+		mlx_sync(MLX_SYNC_WIN_CMD_COMPLETED, game->info.win_ptr);
 	}
 	return (0);
 }
@@ -109,12 +113,10 @@ void	loop(t_game *game)
 	mlx_loop(game->info.mlx_ptr);
 }
 
-void	init_game(int argc, char **argv, t_game *game)
+void	player_handle_setting(t_player *player)
 {
-	game->player.move_speed = 0.05;
-	game->player.rotate_speed = 0.5;
-	game->player.camera_angle = 0;
-	game->pressed_keyset = 0;
+	player->move_speed = 0.05;
+	player->rotate_speed = 1;
 }
 
 int	main(int argc, char *argv[])
@@ -126,7 +128,7 @@ int	main(int argc, char *argv[])
 	int		y[2];
 
 	graphic_resource_init(&game);
-	init_game(argc, argv, &game);
+	player_handle_setting(&game.player);
 	check_argv(argc, argv, &game);
 	print_game_info(&game);
 	make_minimap_image(&game);

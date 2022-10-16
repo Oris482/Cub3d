@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   handle_player.c                                    :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: jaesjeon <jaesjeon@student.42seoul.kr>     +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/15 13:54:45 by jaesjeon          #+#    #+#             */
-/*   Updated: 2022/10/15 13:58:31 by jaesjeon         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "cub3d.h"
 
 double	cut_point(double num, int limiter)
@@ -28,7 +16,7 @@ double	cut_point(double num, int limiter)
 }
 
 void	check_wall_collisions(t_vector2 *player_pos, t_vector2 tmp_pos, \
-															t_minimap *minimap)
+									t_minimap *minimap, int collision_value)
 {
 	int					x[2];
 	int					y[2];
@@ -36,10 +24,11 @@ void	check_wall_collisions(t_vector2 *player_pos, t_vector2 tmp_pos, \
 	const t_img_data	*img_data = &minimap->map_img_data;
 	char				*dst[4];
 
-	x[0] = (int)(tmp_pos.x * minimap->pixel_per_square) + 2;
-	x[1] = (int)((tmp_pos.x + 1) * minimap->pixel_per_square) - 2;
-	y[0] = (int)(tmp_pos.y * minimap->pixel_per_square) + 2;
-	y[1] = (int)((tmp_pos.y + 1) * minimap->pixel_per_square) - 2;
+	collision_value = (minimap->pixel_per_square - collision_value) / 2;
+	x[0] = (int)(tmp_pos.x * minimap->pixel_per_square) + collision_value;
+	x[1] = (int)((tmp_pos.x + 1) * minimap->pixel_per_square) - collision_value;
+	y[0] = (int)(tmp_pos.y * minimap->pixel_per_square) + collision_value;
+	y[1] = (int)((tmp_pos.y + 1) * minimap->pixel_per_square) - collision_value;
 	dst[0] = img_data->addr + (y[0] * img_data->line_length + \
 										x[0] * (img_data->bits_per_pixel / 8));
 	dst[1] = img_data->addr + (y[0] * img_data->line_length + \
@@ -82,7 +71,7 @@ void    move_player(t_player *player, t_minimap *minimap, unsigned int const pre
 		tmp_pos.y += move_speed \
 			* cut_point(sin(deg2rad(adjust_degree(angle, 90.0 * sign))), 6);		
 	}
-	check_wall_collisions(&player->vec_pos, tmp_pos, minimap);
+	check_wall_collisions(&player->vec_pos, tmp_pos, minimap, 1);
 }
 
 void    rotate_player(t_player *player, unsigned int const pressed_keyset)
