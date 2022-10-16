@@ -42,6 +42,8 @@ int	main_loop(t_game *game)
 		// 	rotate_player(game);
 		;
 	}
+	// draw_screen(game);
+	print_map(game->map, game->info.map_x, game->info.map_y);
 	return (0);
 }
 
@@ -143,7 +145,7 @@ int	main(int argc, char *argv[])
 	// 	draw_ceiling_floor(&game, x, y, 0.2);
 	// 	x++;
 	// }
-	// mlx_put_iage_to_window(game.info.mlx_ptr, game.info.win_ptr, game.bg_data.img, 0, 0);
+	// mlx_put_image_to_window(game.info.mlx_ptr, game.info.win_ptr, game.bg_data.img, 0, 0);
 	loop(&game);
 	return (0);
 }

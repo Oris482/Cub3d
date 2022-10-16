@@ -213,6 +213,7 @@ void			check_argv(int argc, char *argv[], t_game *game);
 
 // ray_casting.c
 void	init_ray(t_game *game);
+void	draw_screen(t_game *game);
 
 //angle_utils.c
 double	degree_to_radian(double degree);
