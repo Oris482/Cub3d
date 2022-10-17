@@ -21,27 +21,57 @@ void	put_one_square_pixels_to_screen(t_game *game, int x, int y, \
 	}
 }
 
+void	draw_ray_line(double center[2], t_img_data *view_data, \
+										double camera_angle, double ray_angle)
+{
+	const int	wall_color = create_trgb(0, 0, 0, 0);
+	const int	ray_color = create_trgb(0, 255, 0, 0);
+	char		*dst;
+	double		pos[2];
+
+	pos[X] = center[X];
+	pos[Y] = center[Y];
+	while (1)
+	{
+		dst = view_data->addr + ((int)pos[Y] * view_data->line_length + \
+							(int)pos[X] * (view_data->bits_per_pixel / 8));
+		if (*(unsigned int *)dst != wall_color)
+			*(unsigned int *)dst = ray_color;
+		else
+			break ;
+		pos[X] = pos[X] + cut_point(cos(deg2rad(camera_angle)), 6) + \
+			cut_point(cos(deg2rad(adjust_degree(camera_angle, ray_angle))), 6);
+		pos[Y] = pos[Y] + cut_point(sin(deg2rad(camera_angle)), 6) + \
+			cut_point(sin(deg2rad(adjust_degree(camera_angle, ray_angle))), 6);
+	}
+}
+
 void	draw_camera_angle(t_player *player, t_img_data *view_data, int pps)
 {
-	const int		player_x = (int)(player->vec_pos.x * pps);
-	const int		player_y = (int)(player->vec_pos.y * pps);
-	const double	angle = player->camera_angle;
-	int				pos[2];
+	const double	camera_angle = player->camera_angle;
+	double			ray_center[2];
+	double			ray_end[2];
 
-	set_range(pos, player_x + pps / 2 - !(pps % 2), player_y + pps / 2 - !(pps % 2));
-	pos[X] += (int)(pps * cut_point(cos(deg2rad(angle)), 6));
-	pos[Y] += (int)(pps * cut_point(sin(deg2rad(angle)), 6));
-	put_one_square_pixels_to_img(view_data, pos, pps / 4, create_trgb(0,255,0,0));
+	ray_center[X] = player->vec_pos.x * pps + pps / 2 - !(pps % 2);
+	ray_center[Y] = player->vec_pos.y * pps + pps / 2 - !(pps % 2);
+	draw_ray_line(ray_center, view_data, camera_angle, -90.0);
+	draw_ray_line(ray_center, view_data, camera_angle, -60.0);
+	draw_ray_line(ray_center, view_data, camera_angle, -30.0);
+	draw_ray_line(ray_center, view_data, camera_angle, 0.0);
+	draw_ray_line(ray_center, view_data, camera_angle, 30.0);
+	draw_ray_line(ray_center, view_data, camera_angle, 60.0);
+	draw_ray_line(ray_center, view_data, camera_angle, 90.0);
 }
 
 void	draw_player(t_player *player, t_img_data *view_data, int pps)
 {
 	const int	player_x = (int)(player->vec_pos.x * pps);
 	const int	player_y = (int)(player->vec_pos.y * pps);
+	const int	player_color = create_trgb(0, 0, 0, 255);
 	int			pos[2];
 
 	set_range(pos, player_x, player_y);
-	put_one_square_pixels_to_img(view_data, pos, pps, create_trgb(0,0,0,255));
+	put_one_square_pixels_to_img(view_data, pos, pps, player_color);
 }
 
 void	draw_minimap(t_game *game)
@@ -60,8 +90,10 @@ void	draw_minimap(t_game *game)
 		while (x < game->minimap.width)
 		{
 			*(unsigned int *)(view_data->addr + (y * view_data->line_length + \
-				x * (view_data->bits_per_pixel / 8))) = *(unsigned int *)(minimap_data->addr + \
-				(y * minimap_data->line_length + x * (minimap_data->bits_per_pixel / 8)));
+				x * (view_data->bits_per_pixel / 8))) = \
+					*(unsigned int *)(minimap_data->addr +
+					(y * minimap_data->line_length + x \
+						* (minimap_data->bits_per_pixel / 8)));
 			x++;
 		}
 		y++;

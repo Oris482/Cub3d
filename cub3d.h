@@ -146,7 +146,6 @@ typedef struct	s_texture {
 typedef struct s_minimap
 {
 	t_img_data	map_img_data;
-	t_img_data	player_img_data;
 	int			width;
 	int			height;
 	int			pixel_per_square;
@@ -160,7 +159,6 @@ typedef struct s_game
 	t_minimap		minimap;
 	t_texture		texture[4];
 	unsigned int	pressed_keyset;
-	char			**map;
 	unsigned int	floor_color;
 	unsigned int	ceiling_color;
 }	t_game;
@@ -214,6 +212,7 @@ void			check_map_surrounded_by_wall(char **map, int end_x, int end_y);
 void			check_argv(int argc, char *argv[], t_game *game);
 
 // handle_player.c
+double			cut_point(double num, int limiter);
 void    		move_player(t_player *player, t_minimap *minimap, unsigned int const pressed_keyset);
 void			rotate_player(t_player *player, unsigned int const pressed_keyset);
 
