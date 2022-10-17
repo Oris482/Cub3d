@@ -42,7 +42,7 @@ void	put_pixels_to_minimap_img(t_info *info, t_minimap *minimap)
 												pps, create_trgb(0, 0, 0, 0));
 			else if (info->map[idx_y][idx_x] == NONE)
 				put_one_square_pixels_to_img(&minimap->map_img_data, pos, \
-												pps, create_trgb(170, 0, 0, 0));
+												pps, create_trgb(0, 0, 0, 0));
 			else
 				put_one_square_pixels_to_img(&minimap->map_img_data, pos, \
 											pps, create_trgb(0, 255, 255, 255));

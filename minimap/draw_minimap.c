@@ -51,15 +51,17 @@ void	draw_camera_angle(t_player *player, t_img_data *view_data, int pps)
 	const double	camera_angle = player->camera_angle;
 	double			ray_center[2];
 	double			ray_end[2];
+	double			ray_angle;
+	const double	ray_interval = 4.0;
 
 	ray_center[X] = player->vec_pos.x * pps + pps / 2 - !(pps % 2);
 	ray_center[Y] = player->vec_pos.y * pps + pps / 2 - !(pps % 2);
-	draw_ray_line(ray_center, view_data, camera_angle, -90.0);
-	draw_ray_line(ray_center, view_data, camera_angle, -60.0);
-	draw_ray_line(ray_center, view_data, camera_angle, -30.0);
-	draw_ray_line(ray_center, view_data, camera_angle, 0.0);
-	draw_ray_line(ray_center, view_data, camera_angle, 30.0);
-	draw_ray_line(ray_center, view_data, camera_angle, 60.0);
+	ray_angle = -90.0;
+	while (ray_angle < 90.0)
+	{
+		draw_ray_line(ray_center, view_data, camera_angle, ray_angle);
+		ray_angle += ray_interval;
+	}
 	draw_ray_line(ray_center, view_data, camera_angle, 90.0);
 }
 
