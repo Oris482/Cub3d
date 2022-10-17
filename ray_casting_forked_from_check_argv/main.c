@@ -6,6 +6,20 @@
 #include <string.h>
 #include <errno.h>
 #include <math.h>
+double	adjust_degree(double base_degree, double offset_degree);
+
+void    rotate_player(t_game *game)
+{
+	unsigned int const	pressed_keyset = game->pressed_keyset;
+	double const		rotate_speed = 0.05;
+	double				*angle;
+
+	angle = &game->player.camera_angle;
+	if (pressed_keyset & KEYSET_LA && !(pressed_keyset & KEYSET_RA))
+		*angle = adjust_degree(*angle, -rotate_speed);
+	if (pressed_keyset & KEYSET_RA && !(pressed_keyset & KEYSET_LA))
+		*angle = adjust_degree(*angle, rotate_speed);
+}
 
 void	graphic_resource_init(t_game *game)
 {
@@ -38,12 +52,12 @@ int	main_loop(t_game *game)
 	{
 		// if (game->pressed_keyset | KEY_WASD)
 		// 	move_player(game);
-		// if (game->pressed_keyset | KEY_ARROW)
-		// 	rotate_player(game);
-		;
+		if (game->pressed_keyset | KEY_ARROW)
+			rotate_player(game);
 	}
-	// draw_screen(game);
-	print_map(game->map, game->info.map_x, game->info.map_y);
+	draw_screen(game);
+	printf("angle : %lf\n", game->player.camera_angle);
+	// printf("%u\n", game->pressed_keyset);
 	return (0);
 }
 
@@ -128,24 +142,26 @@ int	main(int argc, char *argv[])
 	graphic_resource_init(&game);
 	check_argv(argc, argv, &game);
 	print_game_info(&game);
-	// y_top = 200;
-	// y_bottom = 400;
-	// x = 0;
-	// while (x <= game.info.screen_x / 2)
 	// {
-	// 	y[START] = y_top - (x / 6);
-	// 	y[END] = y_bottom - (x / 6);
-	// 	draw_ceiling_floor(&game, x, y, 0.2);
-	// 	x++;
+	// 	y_top = 200;
+	// 	y_bottom = 400;
+	// 	x = 0;
+	// 	while (x <= game.info.screen_x / 2)
+	// 	{
+	// 		y[START] = y_top - (x / 6);
+	// 		y[END] = y_bottom - (x / 6);
+	// 		draw_ceiling_floor(&game, x, y, 0.2);
+	// 		x++;
+	// 	}
+	// 	while (x <= game.info.screen_x)
+	// 	{
+	// 		y[START] = (y_top - (game.info.screen_x / 12)) + ((x - (game.info.screen_x / 2)) / 6);
+	// 		y[END] = (y_bottom - (game.info.screen_x / 12)) + ((x - (game.info.screen_x / 2)) / 6);
+	// 		draw_ceiling_floor(&game, x, y, 0.2);
+	// 		x++;
+	// 	}
+	// 	mlx_put_image_to_window(game.info.mlx_ptr, game.info.win_ptr, game.bg_data.img, 0, 0);
 	// }
-	// while (x <= game.info.screen_x)
-	// {
-	// 	y[START] = (y_top - (game.info.screen_x / 12)) + ((x - (game.info.screen_x / 2)) / 6);
-	// 	y[END] = (y_bottom - (game.info.screen_x / 12)) + ((x - (game.info.screen_x / 2)) / 6);
-	// 	draw_ceiling_floor(&game, x, y, 0.2);
-	// 	x++;
-	// }
-	// mlx_put_image_to_window(game.info.mlx_ptr, game.info.win_ptr, game.bg_data.img, 0, 0);
 	loop(&game);
 	return (0);
 }
