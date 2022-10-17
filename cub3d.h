@@ -140,6 +140,8 @@ typedef struct s_ray
 {
 	double		cast_angle;
 	double		ray_length;
+	double		wall_distance;
+	t_vector2	hit_point;
 	int			hit_idx_x;
 	int			hit_idx_y;
 	int			hit_wall_side;
