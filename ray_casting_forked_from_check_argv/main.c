@@ -91,6 +91,19 @@ int	main_loop(t_game *game)
 	printf("angle : %lf\n", game->player.camera_angle);
 	printf("pos : X:%lf Y:%lf\n", game->player.vec_pos.x, game->player.vec_pos.y);
 	// printf("%u\n", game->pressed_keyset);
+	// int idx_x = 0;
+	// while (idx_x < game->info.screen_x - 650)
+	// {
+	// 	printf("---\n");
+	// 	// printf("idx_x %d : %lf\n", idx_x, game->ray_data[idx_x].cast_angle);
+	// 	// printf("idx_x %d : %d %d\n", idx_x, game->ray_data[idx_x].hit_idx_x, game->ray_data[idx_x].hit_idx_y);
+	// 	printf("idx_x %d : %lf %lf\n", idx_x, game->ray_data[idx_x].hit_point.x, game->ray_data[idx_x].hit_point.y);
+	// 	printf("idx_x %d : %lf %lf\n", idx_x, game->ray_data[idx_x].ray_length, game->ray_data[idx_x].wall_distance);
+	// 	// printf("idx_x %d : %d\n", idx_x, game->ray_data[idx_x].hit_wall_side);
+	// 	printf("---\n");
+	// 	idx_x++;
+	// }
+	// exit(0);
 	return (0);
 }
 
@@ -175,26 +188,26 @@ int	main(int argc, char *argv[])
 	graphic_resource_init(&game);
 	check_argv(argc, argv, &game);
 	print_game_info(&game);
-	{
-		y_top = 200;
-		y_bottom = 400;
-		x = 0;
-		while (x <= game.info.screen_x / 2)
-		{
-			y[START] = y_top - (x / 6);
-			y[END] = y_bottom - (x / 6);
-			draw_ceiling_floor(&game, x, y, 0.2);
-			x++;
-		}
-		while (x <= game.info.screen_x)
-		{
-			y[START] = (y_top - (game.info.screen_x / 12)) + ((x - (game.info.screen_x / 2)) / 6);
-			y[END] = (y_bottom - (game.info.screen_x / 12)) + ((x - (game.info.screen_x / 2)) / 6);
-			draw_ceiling_floor(&game, x, y, 0.2);
-			x++;
-		}
-		mlx_put_image_to_window(game.info.mlx_ptr, game.info.win_ptr, game.bg_data.img, 0, 0);
-	}
+	// {
+	// 	y_top = 200;
+	// 	y_bottom = 400;
+	// 	x = 0;
+	// 	while (x <= game.info.screen_x / 2)
+	// 	{
+	// 		y[START] = y_top - (x / 6);
+	// 		y[END] = y_bottom - (x / 6);
+	// 		draw_ceiling_floor(&game, x, y, 0.2);
+	// 		x++;
+	// 	}
+	// 	while (x <= game.info.screen_x)
+	// 	{
+	// 		y[START] = (y_top - (game.info.screen_x / 12)) + ((x - (game.info.screen_x / 2)) / 6);
+	// 		y[END] = (y_bottom - (game.info.screen_x / 12)) + ((x - (game.info.screen_x / 2)) / 6);
+	// 		draw_ceiling_floor(&game, x, y, 0.2);
+	// 		x++;
+	// 	}
+	// 	mlx_put_image_to_window(game.info.mlx_ptr, game.info.win_ptr, game.bg_data.img, 0, 0);
+	// }
 	loop(&game);
 	return (0);
 }

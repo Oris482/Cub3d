@@ -111,7 +111,6 @@ void	calcul_hitpoint_dist(t_player *player_info, t_ray *ray)
 	const double	delta_y = player_info->vec_pos.y - ray->hit_point.y;
 	double			delta_angle;
 
-
 	delta_angle = fabs(player_info->camera_angle - ray->cast_angle);
 	// while (delta_angle >= 360)
 	// 	delta_angle -= 360;
@@ -131,19 +130,19 @@ void	set_ray_hit_point(t_vector2 *vec_pos, t_ray *ray)
 	{
 		ray->hit_point.x = ray->hit_idx_x + 1;
 		ray->hit_point.y = \
-			vec_pos->y + (vec_pos->x - ray->hit_point.x) * sin(degree_to_radian(ray->cast_angle));
+			vec_pos->y + (vec_pos->x - ray->hit_point.x) * tan(degree_to_radian(ray->cast_angle));
 	}
 	else if (ray->hit_wall_side == 1)
 	{
 		ray->hit_point.x = ray->hit_idx_x;
 		ray->hit_point.y = \
-			vec_pos->y + (ray->hit_point.x - vec_pos->x) * sin(degree_to_radian(ray->cast_angle));
+			vec_pos->y + (ray->hit_point.x - vec_pos->x) * tan(degree_to_radian(ray->cast_angle));
 	}
 	else if (ray->hit_wall_side == 2)
 	{
 		ray->hit_point.y = ray->hit_idx_y + 1;
 		ray->hit_point.x = \
-			vec_pos->x + (vec_pos->y - ray->hit_point.y) * tan(degree_to_radian(ray->cast_angle));
+			vec_pos->x - (vec_pos->y - ray->hit_point.y) * tan(degree_to_radian(ray->cast_angle));
 	}
 	else
 	{
@@ -164,6 +163,30 @@ void	set_ray_hit_point(t_vector2 *vec_pos, t_ray *ray)
 	// }
 }
 
+void	new_calcul_hitpoint_dist(t_ray *ray, int last_step, \
+									t_vector2 *side_dist, t_vector2 *delta_dist)
+{
+	if (last_step == 0) // x축을 마지막으로 이동
+		ray->ray_length = side_dist->x - delta_dist->x;
+	else
+		ray->ray_length = side_dist->y - delta_dist->y;
+}
+
+void	new_set_ray_hit_point(t_vector2 *cast_pos, t_ray *ray)
+{
+	// ray->hit_point.x =
+}
+
+void	new_set_wall_distance(t_player *player_info, t_ray *ray)
+{
+	double			delta_angle;
+
+	delta_angle = fabs(player_info->camera_angle - ray->cast_angle);
+	ray->wall_distance = fabs(cos(degree_to_radian(delta_angle))) * ray->ray_length;
+	printf("%lf\n", ray->ray_length);
+	// ray->wall_distance = ray->ray_length;
+}
+
 void	cast_sigle_ray(t_game *game, t_ray *ray)
 {
 	t_vector2	step;
@@ -180,9 +203,12 @@ void	cast_sigle_ray(t_game *game, t_ray *ray)
 			break ;
 	}
 	get_hit_wall_side(ray, last_step);
+	new_calcul_hitpoint_dist(ray, last_step, &side_dist, &delta_dist);
+	new_set_ray_hit_point(&game->player.vec_pos, ray);
+	new_set_wall_distance(&game->player, ray);
 	set_ray_hit_point(&game->player.vec_pos, ray);
 	// printf("hit_x : %lf hit_y : %lf\n", ray->hit_point.x, ray->hit_point.y);
-	calcul_hitpoint_dist(&game->player, ray);
+	// calcul_hitpoint_dist(&game->player, ray, &side_dist, &delta_dist);
 	calcul_texture_point(&game->player.vec_pos, ray);
 }
 
@@ -194,6 +220,8 @@ void	set_cast_angle(t_game *game, int idx_x)
 	cast_angle = game->player.camera_angle - (game->info.fov_h / 2) + delta_angle * idx_x;
 	if (cast_angle < 0)
 		cast_angle += 360;
+	else if (cast_angle >= 360)
+		cast_angle -= 360;
 	game->ray_data[idx_x].cast_angle = cast_angle;
 }
 
@@ -213,8 +241,8 @@ void	ray_cast(t_game *game)
 
 void	calcul_drawpixel(t_game *game, t_ray *ray, t_vector2 *wall_pixel)
 {
-	wall_pixel->x = game->info.screen_y / 2 - ray->wall_distance * 5; // 그냥 대입해봄
-	wall_pixel->y = game->info.screen_y / 2 + ray->wall_distance * 5;
+	wall_pixel->x = game->info.screen_y / 2 - ray->wall_distance * 20; // 그냥 대입해봄
+	wall_pixel->y = game->info.screen_y / 2 + ray->wall_distance * 20;
 	if (wall_pixel->x < 0)
 		wall_pixel->x = 0;
 	if (wall_pixel->y > game->info.screen_y)
