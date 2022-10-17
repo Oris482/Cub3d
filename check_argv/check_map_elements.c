@@ -6,13 +6,13 @@ static void	_set_init_player(char c, t_player *player, int map_x, int map_y)
 	player->vec_pos.x = map_x;
 	player->vec_pos.y = map_y;
 	if (c == 'E')
-		player->camera_angle = 0.0;
-	else if (c == 'W')
 		player->camera_angle = 180.0;
+	else if (c == 'W')
+		player->camera_angle = 0.0;
 	else if (c == 'S')
-		player->camera_angle = 90.0;
-	else if (c == 'N')
 		player->camera_angle = 270.0;
+	else if (c == 'N')
+		player->camera_angle = 90.0;
 }
 
 static void	_check_map_elements_flag(char *line, unsigned int *elements_flag, \

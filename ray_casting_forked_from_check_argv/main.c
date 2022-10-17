@@ -11,7 +11,7 @@ double	adjust_degree(double base_degree, double offset_degree);
 void    rotate_player(t_game *game)
 {
 	unsigned int const	pressed_keyset = game->pressed_keyset;
-	double const		rotate_speed = 0.05;
+	double const		rotate_speed = 1.0;
 	double				*angle;
 
 	angle = &game->player.camera_angle;
@@ -44,19 +44,52 @@ void	graphic_resource_init(t_game *game)
 	init_ray(game);
 }
 
+double	deg2rad(double degree);
+
+void    move_player(t_game *game)
+{
+	unsigned int const	pressed_keyset = game->pressed_keyset;
+	double const		angle = game->player.camera_angle;
+	double const		move_speed = 0.02;
+	t_vector2			*player_pos;
+
+	player_pos = &game->player.vec_pos;
+	if (pressed_keyset & KEYSET_W && !(pressed_keyset & KEYSET_S))
+	{
+		player_pos->x += move_speed * cos(deg2rad(angle));
+		player_pos->y += move_speed * sin(deg2rad(angle));
+	}
+	if (pressed_keyset & KEYSET_S && !(pressed_keyset & KEYSET_W))
+	{
+		player_pos->x -= move_speed * cos(deg2rad(angle));
+		player_pos->y -= move_speed * sin(deg2rad(angle));
+	}
+	if (pressed_keyset & KEYSET_A && !(pressed_keyset & KEYSET_D))
+	{
+		player_pos->x += move_speed * cos(deg2rad(adjust_degree(angle, -90.0)));
+		player_pos->y += move_speed * sin(deg2rad(adjust_degree(angle, -90.0)));
+	}
+	if (pressed_keyset & KEYSET_D && !(pressed_keyset & KEYSET_A))
+	{
+		player_pos->x += move_speed * cos(deg2rad(adjust_degree(angle, +90.0)));
+		player_pos->y += move_speed * sin(deg2rad(adjust_degree(angle, +90.0)));
+	}
+}
 int	main_loop(t_game *game)
 {
 	// printf("X : %f Y: %f Angle: %f\n", game->player.vec_pos.x, game->player.vec_pos.y, game->player.camera_angle);
 	// 여기서는 눌린 키가 있어야 그리기 때문에 스프라이트는 없다고 가정함.
 	if (game->pressed_keyset != 0)
 	{
-		// if (game->pressed_keyset | KEY_WASD)
-		// 	move_player(game);
+		if (game->pressed_keyset | KEY_WASD)
+			move_player(game);
 		if (game->pressed_keyset | KEY_ARROW)
 			rotate_player(game);
+		// printf("move : %lf, rotate : %lf\n", game->player.move_speed, game->player.rotate_speed);
 	}
 	draw_screen(game);
 	printf("angle : %lf\n", game->player.camera_angle);
+	printf("pos : X:%lf Y:%lf\n", game->player.vec_pos.x, game->player.vec_pos.y);
 	// printf("%u\n", game->pressed_keyset);
 	return (0);
 }
@@ -125,7 +158,7 @@ void	loop(t_game *game)
 void	init_game(int argc, char **argv, t_game *game)
 {
 	game->player.move_speed = 0.001;
-	game->player.rotate_speed = 0.01;
+	game->player.rotate_speed = 0.1;
 	game->player.camera_angle = 0;
 	game->pressed_keyset = 0;
 }
@@ -142,26 +175,26 @@ int	main(int argc, char *argv[])
 	graphic_resource_init(&game);
 	check_argv(argc, argv, &game);
 	print_game_info(&game);
-	// {
-	// 	y_top = 200;
-	// 	y_bottom = 400;
-	// 	x = 0;
-	// 	while (x <= game.info.screen_x / 2)
-	// 	{
-	// 		y[START] = y_top - (x / 6);
-	// 		y[END] = y_bottom - (x / 6);
-	// 		draw_ceiling_floor(&game, x, y, 0.2);
-	// 		x++;
-	// 	}
-	// 	while (x <= game.info.screen_x)
-	// 	{
-	// 		y[START] = (y_top - (game.info.screen_x / 12)) + ((x - (game.info.screen_x / 2)) / 6);
-	// 		y[END] = (y_bottom - (game.info.screen_x / 12)) + ((x - (game.info.screen_x / 2)) / 6);
-	// 		draw_ceiling_floor(&game, x, y, 0.2);
-	// 		x++;
-	// 	}
-	// 	mlx_put_image_to_window(game.info.mlx_ptr, game.info.win_ptr, game.bg_data.img, 0, 0);
-	// }
+	{
+		y_top = 200;
+		y_bottom = 400;
+		x = 0;
+		while (x <= game.info.screen_x / 2)
+		{
+			y[START] = y_top - (x / 6);
+			y[END] = y_bottom - (x / 6);
+			draw_ceiling_floor(&game, x, y, 0.2);
+			x++;
+		}
+		while (x <= game.info.screen_x)
+		{
+			y[START] = (y_top - (game.info.screen_x / 12)) + ((x - (game.info.screen_x / 2)) / 6);
+			y[END] = (y_bottom - (game.info.screen_x / 12)) + ((x - (game.info.screen_x / 2)) / 6);
+			draw_ceiling_floor(&game, x, y, 0.2);
+			x++;
+		}
+		mlx_put_image_to_window(game.info.mlx_ptr, game.info.win_ptr, game.bg_data.img, 0, 0);
+	}
 	loop(&game);
 	return (0);
 }
