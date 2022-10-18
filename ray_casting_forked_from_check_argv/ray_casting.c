@@ -183,7 +183,7 @@ void	new_set_wall_distance(t_player *player_info, t_ray *ray)
 
 	delta_angle = fabs(player_info->camera_angle - ray->cast_angle);
 	ray->wall_distance = fabs(cos(degree_to_radian(delta_angle))) * ray->ray_length;
-	printf("%lf\n", ray->ray_length);
+	// printf("%lf\n", ray->ray_length);
 	// ray->wall_distance = ray->ray_length;
 }
 
@@ -212,27 +212,34 @@ void	cast_sigle_ray(t_game *game, t_ray *ray)
 	calcul_texture_point(&game->player.vec_pos, ray);
 }
 
-void	set_cast_angle(t_game *game, int idx_x)
-{
-	const double	delta_angle = game->info.fov_h / game->info.screen_x;
-	double			cast_angle;
+// void	set_cast_angle(t_ray, int idx_x)
+// {
+// 	double			cast_angle;
 
-	cast_angle = game->player.camera_angle - (game->info.fov_h / 2) + delta_angle * idx_x;
-	if (cast_angle < 0)
-		cast_angle += 360;
-	else if (cast_angle >= 360)
-		cast_angle -= 360;
-	game->ray_data[idx_x].cast_angle = cast_angle;
-}
+// 	cast_angle = game->player.camera_angle - (game->info.fov_h / 2) + delta_angle * idx_x;
+// 	if (cast_angle < 0)
+// 		cast_angle += 360;
+// 	else if (cast_angle >= 360)
+// 		cast_angle -= 360;
+// 	game->ray_data[idx_x].cast_angle = cast_angle;
+// }
 
 void	ray_cast(t_game *game)
 {
+	const double	delta_angle = game->info.fov_h / game->info.screen_x;
+	double			cast_angle;
 	int	idx_x;
 
 	idx_x = 0;
 	while (idx_x < game->info.screen_x)
 	{
-		set_cast_angle(game, idx_x);
+		cast_angle = game->player.camera_angle - \
+								(game->info.fov_h / 2) + delta_angle * idx_x;
+		if (cast_angle < 0)
+			cast_angle += 360;
+		else if (cast_angle >= 360)
+			cast_angle -= 360;
+		game->ray_data[idx_x].cast_angle = cast_angle;
 		cast_sigle_ray(game, &game->ray_data[idx_x]);
 		// printf("%d :  x:%d y:%d\n", idx_x, game->ray_data[idx_x].hit_idx_x, game->ray_data[idx_x].hit_idx_y);
 		idx_x++;
@@ -255,8 +262,15 @@ void	draw_line(t_game *game, int idx_x, t_vector2 *wall_pixel)
 	char		*dst;
 	int			idx_y;
 
-	idx_y = wall_pixel->x;
+	idx_y = 0;
 	bg_data = &game->bg_data;
+	while (idx_y < wall_pixel->x)
+	{
+		dst = bg_data->addr + (idx_y * bg_data->line_length +
+							   idx_x * (bg_data->bits_per_pixel / 8));
+		*(unsigned int *)dst = create_trgb(0, 0, 0, 0);
+		idx_y++;
+	}	
 	while (idx_y < wall_pixel->y)
 	{
 		dst = bg_data->addr + (idx_y * bg_data->line_length +
@@ -264,6 +278,13 @@ void	draw_line(t_game *game, int idx_x, t_vector2 *wall_pixel)
 		*(unsigned int *)dst = create_trgb(0, 100, 100, 100);
 		idx_y++;
 	}
+	while (idx_y < game->info.screen_y)
+	{
+		dst = bg_data->addr + (idx_y * bg_data->line_length +
+							   idx_x * (bg_data->bits_per_pixel / 8));
+		*(unsigned int *)dst = create_trgb(0, 0, 0, 0);
+		idx_y++;
+	}	
 }
 
 void	make_wall(t_game *game, t_vector2 *wall_pixel)
@@ -297,7 +318,7 @@ void	reset_img(t_game *game)
 
 	size_of_img = game->bg_data.line_length * game->info.screen_y + \
 				game->info.screen_x * (game->bg_data.bits_per_pixel / 8);
-	ft_memset(game->bg_data.addr, 0, size_of_img);
+	ft_memset(game->bg_data.addr, 0, sizeof(game->bg_data.img));
 }
 
 void	draw_screen(t_game *game)
@@ -310,7 +331,7 @@ void	draw_screen(t_game *game)
 	// 그리기
 	// mlx_clear_window(game->info.mlx_ptr, game->info.win_ptr);
 	mlx_put_image_to_window(game->info.mlx_ptr, game->info.win_ptr, game->bg_data.img, 0, 0);
-	reset_img(game);
-	printf("frame : %d\n", frame);
+	// reset_img(game);
+	// printf("frame : %d\n", frame);
 	frame++;
 }
