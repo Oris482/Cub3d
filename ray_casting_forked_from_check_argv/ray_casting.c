@@ -48,8 +48,10 @@ void	set_dist(t_vector2 *pos, double cast_angle, \
 	// side_dist->y = fabs((trunc(pos->y + 1) - pos->y) / sin(radian_cast_angle));
 	delta_dist->x = 1 / fabs(cos(radian_cast_angle));
 	delta_dist->y = 1 / fabs(sin(radian_cast_angle));
-	side_dist->x = (ceil(pos->x) - pos->x) * delta_dist->x;
-	side_dist->y = (ceil(pos->y) - pos->y) * delta_dist->y;
+	side_dist->x = (fabs(floor(pos->x) - pos->x) ) * delta_dist->x;
+	side_dist->y = (fabs(floor(pos->y) - pos->y) ) * delta_dist->y;
+	// side_dist->x = (ceil(pos->x) - pos->x) * delta_dist->x;
+	// side_dist->y = (ceil(pos->y) - pos->y) * delta_dist->y;
 	// side_dist->x = (ceil(pos->x) - pos->x) / fabs(cos(radian_cast_angle));
 	// side_dist->y = (ceil(pos->y) - pos->y) / fabs(sin(radian_cast_angle));
 }
@@ -174,33 +176,47 @@ void	new_calcul_hitpoint_dist(t_ray *ray, int last_step, \
 
 void	reflect_hit_point(t_vector2 *cast_pos, t_ray *ray, double abs_delta_len)
 {
-	if (ray->hit_wall_side == 0)
+	// if (ray->hit_wall_side == 0)
+	// {
+	// 	if (90 < ray->cast_angle && ray->cast_angle <= 180)
+	// 		ray->hit_point.y = cast_pos->y + abs_delta_len + 1;
+	// 	else
+	// 		ray->hit_point.y = cast_pos->y + abs_delta_len;
+	// }
+	// else if (ray->hit_wall_side == 1)
+	// {
+	// 	if (ray->cast_angle <= 90)
+	// 		ray->hit_point.y = cast_pos->y + abs_delta_len + 1;
+	// 	else
+	// 		ray->hit_point.y = cast_pos->y + abs_delta_len;
+	// }
+	// else if (ray->hit_wall_side == 2)
+	// {
+	// 	if (ray->cast_angle < 270)
+	// 		ray->hit_point.x = cast_pos->x + abs_delta_len;
+	// 	else
+	// 		ray->hit_point.x = cast_pos->x + abs_delta_len + 1;
+	// }
+	// else
+	// {
+	// 	if (ray->cast_angle < 90)
+	// 		ray->hit_point.x = cast_pos->x + abs_delta_len + 1;
+	// 	else
+	// 		ray->hit_point.x = cast_pos->x + abs_delta_len;
+	// }
+	if (ray->hit_wall_side == 2 || ray->hit_wall_side == 3)
 	{
-		if (90 < ray->cast_angle && ray->cast_angle <= 180)
-			ray->hit_point.y = cast_pos->y + abs_delta_len;
-		else
-			ray->hit_point.y = cast_pos->y - abs_delta_len;
-	}
-	else if (ray->hit_wall_side == 1)
-	{
-		if (ray->cast_angle <= 90)
-			ray->hit_point.y = cast_pos->y + abs_delta_len;
-		else
-			ray->hit_point.y = cast_pos->y - abs_delta_len;
-	}
-	else if (ray->hit_wall_side == 2)
-	{
-		if (ray->cast_angle < 270)
-			ray->hit_point.x = cast_pos->x - abs_delta_len;
-		else
+		if (cos(degree_to_radian(ray->cast_angle)) > 0)
 			ray->hit_point.x = cast_pos->x + abs_delta_len;
+		else
+			ray->hit_point.x = cast_pos->x - abs_delta_len;
 	}
 	else
 	{
-		if (ray->cast_angle < 90)
-			ray->hit_point.x = cast_pos->x + abs_delta_len;
+		if (sin(degree_to_radian(ray->cast_angle)) > 0)
+			ray->hit_point.y = cast_pos->y + abs_delta_len;
 		else
-			ray->hit_point.x = cast_pos->x - abs_delta_len;
+			ray->hit_point.y = cast_pos->y - abs_delta_len;
 	}
 }
 
@@ -211,22 +227,22 @@ void	new_set_ray_hit_point(t_vector2 *cast_pos, t_ray *ray)
 	if (ray->hit_wall_side == 0)
 	{
 		ray->hit_point.x = ray->hit_idx_x + 1;
-		abs_delta_len = sqrt(pow(ray->ray_length, 2) - pow(fabs(cast_pos->x - ray->hit_point.x), 2));
+		abs_delta_len = sqrt(pow(ray->ray_length, 2) - pow(cast_pos->x - ray->hit_point.x, 2));
 	}
 	else if (ray->hit_wall_side == 1)
 	{
 		ray->hit_point.x = ray->hit_idx_x;
-		abs_delta_len = sqrt(pow(ray->ray_length, 2) - pow(fabs(cast_pos->x - ray->hit_point.x), 2));
+		abs_delta_len = sqrt(pow(ray->ray_length, 2) - pow(ray->hit_point.x - cast_pos->x, 2));
 	}
 	else if (ray->hit_wall_side == 2)
 	{
 		ray->hit_point.y = ray->hit_idx_y + 1;
-		abs_delta_len = sqrt(pow(ray->ray_length, 2) - pow(fabs(cast_pos->y - ray->hit_point.y), 2));
+		abs_delta_len = sqrt(pow(ray->ray_length, 2) - pow(cast_pos->y - ray->hit_point.y, 2));
 	}
 	else
 	{
 		ray->hit_point.y = ray->hit_idx_y;
-		abs_delta_len = sqrt(pow(ray->ray_length, 2) - pow(fabs(cast_pos->y - ray->hit_point.y), 2));
+		abs_delta_len = sqrt(pow(ray->ray_length, 2) - pow(ray->hit_point.y -cast_pos->y, 2));
 	}
 	reflect_hit_point(cast_pos, ray, abs_delta_len);
 }
@@ -236,7 +252,7 @@ void	new_set_wall_distance(t_player *player_info, t_ray *ray)
 	double			delta_angle;
 
 	delta_angle = fabs(player_info->camera_angle - ray->cast_angle);
-	ray->wall_distance = fabs(cos(degree_to_radian(delta_angle))) * ray->ray_length;
+	ray->wall_distance = cos(degree_to_radian(delta_angle)) * ray->ray_length;
 	// printf("%lf\n", ray->ray_length);
 	// ray->wall_distance = ray->ray_length;
 }
@@ -247,9 +263,14 @@ void	cast_sigle_ray(t_game *game, t_ray *ray)
 	t_vector2	side_dist;
 	t_vector2	delta_dist;
 	int			last_step;
+	// static int			debug_i = 0;
 
 	set_ray_step(&game->player.vec_pos, ray, &step);
 	set_dist(&game->player.vec_pos, ray->cast_angle, &side_dist, &delta_dist);
+	// printf("idx : %d side_dist (%lf %lf), delta_dist (%lf %lf)\n", debug_i, side_dist.x, side_dist.y, delta_dist.x, delta_dist.y);
+	// debug_i++;
+	// if (debug_i == game->info.screen_x)
+	// 	exit(0);
 	while (TRUE)
 	{
 		last_step = ray_travel(ray, &step, &side_dist, &delta_dist);
@@ -291,6 +312,7 @@ void	debug_print_ray_info(t_game *game)
 		printf("hit_idx(%d %d), hit_side : %d\n", ray->hit_idx_x, ray->hit_idx_y, ray->hit_wall_side);
 		i++;
 	}
+	printf("my pos (%lf %lf)\n", game->player.vec_pos.x, game->player.vec_pos.y);
 	exit(0);
 }
 
@@ -305,10 +327,6 @@ void	ray_cast(t_game *game)
 	{
 		cast_angle = game->player.camera_angle - \
 								(game->info.fov_h / 2) + delta_angle * idx_x;
-		if (cast_angle < 0)
-			cast_angle += 360;
-		else if (cast_angle >= 360)
-			cast_angle -= 360;
 		game->ray_data[idx_x].cast_angle = cast_angle;
 		cast_sigle_ray(game, &game->ray_data[idx_x]);
 		// printf("%d :  x:%d y:%d\n", idx_x, game->ray_data[idx_x].hit_idx_x, game->ray_data[idx_x].hit_idx_y);
@@ -319,12 +337,12 @@ void	ray_cast(t_game *game)
 
 void	calcul_drawpixel(t_game *game, t_ray *ray, t_vector2 *wall_pixel)
 {
-	wall_pixel->x = game->info.screen_y / 2 - ray->wall_distance * 20; // 그냥 대입해봄
-	wall_pixel->y = game->info.screen_y / 2 + ray->wall_distance * 20;
-	if (wall_pixel->x < 0)
-		wall_pixel->x = 0;
-	if (wall_pixel->y > game->info.screen_y)
-		wall_pixel->y = game->info.screen_y;
+	wall_pixel->x = ray->wall_distance * 50; // 그냥 대입해봄
+	wall_pixel->y = game->info.screen_y - ray->wall_distance * 50;
+	if (wall_pixel->y < 0)
+		wall_pixel->y = 0;
+	if (wall_pixel->x > game->info.screen_y)
+		wall_pixel->x = game->info.screen_y;
 }
 
 void	draw_line(t_game *game, int idx_x, t_vector2 *wall_pixel)
