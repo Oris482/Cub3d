@@ -172,9 +172,63 @@ void	new_calcul_hitpoint_dist(t_ray *ray, int last_step, \
 		ray->ray_length = side_dist->y - delta_dist->y;
 }
 
+void	reflect_hit_point(t_vector2 *cast_pos, t_ray *ray, double abs_delta_len)
+{
+	if (ray->hit_wall_side == 0)
+	{
+		if (90 < ray->cast_angle && ray->cast_angle <= 180)
+			ray->hit_point.y = cast_pos->y + abs_delta_len;
+		else
+			ray->hit_point.y = cast_pos->y - abs_delta_len;
+	}
+	else if (ray->hit_wall_side == 1)
+	{
+		if (ray->cast_angle <= 90)
+			ray->hit_point.y = cast_pos->y + abs_delta_len;
+		else
+			ray->hit_point.y = cast_pos->y - abs_delta_len;
+	}
+	else if (ray->hit_wall_side == 2)
+	{
+		if (ray->cast_angle < 270)
+			ray->hit_point.x = cast_pos->x - abs_delta_len;
+		else
+			ray->hit_point.x = cast_pos->x + abs_delta_len;
+	}
+	else
+	{
+		if (ray->cast_angle < 90)
+			ray->hit_point.x = cast_pos->x + abs_delta_len;
+		else
+			ray->hit_point.x = cast_pos->x - abs_delta_len;
+	}
+}
+
 void	new_set_ray_hit_point(t_vector2 *cast_pos, t_ray *ray)
 {
-	// ray->hit_point.x =
+	double	abs_delta_len;
+
+	if (ray->hit_wall_side == 0)
+	{
+		ray->hit_point.x = ray->hit_idx_x + 1;
+		abs_delta_len = sqrt(pow(ray->ray_length, 2) - pow(fabs(cast_pos->x - ray->hit_point.x), 2));
+	}
+	else if (ray->hit_wall_side == 1)
+	{
+		ray->hit_point.x = ray->hit_idx_x;
+		abs_delta_len = sqrt(pow(ray->ray_length, 2) - pow(fabs(cast_pos->x - ray->hit_point.x), 2));
+	}
+	else if (ray->hit_wall_side == 2)
+	{
+		ray->hit_point.y = ray->hit_idx_y + 1;
+		abs_delta_len = sqrt(pow(ray->ray_length, 2) - pow(fabs(cast_pos->y - ray->hit_point.y), 2));
+	}
+	else
+	{
+		ray->hit_point.y = ray->hit_idx_y;
+		abs_delta_len = sqrt(pow(ray->ray_length, 2) - pow(fabs(cast_pos->y - ray->hit_point.y), 2));
+	}
+	reflect_hit_point(cast_pos, ray, abs_delta_len);
 }
 
 void	new_set_wall_distance(t_player *player_info, t_ray *ray)
@@ -206,7 +260,7 @@ void	cast_sigle_ray(t_game *game, t_ray *ray)
 	new_calcul_hitpoint_dist(ray, last_step, &side_dist, &delta_dist);
 	new_set_ray_hit_point(&game->player.vec_pos, ray);
 	new_set_wall_distance(&game->player, ray);
-	set_ray_hit_point(&game->player.vec_pos, ray);
+	// set_ray_hit_point(&game->player.vec_pos, ray);
 	// printf("hit_x : %lf hit_y : %lf\n", ray->hit_point.x, ray->hit_point.y);
 	// calcul_hitpoint_dist(&game->player, ray, &side_dist, &delta_dist);
 	calcul_texture_point(&game->player.vec_pos, ray);
@@ -223,6 +277,22 @@ void	cast_sigle_ray(t_game *game, t_ray *ray)
 // 		cast_angle -= 360;
 // 	game->ray_data[idx_x].cast_angle = cast_angle;
 // }
+
+void	debug_print_ray_info(t_game *game)
+{
+	int	i = 0;
+	t_ray	*ray;
+
+	while (i < game->info.screen_x)
+	{
+		ray = &game->ray_data[i];
+		printf("index : %d cast_angle : %lf, ray_length : %lf, wall_dist : %lf, hit_point(%lf %lf)", \
+		i, ray->cast_angle, ray->ray_length, ray->wall_distance, ray->hit_point.x, ray->hit_point.y);
+		printf("hit_idx(%d %d), hit_side : %d\n", ray->hit_idx_x, ray->hit_idx_y, ray->hit_wall_side);
+		i++;
+	}
+	exit(0);
+}
 
 void	ray_cast(t_game *game)
 {
@@ -244,6 +314,7 @@ void	ray_cast(t_game *game)
 		// printf("%d :  x:%d y:%d\n", idx_x, game->ray_data[idx_x].hit_idx_x, game->ray_data[idx_x].hit_idx_y);
 		idx_x++;
 	}
+	// debug_print_ray_info(game);
 }
 
 void	calcul_drawpixel(t_game *game, t_ray *ray, t_vector2 *wall_pixel)
@@ -270,7 +341,7 @@ void	draw_line(t_game *game, int idx_x, t_vector2 *wall_pixel)
 							   idx_x * (bg_data->bits_per_pixel / 8));
 		*(unsigned int *)dst = create_trgb(0, 0, 0, 0);
 		idx_y++;
-	}	
+	}
 	while (idx_y < wall_pixel->y)
 	{
 		dst = bg_data->addr + (idx_y * bg_data->line_length +
@@ -284,7 +355,7 @@ void	draw_line(t_game *game, int idx_x, t_vector2 *wall_pixel)
 							   idx_x * (bg_data->bits_per_pixel / 8));
 		*(unsigned int *)dst = create_trgb(0, 0, 0, 0);
 		idx_y++;
-	}	
+	}
 }
 
 void	make_wall(t_game *game, t_vector2 *wall_pixel)
