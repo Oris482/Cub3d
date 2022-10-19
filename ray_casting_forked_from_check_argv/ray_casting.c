@@ -123,9 +123,16 @@ void	calcul_hitpoint_dist(t_player *player_info, t_ray *ray)
 	// ray->wall_distance = ray->ray_length;
 }
 
-void	calcul_texture_point(t_vector2 *cast_point, t_ray *ray)
+void	calcul_texture_x_point(t_vector2 *cast_point, t_ray *ray)
 {
-
+	if (ray->hit_wall_side == 0)
+		ray->hit_texture_point = ray->hit_idx_y + 1 - ray->hit_point.y;
+	else if (ray->hit_wall_side == 1)
+		ray->hit_texture_point = ray->hit_point.y - ray->hit_idx_y;
+	else if (ray->hit_wall_side == 2)
+		ray->hit_texture_point = ray->hit_point.x - ray->hit_idx_x;
+	else
+		ray->hit_texture_point = ray->hit_idx_x + 1 - ray->hit_point.x;
 }
 
 void	set_ray_hit_point(t_vector2 *vec_pos, t_ray *ray)
@@ -286,7 +293,7 @@ void	cast_sigle_ray(t_game *game, t_ray *ray)
 	// set_ray_hit_point(&game->player.vec_pos, ray);
 	// printf("hit_x : %lf hit_y : %lf\n", ray->hit_point.x, ray->hit_point.y);
 	// calcul_hitpoint_dist(&game->player, ray, &side_dist, &delta_dist);
-	calcul_texture_point(&game->player.vec_pos, ray);
+	calcul_texture_x_point(&game->player.vec_pos, ray);
 }
 
 // void	set_cast_angle(t_ray, int idx_x)
@@ -355,6 +362,19 @@ void	calcul_drawpixel(t_game *game, t_ray *ray, t_vector2 *wall_pixel)
 		wall_pixel->y = game->info.screen_y;
 }
 
+int	get_wall_texture_pixel(t_game *game, t_vector2 *wall_pixel, int idx_x, int idx_y)
+{
+	t_vector2		texture_idx;
+	unsigned int	pixel_color;
+
+	texture_idx.x = game->ray_data[idx_x].hit_texture_point * \
+			game->texture[game->ray_data[idx_x].hit_wall_side].texture_width;
+	texture_idx.y = (idx_y - wall_pixel->x) * (wall_pixel->y - wall_pixel->x) * \
+			game->texture[game->ray_data[idx_x].hit_wall_side].texture_height;
+	pixel_color = game->texture[game->ray_data[idx_x].hit_wall_side].img;
+	// return (create_trgb(0, get_r()))
+}
+
 void	draw_line(t_game *game, int idx_x, t_vector2 *wall_pixel)
 {
 	t_bg_data	*bg_data;
@@ -367,21 +387,29 @@ void	draw_line(t_game *game, int idx_x, t_vector2 *wall_pixel)
 	{
 		dst = bg_data->addr + (idx_y * bg_data->line_length +
 							   idx_x * (bg_data->bits_per_pixel / 8));
-		*(unsigned int *)dst = create_trgb(0, 0, 0, 0);
+		*(unsigned int *)dst = create_trgb(0, 50, 50, 125);
 		idx_y++;
 	}
 	while (idx_y < wall_pixel->y)
 	{
 		dst = bg_data->addr + (idx_y * bg_data->line_length +
 							   idx_x * (bg_data->bits_per_pixel / 8));
-		*(unsigned int *)dst = create_trgb(0, 100, 100, 100);
+		// *(unsigned int *)dst = get_wall_texture_pixel(game, wall_pixel, idx_x, idx_y);
+		if (game->ray_data[idx_x].hit_wall_side == 0)
+			*(unsigned int *)dst = create_trgb(0, 255, 0, 0);
+		else if (game->ray_data[idx_x].hit_wall_side == 1)
+			*(unsigned int *)dst = create_trgb(0, 0, 255, 0);
+		else if (game->ray_data[idx_x].hit_wall_side == 2)
+			*(unsigned int *)dst = create_trgb(0, 0, 0, 255);
+		else
+			*(unsigned int *)dst = create_trgb(0, 255, 0, 255);
 		idx_y++;
 	}
 	while (idx_y < game->info.screen_y)
 	{
 		dst = bg_data->addr + (idx_y * bg_data->line_length +
 							   idx_x * (bg_data->bits_per_pixel / 8));
-		*(unsigned int *)dst = create_trgb(0, 0, 0, 0);
+		*(unsigned int *)dst = create_trgb(100, 59, 29, 0);
 		idx_y++;
 	}
 }

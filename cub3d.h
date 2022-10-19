@@ -148,15 +148,6 @@ typedef struct s_ray
 	double		hit_texture_point;
 }	t_ray;
 
-typedef struct s_ray_travel_data
-{
-	int		step_x;
-	int		step_y;
-	double	cur_x;
-	double	cur_y;
-}	t_ray_travel_data;
-
-
 typedef struct s_game
 {
 	t_info			info;
