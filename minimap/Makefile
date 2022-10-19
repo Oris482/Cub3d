@@ -1,5 +1,5 @@
 CC = cc
-NAME = a.out
+NAME = cub3d
 CFLAGS = #-Wall -Wextra -Werror
 CFLAGS = -g
 MLX_DIR = ../mlx
@@ -33,7 +33,7 @@ all : ${NAME}
 
 $(NAME) : ${OBJS} ${MLX_LIB}
 	${CC} ${CFLAGS} -o ${NAME} ${OBJS} ${LFLAGS}
-	install_name_tool -change ${MLX_LIB} ./${MLX_DIR}/${MLX_LIB} ${NAME}
+	install_name_tool -change ${MLX_LIB} $(CURDIR)/${MLX_DIR}/${MLX_LIB} ${NAME}
 
 m1 :
 	arch -x86_64 make all
