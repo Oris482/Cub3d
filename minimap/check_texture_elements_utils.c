@@ -70,15 +70,19 @@ unsigned char	get_color_value(char **rgb_str)
 {
 	int	color_value;
 
-	color_value = 0;
+	color_value = -1;
 	while (**rgb_str && **rgb_str != ',')
 	{
 		if (**rgb_str < '0' || **rgb_str > '9')
 			exit_with_err("floor, ceiling color value error", E_PERM);
+		if (color_value == -1)
+			color_value = 0;
 		color_value = color_value * 10 + (**rgb_str - '0');
 		if (color_value > 255)
 			exit_with_err("floor, ceiling color value error", E_PERM);
 		(*rgb_str)++;
 	}
+	if (color_value < 0)
+		exit_with_err("floor, ceiling color value error", E_PERM);
 	return ((unsigned char)color_value);
 }
