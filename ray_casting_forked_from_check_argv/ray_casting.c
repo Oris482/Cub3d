@@ -44,16 +44,18 @@ void	set_dist(t_vector2 *pos, double cast_angle, \
 {
 	const	double radian_cast_angle = degree_to_radian(cast_angle);
 
-	// side_dist->x = fabs((trunc(pos->x + 1) - pos->x) / cos(radian_cast_angle));
-	// side_dist->y = fabs((trunc(pos->y + 1) - pos->y) / sin(radian_cast_angle));
 	delta_dist->x = 1 / fabs(cos(radian_cast_angle));
 	delta_dist->y = 1 / fabs(sin(radian_cast_angle));
-	side_dist->x = (fabs(floor(pos->x) - pos->x) ) * delta_dist->x;
-	side_dist->y = (fabs(floor(pos->y) - pos->y) ) * delta_dist->y;
-	// side_dist->x = (ceil(pos->x) - pos->x) * delta_dist->x;
-	// side_dist->y = (ceil(pos->y) - pos->y) * delta_dist->y;
-	// side_dist->x = (ceil(pos->x) - pos->x) / fabs(cos(radian_cast_angle));
-	// side_dist->y = (ceil(pos->y) - pos->y) / fabs(sin(radian_cast_angle));
+	if (cos(radian_cast_angle) >= 0)
+		side_dist->x = delta_dist->x * (ceil(pos->x) - pos->x);
+	else
+		side_dist->x = delta_dist->x * (pos->x - floor(pos->x));
+	if (sin(radian_cast_angle) >= 0)
+		side_dist->y = delta_dist->y * (ceil(pos->y) - pos->y);
+	else
+		side_dist->y = delta_dist->y * (pos->y - floor(pos->y));
+	// side_dist->x = (fabs(floor(pos->x) - pos->x) + 1) * delta_dist->x;
+	// side_dist->y = (fabs(floor(pos->y) - pos->y) + 1) * delta_dist->y;
 }
 
 void	get_hit_wall_side(t_ray *ray, int last_step)
@@ -327,6 +329,10 @@ void	ray_cast(t_game *game)
 	{
 		cast_angle = game->player.camera_angle - \
 								(game->info.fov_h / 2) + delta_angle * idx_x;
+		if (cast_angle < 0)
+			cast_angle += 360.0;
+		else if (cast_angle >= 360.0)
+			cast_angle -= 360.0;
 		game->ray_data[idx_x].cast_angle = cast_angle;
 		cast_sigle_ray(game, &game->ray_data[idx_x]);
 		// printf("%d :  x:%d y:%d\n", idx_x, game->ray_data[idx_x].hit_idx_x, game->ray_data[idx_x].hit_idx_y);
@@ -341,8 +347,8 @@ void	calcul_drawpixel(t_game *game, t_ray *ray, t_vector2 *wall_pixel)
 	// wall_pixel->x = ray->wall_distance * 50; // 그냥 대입해봄
 	// wall_pixel->y = game->info.screen_y - ray->wall_distance * 50;
 
-	wall_pixel->x = game->info.screen_y / 2 - ratio_wall * 100;
-	wall_pixel->y = game->info.screen_y / 2 + ratio_wall * 100;
+	wall_pixel->x = game->info.screen_y / 2 - ratio_wall * game->info.screen_y;
+	wall_pixel->y = game->info.screen_y / 2 + ratio_wall * game->info.screen_y;
 	if (wall_pixel->x < 0)
 		wall_pixel->x = 0;
 	if (wall_pixel->y > game->info.screen_y)

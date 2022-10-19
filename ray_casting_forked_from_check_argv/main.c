@@ -11,7 +11,7 @@ double	adjust_degree(double base_degree, double offset_degree);
 void    rotate_player(t_game *game)
 {
 	unsigned int const	pressed_keyset = game->pressed_keyset;
-	double const		rotate_speed = 1.0;
+	double const		rotate_speed = 1.5;
 	double				*angle;
 
 	angle = &game->player.camera_angle;
@@ -50,7 +50,7 @@ void    move_player(t_game *game)
 {
 	unsigned int const	pressed_keyset = game->pressed_keyset;
 	double const		angle = game->player.camera_angle;
-	double const		move_speed = 0.02;
+	double const		move_speed = 0.1;
 	t_vector2			*player_pos;
 
 	player_pos = &game->player.vec_pos;
