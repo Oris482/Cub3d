@@ -337,12 +337,16 @@ void	ray_cast(t_game *game)
 
 void	calcul_drawpixel(t_game *game, t_ray *ray, t_vector2 *wall_pixel)
 {
-	wall_pixel->x = ray->wall_distance * 50; // 그냥 대입해봄
-	wall_pixel->y = game->info.screen_y - ray->wall_distance * 50;
-	if (wall_pixel->y < 0)
-		wall_pixel->y = 0;
-	if (wall_pixel->x > game->info.screen_y)
-		wall_pixel->x = game->info.screen_y;
+	const double	ratio_wall = 1 / ray->wall_distance;
+	// wall_pixel->x = ray->wall_distance * 50; // 그냥 대입해봄
+	// wall_pixel->y = game->info.screen_y - ray->wall_distance * 50;
+
+	wall_pixel->x = game->info.screen_y / 2 - ratio_wall * 100;
+	wall_pixel->y = game->info.screen_y / 2 + ratio_wall * 100;
+	if (wall_pixel->x < 0)
+		wall_pixel->x = 0;
+	if (wall_pixel->y > game->info.screen_y)
+		wall_pixel->y = game->info.screen_y;
 }
 
 void	draw_line(t_game *game, int idx_x, t_vector2 *wall_pixel)

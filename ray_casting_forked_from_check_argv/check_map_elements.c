@@ -4,7 +4,7 @@
 static void	_set_init_player(char c, t_player *player, int map_x, int map_y)
 {
 	player->vec_pos.x = map_x + 0.5;
-	player->vec_pos.y = map_y + 0.2;
+	player->vec_pos.y = map_y + 0.5;
 	if (c == 'E')
 		player->camera_angle = 0.0;
 	else if (c == 'W')
