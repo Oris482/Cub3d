@@ -21,8 +21,8 @@ SRCS	= main.c	\
 			check_texture_elements.c	\
 			check_texture_elements_utils.c	\
 			rgb_utils.c	\
-			ray_casting.c	\
-			angle_utils.c
+			make_minimap_image.c	\
+			draw_minimap.c
 
 OBJS = ${SRCS:.c=.o}
 

@@ -1,0 +1,12 @@
+EA ./path_to_the_east_texture
+WE ./no_file
+SO ./path_to_the_south_texture
+NO ./path_to_the_north_texture
+F 10,225,11
+C 225,10,2
+
+11111
+10001
+10N01
+10001
+11111

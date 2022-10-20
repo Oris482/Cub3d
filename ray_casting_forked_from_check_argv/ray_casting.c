@@ -280,23 +280,23 @@ void	calcul_drawpixel(t_game *game, t_ray *ray, t_vector2 *wall_pixel)
 
 void	draw_line(t_game *game, int idx_x, t_vector2 *wall_pixel)
 {
-	t_bg_data	*bg_data;
+	t_view_data	*view_data;
 	char		*dst;
 	int			idx_y;
 
 	idx_y = 0;
-	bg_data = &game->bg_data;
+	view_data = &game->view_data;
 	while (idx_y < wall_pixel->x)
 	{
-		dst = bg_data->addr + (idx_y * bg_data->line_length +
-							   idx_x * (bg_data->bits_per_pixel / 8));
+		dst = view_data->addr + (idx_y * view_data->line_length +
+							   idx_x * (view_data->bits_per_pixel / 8));
 		*(unsigned int *)dst = create_trgb(0, 50, 50, 125);
 		idx_y++;
 	}
 	while (idx_y < wall_pixel->y)
 	{
-		dst = bg_data->addr + (idx_y * bg_data->line_length +
-							   idx_x * (bg_data->bits_per_pixel / 8));
+		dst = view_data->addr + (idx_y * view_data->line_length +
+							   idx_x * (view_data->bits_per_pixel / 8));
 		if (game->ray_data[idx_x].hit_wall_side == 0)
 			*(unsigned int *)dst = create_trgb(0, 255, 0, 0);
 		else if (game->ray_data[idx_x].hit_wall_side == 1)
@@ -309,8 +309,8 @@ void	draw_line(t_game *game, int idx_x, t_vector2 *wall_pixel)
 	}
 	while (idx_y < game->info.screen_y)
 	{
-		dst = bg_data->addr + (idx_y * bg_data->line_length +
-							   idx_x * (bg_data->bits_per_pixel / 8));
+		dst = view_data->addr + (idx_y * view_data->line_length +
+							   idx_x * (view_data->bits_per_pixel / 8));
 		*(unsigned int *)dst = create_trgb(100, 59, 29, 0);
 		idx_y++;
 	}
@@ -340,5 +340,5 @@ void	draw_screen(t_game *game)
 	t_vector2	wall_pixel;
 
 	draw(game, &wall_pixel);
-	mlx_put_image_to_window(game->info.mlx_ptr, game->info.win_ptr, game->bg_data.img, 0, 0);
+	mlx_put_image_to_window(game->info.mlx_ptr, game->info.win_ptr, game->view_data.img, 0, 0);
 }

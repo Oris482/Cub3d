@@ -51,8 +51,10 @@ Module.symvers
 Mkfile.old
 dkms.conf
 
+# Custom
 .vscode/
 .DS_Store
 *.swiftdoc
 *.swiftmodule
 *.swiftsourceinfo
+cub3d
