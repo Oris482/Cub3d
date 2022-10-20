@@ -2,12 +2,11 @@ CC = cc
 NAME = cub3d
 CFLAGS = #-Wall -Wextra -Werror
 CFLAGS = -g# -fsanitize=address -g3
-MLX_DIR = ../mlx
+MLX_DIR = mlx
 LFLAGS = -L${MLX_DIR} -lmlx -framework OpenGL -framework AppKit
 IFLAGS = -I${MLX_DIR} -I. -I..
 MLX_LIB = libmlx.dylib
 SRCS	= main.c	\
-			degree_utils.c	\
 			handle_player.c	\
 			make_ceiling_floor_image.c	\
 			print_functions.c	\
@@ -22,7 +21,9 @@ SRCS	= main.c	\
 			check_texture_elements_utils.c	\
 			rgb_utils.c	\
 			make_minimap_image.c	\
-			draw_minimap.c
+			draw_minimap.c	\
+			degree_utils.c	\
+			ray_casting.c	\
 
 OBJS = ${SRCS:.c=.o}
 

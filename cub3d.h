@@ -227,9 +227,6 @@ void			check_argv(int argc, char *argv[], t_game *game);
 void	init_ray(t_game *game);
 void	draw_screen(t_game *game);
 
-//angle_utils.c
-double	degree_to_radian(double degree);
-
 // handle_player.c
 double			cut_point(double num, int limiter);
 void    		move_player(t_player *player, t_minimap *minimap, unsigned int const pressed_keyset);
@@ -242,6 +239,9 @@ void			make_minimap_image(t_game *game);
 
 // draw_minimap.c
 void			draw_minimap(t_game *game);
+
+// ray_casting.c
+void	draw_screen(t_game *game);
 
 
 #endif
