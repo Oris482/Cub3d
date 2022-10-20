@@ -16,11 +16,18 @@
 # define TRUE 1
 # define FALSE 0
 
-#define START	0
-#define END		1
+# define START	0
+# define END	1
 
 # define KEY	0
 # define VALUE 1
+
+# define X	0
+# define Y	1
+
+# define NONE ' '
+# define WALL '1'
+# define RODE '0'
 
 enum	e_keyset
 {
@@ -71,8 +78,8 @@ enum	e_texture_elements
 
 enum	e_map_elements
 {
-	WALL = 1 << 0,
-	PLAYER = 1 << 1,
+	WALL_ELEMENT = 1 << 0,
+	PLAYER_ELEMENT = 1 << 1,
 	ALL_MAP_ELEMENTS = 0b00000011
 };
 
@@ -121,13 +128,13 @@ typedef struct s_player
 	double			rotate_speed;
 }	t_player;
 
-typedef struct	s_bg_data {
+typedef struct	s_img_data {
 	void	*img;
 	char	*addr;
 	int		bits_per_pixel;
 	int		line_length;
 	int		endian;
-}   t_bg_data;
+}   t_img_data;
 
 typedef struct	s_texture {
 	void	*img;
@@ -136,14 +143,22 @@ typedef struct	s_texture {
 	int		texture_height;
 }	t_texture;
 
+typedef struct s_minimap
+{
+	t_img_data	map_img_data;
+	int			width;
+	int			height;
+	int			pixel_per_square;
+}	t_minimap;
+
 typedef struct s_game
 {
 	t_info			info;
 	t_player		player;
-	t_bg_data		bg_data;
+	t_img_data		view_data;
+	t_minimap		minimap;
 	t_texture		texture[4];
 	unsigned int	pressed_keyset;
-	char			**map;
 	unsigned int	floor_color;
 	unsigned int	ceiling_color;
 }	t_game;
@@ -153,6 +168,10 @@ void    		multi_free(void *ptr1, void *ptr2, void *ptr3, void *ptr4);
 void			*my_malloc(size_t len);
 void			ft_memset(void *ptr, unsigned char value, size_t size);
 void			remove_newline(char *line);
+
+// degree_utils.c
+double			deg2rad(double degree);
+double			adjust_degree(double base_degree, double offset_degree);
 
 // print_functions.c
 void			exit_with_err(char *custom_msg, int exit_code);
@@ -167,6 +186,7 @@ unsigned char	get_g(int trgb);
 unsigned char	get_b(int trgb);
 
 // make_ceiling_floor_image.c
+void			set_range(int arg[2], int arg_start, int arg_end);
 void			draw_ceiling_floor(t_game *game, int x, int wall_y[2], double fog_value);
 
 // check_texture_elements_utils.c
@@ -190,5 +210,19 @@ void			check_map_surrounded_by_wall(char **map, int end_x, int end_y);
 
 // check_argv.c
 void			check_argv(int argc, char *argv[], t_game *game);
+
+// handle_player.c
+double			cut_point(double num, int limiter);
+void    		move_player(t_player *player, t_minimap *minimap, unsigned int const pressed_keyset);
+void			rotate_player(t_player *player, unsigned int const pressed_keyset);
+
+// make_minimap_imgae.c
+void			put_one_square_pixels_to_img(t_img_data *img_data, int pos[2], \
+													int pps, unsigned int color);
+void			make_minimap_image(t_game *game);
+
+// draw_minimap.c
+void			draw_minimap(t_game *game);
+
 
 #endif

@@ -12,16 +12,16 @@ char	*get_map_first_line(int fd)
 		if (line == NULL)
 			exit_with_err("invalid map", E_PERM);
 		cursor = line;
-		while (*cursor && (*cursor == ' ' || *cursor == '\n'))
+		while (*cursor && (*cursor == NONE || *cursor == '\n'))
 			cursor++;
 		if (*cursor == '\0')
 		{
 			free(line);
 			continue ;
 		}
-		else if (*cursor != '1')
+		else if (*cursor != WALL)
 			exit_with_err("invalid map", E_PERM);
-		while (*cursor && (*cursor == '1' || *cursor == ' ' || *cursor == '\n'))
+		while (*cursor && (*cursor == WALL || *cursor == NONE || *cursor == '\n'))
 			cursor++;
 		if (*cursor == '\0')
 			return (line);
@@ -64,7 +64,7 @@ void	linked_map_to_arr(t_linked_map *linked_map, t_info *info)
 	while (linked_map)
 	{
 		info->map[y] = (char *)my_malloc(sizeof(char) * info->map_x);
-		ft_memset(info->map[y], ' ', info->map_x);
+		ft_memset(info->map[y], NONE, info->map_x);
 		x = 0;
 		while (linked_map->line[x])
 		{
