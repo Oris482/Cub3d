@@ -18,7 +18,7 @@ void	graphic_resource_init(t_game *game)
 		exit_with_err("mlx function error", E_PERM);
 	mlx_get_screen_size(info->mlx_ptr, &info->screen_x, &info->screen_y);
 	info->screen_x *= 0.6;
-	info->screen_y *= 0.7;
+	info->screen_y *= 0.5;
 	info->fov_h = 60.0;
 	info->fov_v = (double)info->screen_y / (double)info->screen_x \
 															* info->fov_h;
@@ -41,19 +41,16 @@ int	main_loop(t_game *game)
 	if (game->pressed_keyset != 0)
 	{
 		if (game->pressed_keyset & KEY_WASD)
-			move_player(&game->player, &game->minimap, game->pressed_keyset);
+			move_player(&game->player, game->info.map, game->pressed_keyset);
 		if (game->pressed_keyset & KEY_ARROW)
 			rotate_player(&game->player, game->pressed_keyset);
-		// printf("X : %f Y: %f Angle: %f\n", game->player.vec_pos.x, game->player.vec_pos.y, game->player.camera_angle);
+	}
 		draw_screen(game);
 		draw_minimap(game);
 		mlx_sync(MLX_SYNC_IMAGE_WRITABLE, game->view_data.img);
-		// mlx_put_image_to_window(game->info.mlx_ptr, game->info.win_ptr, \
-		// 								game->minimap.map_img_data.img, 0, 0);
-		mlx_put_image_to_window(game->info.mlx_ptr, game->info.win_ptr, \
-													game->view_data.img, 0, 0);
+		mlx_put_image_to_window(game->info.mlx_ptr, game->info.win_ptr,
+								game->view_data.img, 0, 0);
 		mlx_sync(MLX_SYNC_WIN_CMD_COMPLETED, game->info.win_ptr);
-	}
 	return (0);
 }
 
@@ -120,8 +117,8 @@ void	loop(t_game *game)
 
 void	player_handle_setting(t_player *player)
 {
-	player->move_speed = 0.05;
-	player->rotate_speed = 1;
+	player->move_speed = 0.15;
+	player->rotate_speed = 1.5;
 }
 
 int	main(int argc, char *argv[])
@@ -133,7 +130,6 @@ int	main(int argc, char *argv[])
 	check_argv(argc, argv, &game);
 	print_game_info(&game);
 	make_minimap_image(&game);
-	// draw_minimap(&game);
 	loop(&game);
 	return (0);
 }

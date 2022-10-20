@@ -290,7 +290,7 @@ void	draw_line(t_game *game, int idx_x, t_vector2 *wall_pixel)
 	{
 		dst = view_data->addr + (idx_y * view_data->line_length +
 							   idx_x * (view_data->bits_per_pixel / 8));
-		*(unsigned int *)dst = create_trgb(0, 50, 50, 125);
+		*(unsigned int *)dst = game->ceiling_color;
 		idx_y++;
 	}
 	while (idx_y < wall_pixel->y)
@@ -311,7 +311,7 @@ void	draw_line(t_game *game, int idx_x, t_vector2 *wall_pixel)
 	{
 		dst = view_data->addr + (idx_y * view_data->line_length +
 							   idx_x * (view_data->bits_per_pixel / 8));
-		*(unsigned int *)dst = create_trgb(100, 59, 29, 0);
+		*(unsigned int *)dst = game->floor_color;
 		idx_y++;
 	}
 }

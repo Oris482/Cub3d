@@ -29,6 +29,8 @@
 # define WALL '1'
 # define RODE '0'
 
+# define BODY_SIDE_2 0.1
+
 enum	e_keyset
 {
 	KEYSET_W = 1,
@@ -229,7 +231,8 @@ void	draw_screen(t_game *game);
 
 // handle_player.c
 double			cut_point(double num, int limiter);
-void    		move_player(t_player *player, t_minimap *minimap, unsigned int const pressed_keyset);
+// void    		move_player(t_player *player, t_minimap *minimap, unsigned int const pressed_keyset);
+void			move_player(t_player *player, char **map, unsigned int	pressed_keyset);
 void			rotate_player(t_player *player, unsigned int const pressed_keyset);
 
 // make_minimap_imgae.c

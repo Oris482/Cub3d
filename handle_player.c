@@ -15,37 +15,25 @@ double	cut_point(double num, int limiter)
 	return ((double)((int)(num * handler)) / handler * sign);
 }
 
-void	check_wall_collisions(t_vector2 *player_pos, t_vector2 tmp_pos, \
-									t_minimap *minimap, int collision_value)
+void	check_wall_collisions(t_vector2 *player_pos, t_vector2 *tmp_pos, char **map)
 {
-	int					x[2];
-	int					y[2];
-	const int			wall_color = create_trgb(0, 0, 0, 0);
-	const t_img_data	*img_data = &minimap->map_img_data;
-	char				*dst[4];
+	t_vector2	check_coordin;
 
-	collision_value = (minimap->pixel_per_square - collision_value) / 2;
-	x[0] = (int)(tmp_pos.x * minimap->pixel_per_square) + collision_value;
-	x[1] = (int)((tmp_pos.x + 1) * minimap->pixel_per_square) - collision_value;
-	y[0] = (int)(tmp_pos.y * minimap->pixel_per_square) + collision_value;
-	y[1] = (int)((tmp_pos.y + 1) * minimap->pixel_per_square) - collision_value;
-	dst[0] = img_data->addr + (y[0] * img_data->line_length + \
-										x[0] * (img_data->bits_per_pixel / 8));
-	dst[1] = img_data->addr + (y[0] * img_data->line_length + \
-										x[1] * (img_data->bits_per_pixel / 8));
-	dst[2] = img_data->addr + (y[1] * img_data->line_length + \
-										x[0] * (img_data->bits_per_pixel / 8));
-	dst[3] = img_data->addr + (y[1] * img_data->line_length + \
-										x[1] * (img_data->bits_per_pixel / 8));
-	if (*dst[0] != wall_color && *dst[1] != wall_color && *dst[2] != wall_color \
-															&& *dst[3] != wall_color)
-	{
-		player_pos->x = tmp_pos.x;
-		player_pos->y = tmp_pos.y;
-	}	
+	if (tmp_pos->x - player_pos->x > 0)
+		check_coordin.x = tmp_pos->x + BODY_SIDE_2;
+	else
+		check_coordin.x = tmp_pos->x - BODY_SIDE_2;
+	if (tmp_pos->y - player_pos->y > 0)
+		check_coordin.y = tmp_pos->y + BODY_SIDE_2;
+	else
+		check_coordin.y = tmp_pos->y - BODY_SIDE_2;
+	if (map[(int)check_coordin.y][(int)player_pos->x] != WALL)
+		player_pos->y = tmp_pos->y;
+	if (map[(int)player_pos->y][(int)check_coordin.x] != WALL)
+		player_pos->x = tmp_pos->x;
 }
 
-void    move_player(t_player *player, t_minimap *minimap, unsigned int const pressed_keyset)
+void    move_player(t_player *player, char **map, unsigned int const pressed_keyset)
 {
 	double const		angle = player->camera_angle;
 	double const		move_speed = player->move_speed;
@@ -71,7 +59,7 @@ void    move_player(t_player *player, t_minimap *minimap, unsigned int const pre
 		tmp_pos.y += move_speed \
 			* cut_point(sin(deg2rad(adjust_degree(angle, 90.0 * sign))), 6);		
 	}
-	check_wall_collisions(&player->vec_pos, tmp_pos, minimap, 1);
+	check_wall_collisions(&player->vec_pos, &tmp_pos, map);
 }
 
 void    rotate_player(t_player *player, unsigned int const pressed_keyset)
