@@ -6,15 +6,13 @@
 #include <string.h>
 #include <errno.h>
 #include <math.h>
-double	adjust_degree(double base_degree, double offset_degree);
 
 void	graphic_resource_init(t_game *game)
 {
-	t_info	*info;
+	t_info * const	info = &game->info;
 	int		idx;
 
 	ft_memset(game, 0, sizeof(t_game));
-	info = &game->info;
 	info->mlx_ptr = mlx_init();
 	if (info->mlx_ptr == NULL)
 		exit_with_err("mlx function error", E_PERM);
@@ -33,6 +31,9 @@ void	graphic_resource_init(t_game *game)
     game->view_data.addr = mlx_get_data_addr(game->view_data.img, \
 		&game->view_data.bits_per_pixel, &game->view_data.line_length, \
 		&game->view_data.endian);
+	game->ray_data = (t_ray *)malloc(sizeof(t_ray) * info->screen_x);
+	if (!game->ray_data)
+		exit_with_err("Malloc error", E_NOMEM);
 }
 
 int	main_loop(t_game *game)
@@ -47,8 +48,8 @@ int	main_loop(t_game *game)
 		draw_screen(game);
 		draw_minimap(game);
 		mlx_sync(MLX_SYNC_IMAGE_WRITABLE, game->view_data.img);
-		mlx_put_image_to_window(game->info.mlx_ptr, game->info.win_ptr, \
-										game->minimap.map_img_data.img, 0, 0);
+		// mlx_put_image_to_window(game->info.mlx_ptr, game->info.win_ptr, \
+		// 								game->minimap.map_img_data.img, 0, 0);
 		mlx_put_image_to_window(game->info.mlx_ptr, game->info.win_ptr, \
 													game->view_data.img, 0, 0);
 		mlx_sync(MLX_SYNC_WIN_CMD_COMPLETED, game->info.win_ptr);

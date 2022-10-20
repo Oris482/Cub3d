@@ -316,29 +316,22 @@ void	draw_line(t_game *game, int idx_x, t_vector2 *wall_pixel)
 	}
 }
 
-void	make_wall(t_game *game, t_vector2 *wall_pixel)
+void	make_wall(t_game *game)
 {
+	t_vector2	wall_pixel;
 	int	idx_x;
 
 	idx_x = 0;
 	while (idx_x < game->info.screen_x)
 	{
-		calcul_drawpixel(game, &game->ray_data[idx_x], wall_pixel);
-		draw_line(game, idx_x, wall_pixel);
+		calcul_drawpixel(game, &game->ray_data[idx_x], &wall_pixel);
+		draw_line(game, idx_x, &wall_pixel);
 		idx_x++;
 	}
 }
 
-void	draw(t_game *game, t_vector2 *wall_pixel)
-{
-	ray_cast(game);
-	make_wall(game, wall_pixel);
-}
-
 void	draw_screen(t_game *game)
 {
-	t_vector2	wall_pixel;
-
-	draw(game, &wall_pixel);
-	mlx_put_image_to_window(game->info.mlx_ptr, game->info.win_ptr, game->view_data.img, 0, 0);
+	ray_cast(game);
+	make_wall(game);
 }
