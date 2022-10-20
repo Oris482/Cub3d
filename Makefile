@@ -1,7 +1,7 @@
 CC = cc
 NAME = cub3d
-CFLAGS = #-Wall -Wextra -Werror
-CFLAGS = -g# -fsanitize=address -g3
+CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -g
 MLX_DIR = mlx
 LFLAGS = -L${MLX_DIR} -lmlx -framework OpenGL -framework AppKit
 IFLAGS = -I${MLX_DIR} -I. -I..
