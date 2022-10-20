@@ -60,16 +60,16 @@ void	get_hit_wall_side(t_ray *ray, int last_step)
 	if (last_step == 0) // x축방향으로 이동 -> 동쪽아니면 서쪽에 맞음
 	{
 		if (ray->cast_angle < 90 || 270 <= ray->cast_angle)
-			ray->hit_wall_side = 1;
+			ray->hit_wall_side = WE;
 		else
-			ray->hit_wall_side = 0;
+			ray->hit_wall_side = EA;
 	}
 	else // y축방향으로 이동 -> 남쪽아니면 북쪽에 맞음
 	{
 		if (ray->cast_angle < 180)
-			ray->hit_wall_side = 3;
+			ray->hit_wall_side = NO;
 		else
-			ray->hit_wall_side = 2;
+			ray->hit_wall_side = SO;
 	}
 }
 
@@ -106,11 +106,11 @@ void	calcul_hitpoint_dist(t_player *player_info, t_ray *ray)
 
 void	calcul_texture_x_point(t_vector2 *cast_point, t_ray *ray)
 {
-	if (ray->hit_wall_side == 0)
+	if (ray->hit_wall_side == EA)
 		ray->hit_texture_point = ray->hit_idx_y + 1 - ray->hit_point.y;
-	else if (ray->hit_wall_side == 1)
+	else if (ray->hit_wall_side == WE)
 		ray->hit_texture_point = ray->hit_point.y - ray->hit_idx_y;
-	else if (ray->hit_wall_side == 2)
+	else if (ray->hit_wall_side == SO)
 		ray->hit_texture_point = ray->hit_point.x - ray->hit_idx_x;
 	else
 		ray->hit_texture_point = ray->hit_idx_x + 1 - ray->hit_point.x;
@@ -118,19 +118,19 @@ void	calcul_texture_x_point(t_vector2 *cast_point, t_ray *ray)
 
 void	set_ray_hit_point(t_vector2 *vec_pos, t_ray *ray)
 {
-	if (ray->hit_wall_side == 0)
+	if (ray->hit_wall_side == EA)
 	{
 		ray->hit_point.x = ray->hit_idx_x + 1;
 		ray->hit_point.y = \
 			vec_pos->y + (vec_pos->x - ray->hit_point.x) * tan(deg2rad(ray->cast_angle));
 	}
-	else if (ray->hit_wall_side == 1)
+	else if (ray->hit_wall_side == WE)
 	{
 		ray->hit_point.x = ray->hit_idx_x;
 		ray->hit_point.y = \
 			vec_pos->y + (ray->hit_point.x - vec_pos->x) * tan(deg2rad(ray->cast_angle));
 	}
-	else if (ray->hit_wall_side == 2)
+	else if (ray->hit_wall_side == SO)
 	{
 		ray->hit_point.y = ray->hit_idx_y + 1;
 		ray->hit_point.x = \
@@ -155,7 +155,7 @@ void	new_calcul_hitpoint_dist(t_ray *ray, int last_step, \
 
 void	reflect_hit_point(t_vector2 *cast_pos, t_ray *ray, double abs_delta_len)
 {
-	if (ray->hit_wall_side == 2 || ray->hit_wall_side == 3)
+	if (ray->hit_wall_side == SO || ray->hit_wall_side == NO)
 	{
 		if (cos(deg2rad(ray->cast_angle)) > 0)
 			ray->hit_point.x = cast_pos->x + abs_delta_len;
@@ -175,17 +175,17 @@ void	new_set_ray_hit_point(t_vector2 *cast_pos, t_ray *ray)
 {
 	double	abs_delta_len;
 
-	if (ray->hit_wall_side == 0)
+	if (ray->hit_wall_side == EA)
 	{
 		ray->hit_point.x = ray->hit_idx_x + 1;
 		abs_delta_len = sqrt(pow(ray->ray_length, 2) - pow(cast_pos->x - ray->hit_point.x, 2));
 	}
-	else if (ray->hit_wall_side == 1)
+	else if (ray->hit_wall_side == WE)
 	{
 		ray->hit_point.x = ray->hit_idx_x;
 		abs_delta_len = sqrt(pow(ray->ray_length, 2) - pow(ray->hit_point.x - cast_pos->x, 2));
 	}
-	else if (ray->hit_wall_side == 2)
+	else if (ray->hit_wall_side == SO)
 	{
 		ray->hit_point.y = ray->hit_idx_y + 1;
 		abs_delta_len = sqrt(pow(ray->ray_length, 2) - pow(cast_pos->y - ray->hit_point.y, 2));
