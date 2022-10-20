@@ -8,6 +8,19 @@
 #include <math.h>
 double	adjust_degree(double base_degree, double offset_degree);
 
+void    rotate_player(t_game *game)
+{
+	unsigned int const	pressed_keyset = game->pressed_keyset;
+	double const		rotate_speed = 1.5;
+	double				*angle;
+
+	angle = &game->player.camera_angle;
+	if (pressed_keyset & KEYSET_LA && !(pressed_keyset & KEYSET_RA))
+		*angle = adjust_degree(*angle, -rotate_speed);
+	if (pressed_keyset & KEYSET_RA && !(pressed_keyset & KEYSET_LA))
+		*angle = adjust_degree(*angle, rotate_speed);
+}
+
 void	graphic_resource_init(t_game *game)
 {
 	t_info	*info;
@@ -26,30 +39,57 @@ void	graphic_resource_init(t_game *game)
 															* info->fov_h;
 	info->win_ptr = mlx_new_window(info->mlx_ptr, info->screen_x, \
 												info->screen_y, "cub3D");
-    game->view_data.img = mlx_new_image(game->info.mlx_ptr, \
-		game->info.screen_x, game->info.screen_y);
-	if (!info->win_ptr || !game->view_data.img)
-		exit_with_err("mlx function error", E_PERM);
-    game->view_data.addr = mlx_get_data_addr(game->view_data.img, \
-		&game->view_data.bits_per_pixel, &game->view_data.line_length, \
-		&game->view_data.endian);
+    game->view_data.img = mlx_new_image(game->info.mlx_ptr, game->info.screen_x, \
+														game->info.screen_y);
+    game->view_data.addr = mlx_get_data_addr(game->view_data.img, &game->view_data.bits_per_pixel, \
+										&game->view_data.line_length, &game->view_data.endian);
+	init_ray(game);
 }
 
+double	deg2rad(double degree);
+
+void    move_player(t_game *game)
+{
+	unsigned int const	pressed_keyset = game->pressed_keyset;
+	double const		angle = game->player.camera_angle;
+	double const		move_speed = 0.1;
+	t_vector2			*player_pos;
+
+	player_pos = &game->player.vec_pos;
+	if (pressed_keyset & KEYSET_W && !(pressed_keyset & KEYSET_S))
+	{
+		player_pos->x += move_speed * cos(deg2rad(angle));
+		player_pos->y += move_speed * sin(deg2rad(angle));
+	}
+	if (pressed_keyset & KEYSET_S && !(pressed_keyset & KEYSET_W))
+	{
+		player_pos->x -= move_speed * cos(deg2rad(angle));
+		player_pos->y -= move_speed * sin(deg2rad(angle));
+	}
+	if (pressed_keyset & KEYSET_A && !(pressed_keyset & KEYSET_D))
+	{
+		player_pos->x += move_speed * cos(deg2rad(adjust_degree(angle, -90.0)));
+		player_pos->y += move_speed * sin(deg2rad(adjust_degree(angle, -90.0)));
+	}
+	if (pressed_keyset & KEYSET_D && !(pressed_keyset & KEYSET_A))
+	{
+		player_pos->x += move_speed * cos(deg2rad(adjust_degree(angle, +90.0)));
+		player_pos->y += move_speed * sin(deg2rad(adjust_degree(angle, +90.0)));
+	}
+}
 int	main_loop(t_game *game)
 {
+	// 여기서는 눌린 키가 있어야 그리기 때문에 스프라이트는 없다고 가정함.
 	if (game->pressed_keyset != 0)
 	{
-		if (game->pressed_keyset & KEY_WASD)
-			move_player(&game->player, &game->minimap, game->pressed_keyset);
-		if (game->pressed_keyset & KEY_ARROW)
-			rotate_player(&game->player, game->pressed_keyset);
-		// printf("X : %f Y: %f Angle: %f\n", game->player.vec_pos.x, game->player.vec_pos.y, game->player.camera_angle);
-		draw_minimap(game);
-		mlx_sync(MLX_SYNC_IMAGE_WRITABLE, game->view_data.img);
-		mlx_put_image_to_window(game->info.mlx_ptr, game->info.win_ptr, \
-													game->view_data.img, 0, 0);
-		mlx_sync(MLX_SYNC_WIN_CMD_COMPLETED, game->info.win_ptr);
+		if (game->pressed_keyset | KEY_WASD)
+			move_player(game);
+		if (game->pressed_keyset | KEY_ARROW)
+			rotate_player(game);
 	}
+	draw_screen(game);
+	printf("angle : %lf\n", game->player.camera_angle);
+	printf("pos : X:%lf Y:%lf\n", game->player.vec_pos.x, game->player.vec_pos.y);
 	return (0);
 }
 
@@ -116,8 +156,9 @@ void	loop(t_game *game)
 
 void	player_handle_setting(t_player *player)
 {
-	player->move_speed = 0.05;
-	player->rotate_speed = 1;
+	player->move_speed = 0.001;
+	player->rotate_speed = 0.1;
+	player->camera_angle = 0;
 }
 
 int	main(int argc, char *argv[])
@@ -132,26 +173,6 @@ int	main(int argc, char *argv[])
 	player_handle_setting(&game.player);
 	check_argv(argc, argv, &game);
 	print_game_info(&game);
-	make_minimap_image(&game);
-	y_top = 200;
-	y_bottom = 400;
-	x = 0;
-	while (x <= game.info.screen_x / 2)
-	{
-		y[START] = y_top - (x / 6);
-		y[END] = y_bottom - (x / 6);
-		draw_ceiling_floor(&game, x, y, 0.2);
-		x++;
-	}
-	while (x <= game.info.screen_x)
-	{
-		y[START] = (y_top - (game.info.screen_x / 12)) + ((x - (game.info.screen_x / 2)) / 6);
-		y[END] = (y_bottom - (game.info.screen_x / 12)) + ((x - (game.info.screen_x / 2)) / 6);
-		draw_ceiling_floor(&game, x, y, 0.2);
-		x++;
-	}
-	mlx_put_image_to_window(game.info.mlx_ptr, game.info.win_ptr, game.view_data.img, 0, 0);
-	draw_minimap(&game);
 	loop(&game);
 	return (0);
 }

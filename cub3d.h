@@ -143,6 +143,17 @@ typedef struct	s_texture {
 	int		texture_height;
 }	t_texture;
 
+typedef struct s_ray
+{
+	double		cast_angle;
+	double		ray_length;
+	double		wall_distance;
+	t_vector2	hit_point;
+	int			hit_idx_x;
+	int			hit_idx_y;
+	int			hit_wall_side;
+	double		hit_texture_point;
+}	t_ray;
 typedef struct s_minimap
 {
 	t_img_data	map_img_data;
@@ -158,6 +169,7 @@ typedef struct s_game
 	t_img_data		view_data;
 	t_minimap		minimap;
 	t_texture		texture[4];
+	t_ray			*ray_data;
 	unsigned int	pressed_keyset;
 	unsigned int	floor_color;
 	unsigned int	ceiling_color;
@@ -210,6 +222,13 @@ void			check_map_surrounded_by_wall(char **map, int end_x, int end_y);
 
 // check_argv.c
 void			check_argv(int argc, char *argv[], t_game *game);
+
+// ray_casting.c
+void	init_ray(t_game *game);
+void	draw_screen(t_game *game);
+
+//angle_utils.c
+double	degree_to_radian(double degree);
 
 // handle_player.c
 double			cut_point(double num, int limiter);
