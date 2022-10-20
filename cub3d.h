@@ -139,10 +139,10 @@ typedef struct	s_img_data {
 }   t_img_data;
 
 typedef struct	s_texture {
-	void	*img;
-	char	*filename;
-	int		texture_width;
-	int		texture_height;
+	t_img_data	img_data;
+	char		*filename;
+	int			texture_width;
+	int			texture_height;
 }	t_texture;
 
 typedef struct s_ray
@@ -243,8 +243,7 @@ void			make_minimap_image(t_game *game);
 // draw_minimap.c
 void			draw_minimap(t_game *game);
 
-// ray_casting.c
-void	draw_screen(t_game *game);
-
+// display_texture.c
+void	put_pixel_wall(t_game *game, int idx_x, t_vector2 *wall_pixel);
 
 #endif
