@@ -46,9 +46,13 @@ static void	_set_floor_ceiling_color(t_game *game, int element_identifier, \
 			exit_with_err("floor, ceiling color value error", E_PERM);
 		color_value[idx] = get_color_value(&rgb_str);
 		idx++;
-		if (*rgb_str == ',')
+		if (idx <=B && *rgb_str == ',')
 			rgb_str++;
 	}
+	while (*rgb_str && (*rgb_str == ' ' || *rgb_str == '\t'))
+		rgb_str++;
+	if (*rgb_str != '\0')
+		exit_with_err("floor, ceiling color value error", E_PERM);
 	*target = create_trgb(0, color_value[R], color_value[G], color_value[B]);
 }
 
@@ -89,5 +93,5 @@ void	check_texture_elements(int fd, t_game *game)
 	elements_flag = 0;
 	_get_texture_elements_info(fd, &elements_flag, game);
 	if (elements_flag != ALL_TEXTURE_ELEMENTS)
-		exit_with_err("some elements source missing", E_PERM);
+		exit_with_err("invalid element source", E_PERM);
 }
