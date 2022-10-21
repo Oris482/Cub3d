@@ -266,27 +266,44 @@ void	ray_cast(t_game *game)
 	}
 }
 
-void	calcul_drawpixel(t_game *game, t_ray *ray, t_vector2 *wall_pixel)
+void	calcul_drawpixel(t_game *game, t_ray *ray, t_vector2 *wall_line)
 {
 	const double	ratio_wall = 1 / ray->wall_distance;
 
-	wall_pixel->x = game->info.screen_y / 2 - ratio_wall * game->info.screen_y;
-	wall_pixel->y = game->info.screen_y / 2 + ratio_wall * game->info.screen_y;
-	if (wall_pixel->x < 0)
-		wall_pixel->x = 0;
-	if (wall_pixel->y > game->info.screen_y)
-		wall_pixel->y = game->info.screen_y;
+	wall_line->x = game->info.screen_y / 2 - ratio_wall * game->info.screen_y;
+	wall_line->y = game->info.screen_y / 2 + ratio_wall * game->info.screen_y;
+	// if (wall_pixel->x < 0)
+	// 	wall_pixel->x = 0;
+	// if (wall_pixel->y > game->info.screen_y)
+	// 	wall_pixel->y = game->info.screen_y;
 }
 
-void	draw_line(t_game *game, int idx_x, t_vector2 *wall_pixel)
+t_vector2	get_wall_pixel(t_game *game, t_vector2 *wall_line)
 {
+	t_vector2	ret_vec;
+
+	if (wall_line->x < 0)
+		ret_vec.x = 0;
+	else
+		ret_vec.x = wall_line->x;
+	if (wall_line->y > game->info.screen_y)
+		ret_vec.y = game->info.screen_y;
+	else
+		ret_vec.y = wall_line->y;
+	return (ret_vec);
+}
+
+void	draw_line(t_game *game, int idx_x, t_vector2 *wall_line)
+{
+	t_vector2	wall_pixel;
 	t_img_data	*view_data;
 	char		*dst;
 	int			idx_y;
 
+	wall_pixel = get_wall_pixel(game, wall_line);
 	idx_y = 0;
 	view_data = &game->view_data;
-	while (idx_y < wall_pixel->x)
+	while (idx_y < wall_pixel.x)
 	{
 		dst = view_data->addr + (idx_y * view_data->line_length +
 							   idx_x * (view_data->bits_per_pixel / 8));
@@ -307,8 +324,8 @@ void	draw_line(t_game *game, int idx_x, t_vector2 *wall_pixel)
 	// 		*(unsigned int *)dst = create_trgb(0, 255, 0, 255);
 	// 	idx_y++;
 	// }
-	put_pixel_wall(game, idx_x, wall_pixel);
-	idx_y = wall_pixel->y;
+	put_pixel_wall(game, idx_x, wall_line, &wall_pixel);
+	idx_y = wall_pixel.y;
 	while (idx_y < game->info.screen_y)
 	{
 		dst = view_data->addr + (idx_y * view_data->line_length +
@@ -320,14 +337,14 @@ void	draw_line(t_game *game, int idx_x, t_vector2 *wall_pixel)
 
 void	make_wall(t_game *game)
 {
-	t_vector2	wall_pixel;
+	t_vector2	wall_line;
 	int	idx_x;
 
 	idx_x = 0;
 	while (idx_x < game->info.screen_x)
 	{
-		calcul_drawpixel(game, &game->ray_data[idx_x], &wall_pixel);
-		draw_line(game, idx_x, &wall_pixel);
+		calcul_drawpixel(game, &game->ray_data[idx_x], &wall_line);
+		draw_line(game, idx_x, &wall_line);
 		idx_x++;
 	}
 }
