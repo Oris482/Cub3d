@@ -54,8 +54,8 @@ void	draw_camera_angle(t_player *player, t_img_data *view_data, int pps)
 	double			ray_angle;
 	const double	ray_interval = 4.0;
 
-	ray_center[X] = player->vec_pos.x * pps + pps / 2 - !(pps % 2);
-	ray_center[Y] = player->vec_pos.y * pps + pps / 2 - !(pps % 2);
+	ray_center[X] = (player->vec_pos.x - 0.5) * pps + pps / 2 - !(pps % 2);
+	ray_center[Y] = (player->vec_pos.y - 0.5) * pps + pps / 2 - !(pps % 2);
 	ray_angle = -90.0;
 	while (ray_angle < 90.0)
 	{
@@ -67,8 +67,8 @@ void	draw_camera_angle(t_player *player, t_img_data *view_data, int pps)
 
 void	draw_player(t_player *player, t_img_data *view_data, int pps)
 {
-	const int	player_x = (int)(player->vec_pos.x * pps);
-	const int	player_y = (int)(player->vec_pos.y * pps);
+	const int	player_x = (int)((player->vec_pos.x - 0.5) * pps);
+	const int	player_y = (int)((player->vec_pos.y - 0.5) * pps);
 	const int	player_color = create_trgb(0, 0, 0, 255);
 	int			pos[2];
 
