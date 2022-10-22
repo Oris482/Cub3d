@@ -30,6 +30,8 @@
 # define RODE '0'
 
 # define BODY_SIDE_2 0.1
+# define SPEED_MOUSE_H 0.1
+# define SPEED_MOUSE_V 2
 
 enum	e_keyset
 {
@@ -132,7 +134,7 @@ typedef struct s_player
 {
 	t_vector2		vec_pos;
 	double			camera_angle_h;
-	double			camera_angle_v;
+	double			vertical_dist_pixel;
 	double			move_speed;
 	double			rotate_speed;
 }	t_player;

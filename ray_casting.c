@@ -270,16 +270,12 @@ void	calcul_drawpixel(t_game *game, t_ray *ray, t_vector2 *wall_line)
 {
 	const double	ratio_wall = 1 / ray->wall_distance;
 
-	wall_line->x = game->info.screen_y / 2 - game->player.camera_angle_v * 2 - ratio_wall * game->info.screen_y;
-	// if (wall_line->x < 0)
-	// 	wall_line->x = 0;
-	// else if (wall_line->x > game->info.screen_y)
-	// 	wall_line->x = game->info.screen_y;
-	wall_line->y = game->info.screen_y / 2 - game->player.camera_angle_v * 2 + ratio_wall * game->info.screen_y;
-	// if (wall_line->y < 0)
-	// 	wall_line->y = 0;
-	// else if (wall_line->y > game->info.screen_y)
-	// 	wall_line->y = game->info.screen_y;
+	wall_line->x = game->info.screen_y / 2 \
+			- game->player.vertical_dist_pixel \
+			- ratio_wall * game->info.screen_y;
+	wall_line->y = game->info.screen_y / 2 \
+			- game->player.vertical_dist_pixel \
+			+ ratio_wall * game->info.screen_y;
 }
 
 t_vector2	get_wall_pixel(t_game *game, t_vector2 *wall_line)
@@ -288,10 +284,14 @@ t_vector2	get_wall_pixel(t_game *game, t_vector2 *wall_line)
 
 	if (wall_line->x < 0)
 		ret_vec.x = 0;
+	else if (wall_line->x > game->info.screen_y)
+		ret_vec.x = game->info.screen_y;
 	else
 		ret_vec.x = wall_line->x;
 	if (wall_line->y > game->info.screen_y)
 		ret_vec.y = game->info.screen_y;
+	else if (wall_line->y < 0)
+		wall_line->y = 0;
 	else
 		ret_vec.y = wall_line->y;
 	return (ret_vec);

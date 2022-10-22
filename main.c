@@ -121,7 +121,7 @@ void	player_handle_setting(t_game *game)
 {
 	game->player.move_speed = 0.15;
 	game->player.rotate_speed = 1.5;
-	game->player.camera_angle_v = 0;
+	game->player.vertical_dist_pixel = 0;
 	mlx_mouse_move(game->info.win_ptr, 0, 0);
 }
 
