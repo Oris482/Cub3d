@@ -45,10 +45,6 @@ int	main_loop(t_game *game)
 		if (game->pressed_keyset & KEY_ARROW)
 			rotate_player(&game->player, game->pressed_keyset);
 	}
-	// mlx_put_image_to_window(game->info.mlx_ptr, game->info.win_ptr, game->texture[0].img_data.img, 0, 0);
-	// mlx_put_image_to_window(game->info.mlx_ptr, game->info.win_ptr, game->texture[1].img_data.img, 300, 0);
-	// mlx_put_image_to_window(game->info.mlx_ptr, game->info.win_ptr, game->texture[2].img_data.img, 600, 0);
-	// mlx_put_image_to_window(game->info.mlx_ptr, game->info.win_ptr, game->texture[3].img_data.img, 900, 0);
 	rotate_player_mouse(game);
 	draw_screen(game);
 	draw_minimap(game);
@@ -125,8 +121,8 @@ void	player_handle_setting(t_game *game)
 {
 	game->player.move_speed = 0.15;
 	game->player.rotate_speed = 1.5;
-	mlx_mouse_move(game->info.win_ptr, \
-							0, 0);
+	game->player.camera_angle_v = 0;
+	mlx_mouse_move(game->info.win_ptr, 0, 0);
 }
 
 int	main(int argc, char *argv[])

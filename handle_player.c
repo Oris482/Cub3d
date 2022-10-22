@@ -36,7 +36,7 @@ void	check_wall_collisions(t_vector2 *player_pos, t_vector2 *tmp_pos, char **map
 
 void    move_player(t_player *player, char **map, unsigned int const pressed_keyset)
 {
-	double const		angle = player->camera_angle;
+	double const		angle = player->camera_angle_h;
 	double const		move_speed = player->move_speed;
 	t_vector2			tmp_pos;
 	double				sign;
@@ -68,7 +68,7 @@ void    rotate_player(t_player *player, unsigned int const pressed_keyset)
 	double const		rotate_speed = player->rotate_speed;
 	double				*angle;
 
-	angle = &player->camera_angle;
+	angle = &player->camera_angle_h;
 	if (pressed_keyset & KEYSET_LA && !(pressed_keyset & KEYSET_RA))
 		*angle = adjust_degree(*angle, -rotate_speed);
 	if (pressed_keyset & KEYSET_RA && !(pressed_keyset & KEYSET_LA))
@@ -78,10 +78,18 @@ void    rotate_player(t_player *player, unsigned int const pressed_keyset)
 void	rotate_player_mouse(t_game *game)
 {
 	t_vector2_d	delta_mousepos;
-	double * const	angle = &game->player.camera_angle;
+	double * const	angle_h = &game->player.camera_angle_h;
+	double * const	angle_v = &game->player.camera_angle_v;
+	double			new_camera_angle_v;
 	double const	mouse_rotate_speed = 0.2;
 
 	mlx_mouse_get_pos(game->info.win_ptr, &delta_mousepos.x, &delta_mousepos.y);
-	*angle = adjust_degree(*angle, delta_mousepos.x * mouse_rotate_speed);
+	*angle_h = adjust_degree(*angle_h, delta_mousepos.x * mouse_rotate_speed);
+	new_camera_angle_v = game->player.camera_angle_v + delta_mousepos.y * mouse_rotate_speed;
+	if (new_camera_angle_v < -90)
+		new_camera_angle_v = -90;
+	else if (new_camera_angle_v > 90)
+		new_camera_angle_v = 90;
+	game->player.camera_angle_v = new_camera_angle_v;
 	mlx_mouse_move(game->info.win_ptr, 0, 0);
 }

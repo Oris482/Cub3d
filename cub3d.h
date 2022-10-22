@@ -131,7 +131,8 @@ typedef struct s_controller
 typedef struct s_player
 {
 	t_vector2		vec_pos;
-	double			camera_angle;
+	double			camera_angle_h;
+	double			camera_angle_v;
 	double			move_speed;
 	double			rotate_speed;
 }	t_player;
