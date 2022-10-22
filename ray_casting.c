@@ -60,16 +60,16 @@ void	get_hit_wall_side(t_ray *ray, int last_step)
 	if (last_step == 0) // x축방향으로 이동 -> 동쪽아니면 서쪽에 맞음
 	{
 		if (ray->cast_angle < 90 || 270 <= ray->cast_angle)
-			ray->hit_wall_side = 1;
+			ray->hit_wall_side = WE;
 		else
-			ray->hit_wall_side = 0;
+			ray->hit_wall_side = EA;
 	}
 	else // y축방향으로 이동 -> 남쪽아니면 북쪽에 맞음
 	{
 		if (ray->cast_angle < 180)
-			ray->hit_wall_side = 3;
+			ray->hit_wall_side = NO;
 		else
-			ray->hit_wall_side = 2;
+			ray->hit_wall_side = SO;
 	}
 }
 
@@ -106,11 +106,11 @@ void	calcul_hitpoint_dist(t_player *player_info, t_ray *ray)
 
 void	calcul_texture_x_point(t_vector2 *cast_point, t_ray *ray)
 {
-	if (ray->hit_wall_side == 0)
+	if (ray->hit_wall_side == EA)
 		ray->hit_texture_point = ray->hit_idx_y + 1 - ray->hit_point.y;
-	else if (ray->hit_wall_side == 1)
+	else if (ray->hit_wall_side == WE)
 		ray->hit_texture_point = ray->hit_point.y - ray->hit_idx_y;
-	else if (ray->hit_wall_side == 2)
+	else if (ray->hit_wall_side == SO)
 		ray->hit_texture_point = ray->hit_point.x - ray->hit_idx_x;
 	else
 		ray->hit_texture_point = ray->hit_idx_x + 1 - ray->hit_point.x;
@@ -118,19 +118,19 @@ void	calcul_texture_x_point(t_vector2 *cast_point, t_ray *ray)
 
 void	set_ray_hit_point(t_vector2 *vec_pos, t_ray *ray)
 {
-	if (ray->hit_wall_side == 0)
+	if (ray->hit_wall_side == EA)
 	{
 		ray->hit_point.x = ray->hit_idx_x + 1;
 		ray->hit_point.y = \
 			vec_pos->y + (vec_pos->x - ray->hit_point.x) * tan(deg2rad(ray->cast_angle));
 	}
-	else if (ray->hit_wall_side == 1)
+	else if (ray->hit_wall_side == WE)
 	{
 		ray->hit_point.x = ray->hit_idx_x;
 		ray->hit_point.y = \
 			vec_pos->y + (ray->hit_point.x - vec_pos->x) * tan(deg2rad(ray->cast_angle));
 	}
-	else if (ray->hit_wall_side == 2)
+	else if (ray->hit_wall_side == SO)
 	{
 		ray->hit_point.y = ray->hit_idx_y + 1;
 		ray->hit_point.x = \
@@ -155,7 +155,7 @@ void	new_calcul_hitpoint_dist(t_ray *ray, int last_step, \
 
 void	reflect_hit_point(t_vector2 *cast_pos, t_ray *ray, double abs_delta_len)
 {
-	if (ray->hit_wall_side == 2 || ray->hit_wall_side == 3)
+	if (ray->hit_wall_side == SO || ray->hit_wall_side == NO)
 	{
 		if (cos(deg2rad(ray->cast_angle)) > 0)
 			ray->hit_point.x = cast_pos->x + abs_delta_len;
@@ -175,17 +175,17 @@ void	new_set_ray_hit_point(t_vector2 *cast_pos, t_ray *ray)
 {
 	double	abs_delta_len;
 
-	if (ray->hit_wall_side == 0)
+	if (ray->hit_wall_side == EA)
 	{
 		ray->hit_point.x = ray->hit_idx_x + 1;
 		abs_delta_len = sqrt(pow(ray->ray_length, 2) - pow(cast_pos->x - ray->hit_point.x, 2));
 	}
-	else if (ray->hit_wall_side == 1)
+	else if (ray->hit_wall_side == WE)
 	{
 		ray->hit_point.x = ray->hit_idx_x;
 		abs_delta_len = sqrt(pow(ray->ray_length, 2) - pow(ray->hit_point.x - cast_pos->x, 2));
 	}
-	else if (ray->hit_wall_side == 2)
+	else if (ray->hit_wall_side == SO)
 	{
 		ray->hit_point.y = ray->hit_idx_y + 1;
 		abs_delta_len = sqrt(pow(ray->ray_length, 2) - pow(cast_pos->y - ray->hit_point.y, 2));
@@ -266,47 +266,48 @@ void	ray_cast(t_game *game)
 	}
 }
 
-void	calcul_drawpixel(t_game *game, t_ray *ray, t_vector2 *wall_pixel)
+void	calcul_drawpixel(t_game *game, t_ray *ray, t_vector2 *wall_line)
 {
 	const double	ratio_wall = 1 / ray->wall_distance;
 
-	wall_pixel->x = game->info.screen_y / 2 - ratio_wall * game->info.screen_y;
-	wall_pixel->y = game->info.screen_y / 2 + ratio_wall * game->info.screen_y;
-	if (wall_pixel->x < 0)
-		wall_pixel->x = 0;
-	if (wall_pixel->y > game->info.screen_y)
-		wall_pixel->y = game->info.screen_y;
+	wall_line->x = game->info.screen_y / 2 - ratio_wall * game->info.screen_y;
+	wall_line->y = game->info.screen_y / 2 + ratio_wall * game->info.screen_y;
 }
 
-void	draw_line(t_game *game, int idx_x, t_vector2 *wall_pixel)
+t_vector2	get_wall_pixel(t_game *game, t_vector2 *wall_line)
 {
+	t_vector2	ret_vec;
+
+	if (wall_line->x < 0)
+		ret_vec.x = 0;
+	else
+		ret_vec.x = wall_line->x;
+	if (wall_line->y > game->info.screen_y)
+		ret_vec.y = game->info.screen_y;
+	else
+		ret_vec.y = wall_line->y;
+	return (ret_vec);
+}
+
+void	draw_line(t_game *game, int idx_x, t_vector2 *wall_line)
+{
+	t_vector2	wall_pixel;
 	t_img_data	*view_data;
 	char		*dst;
 	int			idx_y;
 
+	wall_pixel = get_wall_pixel(game, wall_line);
 	idx_y = 0;
 	view_data = &game->view_data;
-	while (idx_y < wall_pixel->x)
+	while (idx_y < wall_pixel.x)
 	{
 		dst = view_data->addr + (idx_y * view_data->line_length +
 							   idx_x * (view_data->bits_per_pixel / 8));
 		*(unsigned int *)dst = game->ceiling_color;
 		idx_y++;
 	}
-	while (idx_y < wall_pixel->y)
-	{
-		dst = view_data->addr + (idx_y * view_data->line_length +
-							   idx_x * (view_data->bits_per_pixel / 8));
-		if (game->ray_data[idx_x].hit_wall_side == 0)
-			*(unsigned int *)dst = create_trgb(0, 255, 0, 0);
-		else if (game->ray_data[idx_x].hit_wall_side == 1)
-			*(unsigned int *)dst = create_trgb(0, 0, 255, 0);
-		else if (game->ray_data[idx_x].hit_wall_side == 2)
-			*(unsigned int *)dst = create_trgb(0, 0, 0, 255);
-		else
-			*(unsigned int *)dst = create_trgb(0, 255, 0, 255);
-		idx_y++;
-	}
+	put_pixel_wall(game, idx_x, wall_line, &wall_pixel);
+	idx_y = wall_pixel.y;
 	while (idx_y < game->info.screen_y)
 	{
 		dst = view_data->addr + (idx_y * view_data->line_length +
@@ -318,14 +319,14 @@ void	draw_line(t_game *game, int idx_x, t_vector2 *wall_pixel)
 
 void	make_wall(t_game *game)
 {
-	t_vector2	wall_pixel;
+	t_vector2	wall_line;
 	int	idx_x;
 
 	idx_x = 0;
 	while (idx_x < game->info.screen_x)
 	{
-		calcul_drawpixel(game, &game->ray_data[idx_x], &wall_pixel);
-		draw_line(game, idx_x, &wall_pixel);
+		calcul_drawpixel(game, &game->ray_data[idx_x], &wall_line);
+		draw_line(game, idx_x, &wall_line);
 		idx_x++;
 	}
 }

@@ -45,12 +45,16 @@ int	main_loop(t_game *game)
 		if (game->pressed_keyset & KEY_ARROW)
 			rotate_player(&game->player, game->pressed_keyset);
 	}
-		draw_screen(game);
-		draw_minimap(game);
-		mlx_sync(MLX_SYNC_IMAGE_WRITABLE, game->view_data.img);
-		mlx_put_image_to_window(game->info.mlx_ptr, game->info.win_ptr,
-								game->view_data.img, 0, 0);
-		mlx_sync(MLX_SYNC_WIN_CMD_COMPLETED, game->info.win_ptr);
+	// mlx_put_image_to_window(game->info.mlx_ptr, game->info.win_ptr, game->texture[0].img_data.img, 0, 0);
+	// mlx_put_image_to_window(game->info.mlx_ptr, game->info.win_ptr, game->texture[1].img_data.img, 300, 0);
+	// mlx_put_image_to_window(game->info.mlx_ptr, game->info.win_ptr, game->texture[2].img_data.img, 600, 0);
+	// mlx_put_image_to_window(game->info.mlx_ptr, game->info.win_ptr, game->texture[3].img_data.img, 900, 0);
+	draw_screen(game);
+	draw_minimap(game);
+	mlx_sync(MLX_SYNC_IMAGE_WRITABLE, game->view_data.img);
+	mlx_put_image_to_window(game->info.mlx_ptr, game->info.win_ptr,
+							game->view_data.img, 0, 0);
+	mlx_sync(MLX_SYNC_WIN_CMD_COMPLETED, game->info.win_ptr);
 	return (0);
 }
 

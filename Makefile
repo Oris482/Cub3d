@@ -24,6 +24,7 @@ SRCS	= main.c	\
 			draw_minimap.c	\
 			degree_utils.c	\
 			ray_casting.c	\
+			display_texture.c
 
 OBJS = ${SRCS:.c=.o}
 

@@ -13,17 +13,21 @@ static void	_set_wall_texture(t_game *game, int element_identifier, \
 												char *texture_file)
 {
 	t_texture	*target;
+	t_img_data	*target_img;
 
 	target = &game->texture[element_identifier];
 	if (target->filename)
 		free(target->filename);
 	target->filename = ft_strcpy(texture_file);
-	if (target->img)
-		mlx_destroy_image(game->info.mlx_ptr, target->img);
-	target->img = mlx_xpm_file_to_image(game->info.mlx_ptr, texture_file, \
-							&target->texture_width, &target->texture_height);
-	if (target->img == NULL)
+	if (target->img_data.img)
+		mlx_destroy_image(game->info.mlx_ptr, target->img_data.img);
+	target->img_data.img = mlx_xpm_file_to_image(game->info.mlx_ptr, \
+				texture_file, &target->texture_width, &target->texture_height);
+	if (target->img_data.img == NULL)
 		exit_with_err("can't open texture file", E_PERM);
+	target->img_data.addr = mlx_get_data_addr(target->img_data.img, \
+		&target->img_data.bits_per_pixel, &target->img_data.line_length, \
+		&target->img_data.endian);
 }
 
 static void	_set_floor_ceiling_color(t_game *game, int element_identifier, \

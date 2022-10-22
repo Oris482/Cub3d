@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   print_functions.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaesjeon <jaesjeon@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/11 19:05:36 by jaesjeon          #+#    #+#             */
-/*   Updated: 2022/10/12 01:23:21 by jaesjeon         ###   ########.fr       */
+/*   Updated: 2022/10/21 04:24:43 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	exit_with_err(char *custom_msg, int exit_code)
 static void	_print_texture_info(char *name, t_texture texture)
 {
 	printf("%s\n -filename\t:\t%s\n -address\t:\t%p\n -size\t\t:\t%d X %d\n", \
-					name, texture.filename, texture.img, \
+					name, texture.filename, texture.img_data.img, \
 					texture.texture_width, texture.texture_height);
 }
 
