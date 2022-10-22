@@ -104,6 +104,12 @@ typedef struct s_vector2
 	double	y;
 }	t_vector2;
 
+typedef struct s_vector2_d
+{
+	int	x;
+	int	y;
+}	t_vector2_d;
+
 typedef struct s_info
 {
 	void	*mlx_ptr;
@@ -233,6 +239,7 @@ void	draw_screen(t_game *game);
 double			cut_point(double num, int limiter);
 void			move_player(t_player *player, char **map, unsigned int	pressed_keyset);
 void			rotate_player(t_player *player, unsigned int const pressed_keyset);
+void			rotate_player_mouse(t_game *game);
 
 // make_minimap_imgae.c
 void			put_one_square_pixels_to_img(t_img_data *img_data, int pos[2], \

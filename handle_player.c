@@ -1,4 +1,5 @@
 #include "cub3d.h"
+#include "mlx.h"
 
 double	cut_point(double num, int limiter)
 {
@@ -72,4 +73,15 @@ void    rotate_player(t_player *player, unsigned int const pressed_keyset)
 		*angle = adjust_degree(*angle, -rotate_speed);
 	if (pressed_keyset & KEYSET_RA && !(pressed_keyset & KEYSET_LA))
 		*angle = adjust_degree(*angle, rotate_speed);
+}
+
+void	rotate_player_mouse(t_game *game)
+{
+	t_vector2_d	delta_mousepos;
+	double * const	angle = &game->player.camera_angle;
+	double const	mouse_rotate_speed = 0.2;
+
+	mlx_mouse_get_pos(game->info.win_ptr, &delta_mousepos.x, &delta_mousepos.y);
+	*angle = adjust_degree(*angle, delta_mousepos.x * mouse_rotate_speed);
+	mlx_mouse_move(game->info.win_ptr, 0, 0);
 }
