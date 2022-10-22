@@ -231,7 +231,6 @@ void	draw_screen(t_game *game);
 
 // handle_player.c
 double			cut_point(double num, int limiter);
-// void    		move_player(t_player *player, t_minimap *minimap, unsigned int const pressed_keyset);
 void			move_player(t_player *player, char **map, unsigned int	pressed_keyset);
 void			rotate_player(t_player *player, unsigned int const pressed_keyset);
 
@@ -244,6 +243,7 @@ void			make_minimap_image(t_game *game);
 void			draw_minimap(t_game *game);
 
 // display_texture.c
-void	put_pixel_wall(t_game *game, int idx_x, t_vector2 *wall_pixel);
+void	put_pixel_wall(t_game *game, int idx_x, t_vector2 *wall_line, \
+														t_vector2 *wall_pixel);
 
 #endif

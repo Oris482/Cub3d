@@ -12,17 +12,9 @@ unsigned int	get_texture_pixel(t_game *game, int idx_x, \
 	texture_img = &game->texture[cur_ray->hit_wall_side].img_data;
 	texture_idx_x = game->texture[cur_ray->hit_wall_side].texture_width;
 	texture_idx_y = game->texture[cur_ray->hit_wall_side].texture_height;
-	// if (cur_ray->hit_wall_side == EA)
-	// 	ratio_pos_texture.x = ceil(cur_ray->hit_point.y) - cur_ray->hit_point.y;
-	// else if (cur_ray->hit_wall_side == WE)
-	// 	ratio_pos_texture.x = cur_ray->hit_point.y - floor(cur_ray->hit_point.y);
-	// else if (cur_ray->hit_wall_side == SO)
-	// 	ratio_pos_texture.x = cur_ray->hit_point.x - floor(cur_ray->hit_point.x);
-	// else if (cur_ray->hit_wall_side == NO)
-	// 	ratio_pos_texture.x = ceil(cur_ray->hit_point.x) - cur_ray->hit_point.x;
 	ratio_pos_texture.x = cur_ray->hit_texture_point;
-	ratio_pos_texture.y = wall_line->
-				// (cur_idx_y - wall_pixel->x) / (wall_pixel->y - wall_pixel->x);
+	ratio_pos_texture.y = \
+				(cur_idx_y - wall_line->x) / (wall_line->y - wall_line->x);
 	texture_idx_x *= ratio_pos_texture.x;
 	texture_idx_y *= ratio_pos_texture.y;
 	return (*(unsigned int *)(texture_img->addr + \

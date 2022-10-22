@@ -272,10 +272,6 @@ void	calcul_drawpixel(t_game *game, t_ray *ray, t_vector2 *wall_line)
 
 	wall_line->x = game->info.screen_y / 2 - ratio_wall * game->info.screen_y;
 	wall_line->y = game->info.screen_y / 2 + ratio_wall * game->info.screen_y;
-	// if (wall_pixel->x < 0)
-	// 	wall_pixel->x = 0;
-	// if (wall_pixel->y > game->info.screen_y)
-	// 	wall_pixel->y = game->info.screen_y;
 }
 
 t_vector2	get_wall_pixel(t_game *game, t_vector2 *wall_line)
@@ -310,20 +306,6 @@ void	draw_line(t_game *game, int idx_x, t_vector2 *wall_line)
 		*(unsigned int *)dst = game->ceiling_color;
 		idx_y++;
 	}
-	// while (idx_y < wall_pixel->y)
-	// {
-	// 	dst = view_data->addr + (idx_y * view_data->line_length +
-	// 						   idx_x * (view_data->bits_per_pixel / 8));
-	// 	if (game->ray_data[idx_x].hit_wall_side == 0)
-	// 		*(unsigned int *)dst = create_trgb(0, 255, 0, 0);
-	// 	else if (game->ray_data[idx_x].hit_wall_side == 1)
-	// 		*(unsigned int *)dst = create_trgb(0, 0, 255, 0);
-	// 	else if (game->ray_data[idx_x].hit_wall_side == 2)
-	// 		*(unsigned int *)dst = create_trgb(0, 0, 0, 255);
-	// 	else
-	// 		*(unsigned int *)dst = create_trgb(0, 255, 0, 255);
-	// 	idx_y++;
-	// }
 	put_pixel_wall(game, idx_x, wall_line, &wall_pixel);
 	idx_y = wall_pixel.y;
 	while (idx_y < game->info.screen_y)
