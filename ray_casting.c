@@ -1,4 +1,4 @@
-#include "../cub3d.h"
+#include "cub3d.h"
 #include "mlx.h"
 
 void	init_ray(t_game *game)
@@ -41,7 +41,7 @@ void	set_ray_step(t_vector2 *vec_pos, t_ray *ray, t_vector2 *step)
 void	set_dist(t_vector2 *pos, double cast_angle, \
 								t_vector2 *side_dist, t_vector2 *delta_dist)
 {
-	const	double radian_cast_angle = degree_to_radian(cast_angle);
+	const	double radian_cast_angle = deg2rad(cast_angle);
 
 	delta_dist->x = 1 / fabs(cos(radian_cast_angle));
 	delta_dist->y = 1 / fabs(sin(radian_cast_angle));
@@ -101,7 +101,7 @@ void	calcul_hitpoint_dist(t_player *player_info, t_ray *ray)
 
 	delta_angle = fabs(player_info->camera_angle - ray->cast_angle);
 	ray->ray_length = sqrt(pow(delta_x, 2) + pow(delta_y, 2));
-	ray->wall_distance = fabs(cos(degree_to_radian(delta_angle))) * ray->ray_length;
+	ray->wall_distance = fabs(cos(deg2rad(delta_angle))) * ray->ray_length;
 }
 
 void	calcul_texture_x_point(t_vector2 *cast_point, t_ray *ray)
@@ -122,25 +122,25 @@ void	set_ray_hit_point(t_vector2 *vec_pos, t_ray *ray)
 	{
 		ray->hit_point.x = ray->hit_idx_x + 1;
 		ray->hit_point.y = \
-			vec_pos->y + (vec_pos->x - ray->hit_point.x) * tan(degree_to_radian(ray->cast_angle));
+			vec_pos->y + (vec_pos->x - ray->hit_point.x) * tan(deg2rad(ray->cast_angle));
 	}
 	else if (ray->hit_wall_side == 1)
 	{
 		ray->hit_point.x = ray->hit_idx_x;
 		ray->hit_point.y = \
-			vec_pos->y + (ray->hit_point.x - vec_pos->x) * tan(degree_to_radian(ray->cast_angle));
+			vec_pos->y + (ray->hit_point.x - vec_pos->x) * tan(deg2rad(ray->cast_angle));
 	}
 	else if (ray->hit_wall_side == 2)
 	{
 		ray->hit_point.y = ray->hit_idx_y + 1;
 		ray->hit_point.x = \
-			vec_pos->x - (vec_pos->y - ray->hit_point.y) * tan(degree_to_radian(ray->cast_angle));
+			vec_pos->x - (vec_pos->y - ray->hit_point.y) * tan(deg2rad(ray->cast_angle));
 	}
 	else
 	{
 		ray->hit_point.y = ray->hit_idx_y;
 		ray->hit_point.x = \
-			vec_pos->x + (ray->hit_point.y - vec_pos->y) * tan(degree_to_radian(ray->cast_angle));
+			vec_pos->x + (ray->hit_point.y - vec_pos->y) * tan(deg2rad(ray->cast_angle));
 	}
 }
 
@@ -157,14 +157,14 @@ void	reflect_hit_point(t_vector2 *cast_pos, t_ray *ray, double abs_delta_len)
 {
 	if (ray->hit_wall_side == 2 || ray->hit_wall_side == 3)
 	{
-		if (cos(degree_to_radian(ray->cast_angle)) > 0)
+		if (cos(deg2rad(ray->cast_angle)) > 0)
 			ray->hit_point.x = cast_pos->x + abs_delta_len;
 		else
 			ray->hit_point.x = cast_pos->x - abs_delta_len;
 	}
 	else
 	{
-		if (sin(degree_to_radian(ray->cast_angle)) > 0)
+		if (sin(deg2rad(ray->cast_angle)) > 0)
 			ray->hit_point.y = cast_pos->y + abs_delta_len;
 		else
 			ray->hit_point.y = cast_pos->y - abs_delta_len;
@@ -203,7 +203,7 @@ void	new_set_wall_distance(t_player *player_info, t_ray *ray)
 	double			delta_angle;
 
 	delta_angle = fabs(player_info->camera_angle - ray->cast_angle);
-	ray->wall_distance = cos(degree_to_radian(delta_angle)) * ray->ray_length;
+	ray->wall_distance = cos(deg2rad(delta_angle)) * ray->ray_length;
 }
 
 void	cast_sigle_ray(t_game *game, t_ray *ray)
@@ -280,7 +280,7 @@ void	calcul_drawpixel(t_game *game, t_ray *ray, t_vector2 *wall_pixel)
 
 void	draw_line(t_game *game, int idx_x, t_vector2 *wall_pixel)
 {
-	t_view_data	*view_data;
+	t_img_data	*view_data;
 	char		*dst;
 	int			idx_y;
 
@@ -290,7 +290,7 @@ void	draw_line(t_game *game, int idx_x, t_vector2 *wall_pixel)
 	{
 		dst = view_data->addr + (idx_y * view_data->line_length +
 							   idx_x * (view_data->bits_per_pixel / 8));
-		*(unsigned int *)dst = create_trgb(0, 50, 50, 125);
+		*(unsigned int *)dst = game->ceiling_color;
 		idx_y++;
 	}
 	while (idx_y < wall_pixel->y)
@@ -311,34 +311,27 @@ void	draw_line(t_game *game, int idx_x, t_vector2 *wall_pixel)
 	{
 		dst = view_data->addr + (idx_y * view_data->line_length +
 							   idx_x * (view_data->bits_per_pixel / 8));
-		*(unsigned int *)dst = create_trgb(100, 59, 29, 0);
+		*(unsigned int *)dst = game->floor_color;
 		idx_y++;
 	}
 }
 
-void	make_wall(t_game *game, t_vector2 *wall_pixel)
+void	make_wall(t_game *game)
 {
+	t_vector2	wall_pixel;
 	int	idx_x;
 
 	idx_x = 0;
 	while (idx_x < game->info.screen_x)
 	{
-		calcul_drawpixel(game, &game->ray_data[idx_x], wall_pixel);
-		draw_line(game, idx_x, wall_pixel);
+		calcul_drawpixel(game, &game->ray_data[idx_x], &wall_pixel);
+		draw_line(game, idx_x, &wall_pixel);
 		idx_x++;
 	}
 }
 
-void	draw(t_game *game, t_vector2 *wall_pixel)
-{
-	ray_cast(game);
-	make_wall(game, wall_pixel);
-}
-
 void	draw_screen(t_game *game)
 {
-	t_vector2	wall_pixel;
-
-	draw(game, &wall_pixel);
-	mlx_put_image_to_window(game->info.mlx_ptr, game->info.win_ptr, game->view_data.img, 0, 0);
+	ray_cast(game);
+	make_wall(game);
 }

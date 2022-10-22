@@ -6,21 +6,19 @@
 #include <string.h>
 #include <errno.h>
 #include <math.h>
-double	adjust_degree(double base_degree, double offset_degree);
 
 void	graphic_resource_init(t_game *game)
 {
-	t_info	*info;
+	t_info * const	info = &game->info;
 	int		idx;
 
 	ft_memset(game, 0, sizeof(t_game));
-	info = &game->info;
 	info->mlx_ptr = mlx_init();
 	if (info->mlx_ptr == NULL)
 		exit_with_err("mlx function error", E_PERM);
 	mlx_get_screen_size(info->mlx_ptr, &info->screen_x, &info->screen_y);
 	info->screen_x *= 0.6;
-	info->screen_y *= 0.7;
+	info->screen_y *= 0.5;
 	info->fov_h = 60.0;
 	info->fov_v = (double)info->screen_y / (double)info->screen_x \
 															* info->fov_h;
@@ -33,6 +31,9 @@ void	graphic_resource_init(t_game *game)
     game->view_data.addr = mlx_get_data_addr(game->view_data.img, \
 		&game->view_data.bits_per_pixel, &game->view_data.line_length, \
 		&game->view_data.endian);
+	game->ray_data = (t_ray *)malloc(sizeof(t_ray) * info->screen_x);
+	if (!game->ray_data)
+		exit_with_err("Malloc error", E_NOMEM);
 }
 
 int	main_loop(t_game *game)
@@ -40,16 +41,16 @@ int	main_loop(t_game *game)
 	if (game->pressed_keyset != 0)
 	{
 		if (game->pressed_keyset & KEY_WASD)
-			move_player(&game->player, &game->minimap, game->pressed_keyset);
+			move_player(&game->player, game->info.map, game->pressed_keyset);
 		if (game->pressed_keyset & KEY_ARROW)
 			rotate_player(&game->player, game->pressed_keyset);
-		// printf("X : %f Y: %f Angle: %f\n", game->player.vec_pos.x, game->player.vec_pos.y, game->player.camera_angle);
+	}
+		draw_screen(game);
 		draw_minimap(game);
 		mlx_sync(MLX_SYNC_IMAGE_WRITABLE, game->view_data.img);
-		mlx_put_image_to_window(game->info.mlx_ptr, game->info.win_ptr, \
-													game->view_data.img, 0, 0);
+		mlx_put_image_to_window(game->info.mlx_ptr, game->info.win_ptr,
+								game->view_data.img, 0, 0);
 		mlx_sync(MLX_SYNC_WIN_CMD_COMPLETED, game->info.win_ptr);
-	}
 	return (0);
 }
 
@@ -116,42 +117,19 @@ void	loop(t_game *game)
 
 void	player_handle_setting(t_player *player)
 {
-	player->move_speed = 0.05;
-	player->rotate_speed = 1;
+	player->move_speed = 0.15;
+	player->rotate_speed = 1.5;
 }
 
 int	main(int argc, char *argv[])
 {
 	t_game	game;
-	int		y_top;
-	int		y_bottom;
-	int		x;
-	int		y[2];
 
 	graphic_resource_init(&game);
 	player_handle_setting(&game.player);
 	check_argv(argc, argv, &game);
 	print_game_info(&game);
 	make_minimap_image(&game);
-	y_top = 200;
-	y_bottom = 400;
-	x = 0;
-	while (x <= game.info.screen_x / 2)
-	{
-		y[START] = y_top - (x / 6);
-		y[END] = y_bottom - (x / 6);
-		draw_ceiling_floor(&game, x, y, 0.2);
-		x++;
-	}
-	while (x <= game.info.screen_x)
-	{
-		y[START] = (y_top - (game.info.screen_x / 12)) + ((x - (game.info.screen_x / 2)) / 6);
-		y[END] = (y_bottom - (game.info.screen_x / 12)) + ((x - (game.info.screen_x / 2)) / 6);
-		draw_ceiling_floor(&game, x, y, 0.2);
-		x++;
-	}
-	mlx_put_image_to_window(game.info.mlx_ptr, game.info.win_ptr, game.view_data.img, 0, 0);
-	draw_minimap(&game);
 	loop(&game);
 	return (0);
 }
