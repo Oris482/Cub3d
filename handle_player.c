@@ -1,4 +1,5 @@
 #include "cub3d.h"
+#include "mlx.h"
 
 double	cut_point(double num, int limiter)
 {
@@ -35,7 +36,7 @@ void	check_wall_collisions(t_vector2 *player_pos, t_vector2 *tmp_pos, char **map
 
 void    move_player(t_player *player, char **map, unsigned int const pressed_keyset)
 {
-	double const		angle = player->camera_angle;
+	double const		angle = player->camera_angle_h;
 	double const		move_speed = player->move_speed;
 	t_vector2			tmp_pos;
 	double				sign;
@@ -67,9 +68,29 @@ void    rotate_player(t_player *player, unsigned int const pressed_keyset)
 	double const		rotate_speed = player->rotate_speed;
 	double				*angle;
 
-	angle = &player->camera_angle;
+	angle = &player->camera_angle_h;
 	if (pressed_keyset & KEYSET_LA && !(pressed_keyset & KEYSET_RA))
 		*angle = adjust_degree(*angle, -rotate_speed);
 	if (pressed_keyset & KEYSET_RA && !(pressed_keyset & KEYSET_LA))
 		*angle = adjust_degree(*angle, rotate_speed);
+}
+
+void	rotate_player_mouse(t_game *game)
+{
+	t_vector2_d	delta_mousepos;
+	double * const		angle_h = &game->player.camera_angle_h;
+	double				new_camera_angle_h;
+	double				new_vertical_dis_pixel;
+	double				ratio_pixel2rad;
+
+	mlx_mouse_get_pos(game->info.win_ptr, &delta_mousepos.x, &delta_mousepos.y);
+	*angle_h = adjust_degree(*angle_h, delta_mousepos.x * SPEED_MOUSE_H);
+	new_vertical_dis_pixel = game->player.vertical_dist_pixel + \
+											delta_mousepos.y * SPEED_MOUSE_V;
+	if (new_vertical_dis_pixel < -game->info.screen_y)
+		new_vertical_dis_pixel = -game->info.screen_y;
+	else if (new_vertical_dis_pixel > game->info.screen_y)
+		new_vertical_dis_pixel = game->info.screen_y;
+	game->player.vertical_dist_pixel = new_vertical_dis_pixel;
+	mlx_mouse_move(game->info.win_ptr, 0, 0);
 }
