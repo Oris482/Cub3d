@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/11 19:05:36 by jaesjeon          #+#    #+#             */
-/*   Updated: 2022/10/21 04:24:43 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2022/10/23 00:17:37 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ void	print_game_info(t_game *game)
 	printf("@ FOV_H\t\t:\t%f\n", info->fov_h);
 	printf("@ FOV_V\t\t:\t%f\n", info->fov_v);
 	printf("@ Player info\t:\tPosition[%d, %d], Camera angle[%.1f]\n", \
-		(int)player->vec_pos.x, (int)player->vec_pos.y, player->camera_angle);
+		(int)player->vec_pos.x, (int)player->vec_pos.y, player->camera_angle_h);
 	printf("@ Map info\t:\t%d X %d\n", info->map_x, info->map_y);
 	print_map(info->map, info->map_x, info->map_y);
 	printf("\n-----------------------WALL TEXTURE-----------------------\n\n");

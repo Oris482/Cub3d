@@ -99,7 +99,7 @@ void	calcul_hitpoint_dist(t_player *player_info, t_ray *ray)
 	const double	delta_y = player_info->vec_pos.y - ray->hit_point.y;
 	double			delta_angle;
 
-	delta_angle = fabs(player_info->camera_angle - ray->cast_angle);
+	delta_angle = fabs(player_info->camera_angle_h - ray->cast_angle);
 	ray->ray_length = sqrt(pow(delta_x, 2) + pow(delta_y, 2));
 	ray->wall_distance = fabs(cos(deg2rad(delta_angle))) * ray->ray_length;
 }
@@ -202,7 +202,7 @@ void	new_set_wall_distance(t_player *player_info, t_ray *ray)
 {
 	double			delta_angle;
 
-	delta_angle = fabs(player_info->camera_angle - ray->cast_angle);
+	delta_angle = fabs(player_info->camera_angle_h - ray->cast_angle);
 	ray->wall_distance = cos(deg2rad(delta_angle)) * ray->ray_length;
 }
 
@@ -254,7 +254,7 @@ void	ray_cast(t_game *game)
 	idx_x = 0;
 	while (idx_x < game->info.screen_x)
 	{
-		cast_angle = game->player.camera_angle - \
+		cast_angle = game->player.camera_angle_h - \
 								(game->info.fov_h / 2) + delta_angle * idx_x;
 		if (cast_angle < 0)
 			cast_angle += 360.0;
@@ -270,8 +270,12 @@ void	calcul_drawpixel(t_game *game, t_ray *ray, t_vector2 *wall_line)
 {
 	const double	ratio_wall = 1 / ray->wall_distance;
 
-	wall_line->x = game->info.screen_y / 2 - ratio_wall * game->info.screen_y;
-	wall_line->y = game->info.screen_y / 2 + ratio_wall * game->info.screen_y;
+	wall_line->x = game->info.screen_y / 2 \
+			- game->player.vertical_dist_pixel \
+			- ratio_wall * game->info.screen_y;
+	wall_line->y = game->info.screen_y / 2 \
+			- game->player.vertical_dist_pixel \
+			+ ratio_wall * game->info.screen_y;
 }
 
 t_vector2	get_wall_pixel(t_game *game, t_vector2 *wall_line)
@@ -280,10 +284,14 @@ t_vector2	get_wall_pixel(t_game *game, t_vector2 *wall_line)
 
 	if (wall_line->x < 0)
 		ret_vec.x = 0;
+	else if (wall_line->x > game->info.screen_y)
+		ret_vec.x = game->info.screen_y;
 	else
 		ret_vec.x = wall_line->x;
 	if (wall_line->y > game->info.screen_y)
 		ret_vec.y = game->info.screen_y;
+	else if (wall_line->y < 0)
+		wall_line->y = 0;
 	else
 		ret_vec.y = wall_line->y;
 	return (ret_vec);

@@ -45,10 +45,7 @@ int	main_loop(t_game *game)
 		if (game->pressed_keyset & KEY_ARROW)
 			rotate_player(&game->player, game->pressed_keyset);
 	}
-	// mlx_put_image_to_window(game->info.mlx_ptr, game->info.win_ptr, game->texture[0].img_data.img, 0, 0);
-	// mlx_put_image_to_window(game->info.mlx_ptr, game->info.win_ptr, game->texture[1].img_data.img, 300, 0);
-	// mlx_put_image_to_window(game->info.mlx_ptr, game->info.win_ptr, game->texture[2].img_data.img, 600, 0);
-	// mlx_put_image_to_window(game->info.mlx_ptr, game->info.win_ptr, game->texture[3].img_data.img, 900, 0);
+	rotate_player_mouse(game);
 	draw_screen(game);
 	draw_minimap(game);
 	mlx_sync(MLX_SYNC_IMAGE_WRITABLE, game->view_data.img);
@@ -116,13 +113,16 @@ void	loop(t_game *game)
 	mlx_hook(game->info.win_ptr, KEY_PRESS_EVENT, 1L << 0, ft_key_press, game);
 	mlx_hook(game->info.win_ptr, KEY_RELEASE_EVENT, 1L << 0, ft_key_release, game);
 	mlx_hook(game->info.win_ptr, KEY_EXIT, 0, exit_game, 0);
+	mlx_mouse_hide();
 	mlx_loop(game->info.mlx_ptr);
 }
 
-void	player_handle_setting(t_player *player)
+void	player_handle_setting(t_game *game)
 {
-	player->move_speed = 0.15;
-	player->rotate_speed = 1.5;
+	game->player.move_speed = 0.15;
+	game->player.rotate_speed = 1.5;
+	game->player.vertical_dist_pixel = 0;
+	mlx_mouse_move(game->info.win_ptr, 0, 0);
 }
 
 int	main(int argc, char *argv[])
@@ -130,7 +130,7 @@ int	main(int argc, char *argv[])
 	t_game	game;
 
 	graphic_resource_init(&game);
-	player_handle_setting(&game.player);
+	player_handle_setting(&game);
 	check_argv(argc, argv, &game);
 	print_game_info(&game);
 	make_minimap_image(&game);

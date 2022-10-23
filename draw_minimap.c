@@ -22,7 +22,7 @@ void	put_one_square_pixels_to_screen(t_game *game, int x, int y, \
 }
 
 void	draw_ray_line(double center[2], t_img_data *view_data, \
-										double camera_angle, double ray_angle)
+										double camera_angle_h, double ray_angle)
 {
 	const int	wall_color = create_trgb(0, 0, 0, 0);
 	const int	ray_color = create_trgb(0, 255, 0, 0);
@@ -39,16 +39,16 @@ void	draw_ray_line(double center[2], t_img_data *view_data, \
 			*(unsigned int *)dst = ray_color;
 		else
 			break ;
-		pos[X] = pos[X] + cut_point(cos(deg2rad(camera_angle)), 6) + \
-			cut_point(cos(deg2rad(adjust_degree(camera_angle, ray_angle))), 6);
-		pos[Y] = pos[Y] + cut_point(sin(deg2rad(camera_angle)), 6) + \
-			cut_point(sin(deg2rad(adjust_degree(camera_angle, ray_angle))), 6);
+		pos[X] = pos[X] + cut_point(cos(deg2rad(camera_angle_h)), 6) + \
+			cut_point(cos(deg2rad(adjust_degree(camera_angle_h, ray_angle))), 6);
+		pos[Y] = pos[Y] + cut_point(sin(deg2rad(camera_angle_h)), 6) + \
+			cut_point(sin(deg2rad(adjust_degree(camera_angle_h, ray_angle))), 6);
 	}
 }
 
-void	draw_camera_angle(t_player *player, t_img_data *view_data, int pps, double fov_h)
+void	draw_camera_angle_h(t_player *player, t_img_data *view_data, int pps, double fov_h)
 {
-	const double	camera_angle = player->camera_angle;
+	const double	camera_angle_h = player->camera_angle_h;
 	double			ray_center[2];
 	double			ray_end[2];
 	double			ray_angle;
@@ -59,10 +59,10 @@ void	draw_camera_angle(t_player *player, t_img_data *view_data, int pps, double 
 	ray_angle = -fov_h;
 	while (ray_angle < fov_h)
 	{
-		draw_ray_line(ray_center, view_data, camera_angle, ray_angle);
+		draw_ray_line(ray_center, view_data, camera_angle_h, ray_angle);
 		ray_angle += ray_interval;
 	}
-	draw_ray_line(ray_center, view_data, camera_angle, fov_h);
+	draw_ray_line(ray_center, view_data, camera_angle_h, fov_h);
 }
 
 void	draw_player(t_player *player, t_img_data *view_data, int pps)
@@ -101,5 +101,5 @@ void	draw_minimap(t_game *game)
 		y++;
 	}
 	draw_player(&game->player, &game->view_data, pps);
-	draw_camera_angle(&game->player, &game->view_data, pps, game->info.fov_h);
+	draw_camera_angle_h(&game->player, &game->view_data, pps, game->info.fov_h);
 }
