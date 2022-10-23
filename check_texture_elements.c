@@ -21,8 +21,10 @@ static void	_set_wall_texture(t_game *game, int element_identifier, \
 	target->filename = ft_strcpy(texture_file);
 	if (target->img_data.img)
 		mlx_destroy_image(game->info.mlx_ptr, target->img_data.img);
-	target->img_data.img = mlx_xpm_file_to_image(game->info.mlx_ptr, \
+	target->img_data.img = mlx_png_file_to_image(game->info.mlx_ptr, \
 				texture_file, &target->texture_width, &target->texture_height);
+	// target->img_data.img = mlx_xpm_file_to_image(game->info.mlx_ptr, \
+	// 			texture_file, &target->texture_width, &target->texture_height);
 	if (target->img_data.img == NULL)
 		exit_with_err("can't open texture file", E_PERM);
 	target->img_data.addr = mlx_get_data_addr(target->img_data.img, \

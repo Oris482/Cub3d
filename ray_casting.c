@@ -271,11 +271,11 @@ void	calcul_drawpixel(t_game *game, t_ray *ray, t_vector2 *wall_line)
 	const double	ratio_wall = 1 / ray->wall_distance;
 
 	wall_line->x = game->info.screen_y / 2 \
-			- game->player.vertical_dist_pixel \
-			- ratio_wall * game->info.screen_y;
+					- ratio_wall * game->info.screen_y \
+					- game->player.vertical_dist_pixel;
 	wall_line->y = game->info.screen_y / 2 \
-			- game->player.vertical_dist_pixel \
-			+ ratio_wall * game->info.screen_y;
+					+ ratio_wall * game->info.screen_y \
+					- game->player.vertical_dist_pixel;
 }
 
 t_vector2	get_wall_pixel(t_game *game, t_vector2 *wall_line)
@@ -297,6 +297,40 @@ t_vector2	get_wall_pixel(t_game *game, t_vector2 *wall_line)
 	return (ret_vec);
 }
 
+void	put_pixel_ceiling(t_game *game, int	idx_x, t_vector2 *wall_pixel)
+{
+	t_img_data * const	view_data = &game->view_data;
+	double				fade_distance = wall_pixel->x + game->info.screen_y;
+	char				*dst;
+	int					idx_y;
+
+	idx_y = 0;
+	while (idx_y < wall_pixel->x)
+	{
+		dst = view_data->addr + (idx_y * view_data->line_length + \
+							   idx_x * (view_data->bits_per_pixel / 8));
+		*(unsigned int *)dst = game->ceiling_color;
+		idx_y++;
+	}
+}
+
+void	put_pixel_floor(t_game *game, int idx_x, t_vector2 *wall_pixel)
+{
+	t_img_data * const	view_data = &game->view_data;
+	double				fade_distance = wall_pixel->x + game->info.screen_y;
+	char				*dst;
+	int	idx_y;
+
+	idx_y = wall_pixel->y;
+	while (idx_y < game->info.screen_y)
+	{
+		dst = view_data->addr + (idx_y * view_data->line_length + \
+							   idx_x * (view_data->bits_per_pixel / 8));
+		*(unsigned int *)dst = game->floor_color;
+		idx_y++;
+	}
+}
+
 void	draw_line(t_game *game, int idx_x, t_vector2 *wall_line)
 {
 	t_vector2	wall_pixel;
@@ -305,24 +339,10 @@ void	draw_line(t_game *game, int idx_x, t_vector2 *wall_line)
 	int			idx_y;
 
 	wall_pixel = get_wall_pixel(game, wall_line);
-	idx_y = 0;
 	view_data = &game->view_data;
-	while (idx_y < wall_pixel.x)
-	{
-		dst = view_data->addr + (idx_y * view_data->line_length +
-							   idx_x * (view_data->bits_per_pixel / 8));
-		*(unsigned int *)dst = game->ceiling_color;
-		idx_y++;
-	}
+	put_pixel_ceiling(game, idx_x, &wall_pixel);
 	put_pixel_wall(game, idx_x, wall_line, &wall_pixel);
-	idx_y = wall_pixel.y;
-	while (idx_y < game->info.screen_y)
-	{
-		dst = view_data->addr + (idx_y * view_data->line_length +
-							   idx_x * (view_data->bits_per_pixel / 8));
-		*(unsigned int *)dst = game->floor_color;
-		idx_y++;
-	}
+	put_pixel_floor(game, idx_x, &wall_pixel);
 }
 
 void	make_wall(t_game *game)
