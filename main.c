@@ -32,6 +32,7 @@ void	graphic_resource_init(t_game *game)
 		&game->view_data.bits_per_pixel, &game->view_data.line_length, \
 		&game->view_data.endian);
 	game->ray_data = (t_ray *)malloc(sizeof(t_ray) * info->screen_x);
+	game->wall_pixel = (int *)malloc(sizeof(int) * game->info.screen_x * 2);
 	if (!game->ray_data)
 		exit_with_err("Malloc error", E_NOMEM);
 }

@@ -347,7 +347,7 @@ void	put_pixel_floor(t_game *game, int idx_x, t_vector2 *wall_pixel)
 	// {
 	// 	dst = view_data->addr + (idx_y * view_data->line_length + \
 	// 						   idx_x * (view_data->bits_per_pixel / 8));
-		
+
 	// 	*(unsigned int *)dst = create_trgb(0, get_r(color) * gradiant, \
 	// 						get_g(color) * gradiant, get_b(color) * gradiant);
 	// }
@@ -381,8 +381,82 @@ void	make_wall(t_game *game)
 	}
 }
 
+void	make_pixels_fade(t_game *game, int idx_x, int idx_y)
+{
+	t_img_data * const	view_data = &game->view_data;
+	int	mixed_trbg[4];
+	int	end_idx[2];
+	int	ij[2];
+	int	idx_trgb;
+	char	*dst;
+
+	ft_memset(&mixed_trbg, 0, sizeof(int) * 4);
+	end_idx[X] = idx_x + FADE_BLOCK_SIZE;
+	end_idx[Y] = idx_y + FADE_BLOCK_SIZE;
+	if (end_idx[X] >= game->info.screen_x)
+		end_idx[X] = game->info.screen_x;
+	if (end_idx[Y] >= game->info.screen_y)
+		end_idx[Y] = game->info.screen_y;
+	ij[X] = 0;
+	while (idx_x + ij[X] <= end_idx[X])
+	{
+		ij[Y] = 0;
+		while (idx_y + ij[Y] <= end_idx[Y])
+		{
+			idx_trgb = 0;
+			while (idx_trgb < 4)
+			{
+				dst = view_data->addr + (idx_y * view_data->line_length + \
+						idx_x * (view_data->bits_per_pixel) / 8);
+				mixed_trbg[idx_trgb] += *(dst + idx_trgb);
+				idx_trgb++;
+			}
+			ij[Y]++;
+		}
+		ij[X]++;
+	}
+	idx_trgb = 0;
+	while (idx_trgb < 4)
+	{
+		mixed_trbg[idx_trgb] /= (FADE_BLOCK_SIZE * FADE_BLOCK_SIZE);
+		idx_trgb++;
+	}
+	ij[X] = 0;
+	while (idx_x + ij[X] <= end_idx[X])
+	{
+		ij[Y] = 0;
+		while (idx_y + ij[Y] <= end_idx[Y])
+		{
+			dst = view_data->addr + (idx_y * view_data->line_length + \
+					idx_x * (view_data->bits_per_pixel / 8));
+			*(unsigned int *)dst = create_trgb(mixed_trbg[0], mixed_trbg[1], mixed_trbg[2], mixed_trbg[3]);
+			ij[Y]++;
+		}
+		ij[X]++;
+	}
+}
+
+void	make_floor(t_game *game)
+{
+	int	idx_x;
+	int	idx_y;
+
+	idx_x = 0;
+	idx_y = game->wall_pixel[1];
+	while (idx_x < game->info.screen_x / FADE_BLOCK_SIZE)
+	{
+		while (idx_y < game->info.screen_y)
+		{
+			make_pixels_fade(game, idx_x, idx_y);
+			idx_y += FADE_BLOCK_SIZE;
+		}
+		idx_x += FADE_BLOCK_SIZE;
+	}
+}
+
 void	draw_screen(t_game *game)
 {
 	ray_cast(game);
 	make_wall(game);
+	make_floor(game);
 }
