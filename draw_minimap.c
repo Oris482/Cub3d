@@ -46,7 +46,7 @@ void	draw_ray_line(double center[2], t_img_data *view_data, \
 	}
 }
 
-void	draw_camera_angle_h(t_player *player, t_img_data *view_data, int pps)
+void	draw_camera_angle_h(t_player *player, t_img_data *view_data, int pps, double fov_h)
 {
 	const double	camera_angle_h = player->camera_angle_h;
 	double			ray_center[2];
@@ -56,13 +56,13 @@ void	draw_camera_angle_h(t_player *player, t_img_data *view_data, int pps)
 
 	ray_center[X] = (player->vec_pos.x - 0.5) * pps + pps / 2 - !(pps % 2);
 	ray_center[Y] = (player->vec_pos.y - 0.5) * pps + pps / 2 - !(pps % 2);
-	ray_angle = -90.0;
-	while (ray_angle < 90.0)
+	ray_angle = -fov_h;
+	while (ray_angle < fov_h)
 	{
 		draw_ray_line(ray_center, view_data, camera_angle_h, ray_angle);
 		ray_angle += ray_interval;
 	}
-	draw_ray_line(ray_center, view_data, camera_angle_h, 90.0);
+	draw_ray_line(ray_center, view_data, camera_angle_h, fov_h);
 }
 
 void	draw_player(t_player *player, t_img_data *view_data, int pps)
@@ -101,5 +101,5 @@ void	draw_minimap(t_game *game)
 		y++;
 	}
 	draw_player(&game->player, &game->view_data, pps);
-	draw_camera_angle_h(&game->player, &game->view_data, pps);
+	draw_camera_angle_h(&game->player, &game->view_data, pps, game->info.fov_h);
 }
