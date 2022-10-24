@@ -32,8 +32,12 @@ void	graphic_resource_init(t_game *game)
 		&game->view_data.bits_per_pixel, &game->view_data.line_length, \
 		&game->view_data.endian);
 	game->ray_data = (t_ray *)malloc(sizeof(t_ray) * info->screen_x);
-	game->wall_pixel = (int *)malloc(sizeof(int) * game->info.screen_x * 2);
-	if (!game->ray_data)
+	game->wall_pixel = \
+			(t_vector2_d *)malloc(sizeof(t_vector2_d) * game->info.screen_x);
+	game->mixed_trgb = (int *)calloc(sizeof(int) * 4, \
+		(game->info.screen_x / FADE_BLOCK_SIZE) \
+		* (game->info.screen_y / FADE_BLOCK_SIZE));
+	if (!game->ray_data || !game->wall_pixel || !game->mixed_trgb)
 		exit_with_err("Malloc error", E_NOMEM);
 }
 

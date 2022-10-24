@@ -32,7 +32,7 @@
 # define BODY_SIDE_2 0.1
 # define SPEED_MOUSE_H 0.1
 # define SPEED_MOUSE_V 2
-# define FADE_BLOCK_SIZE 100
+# define FADE_BLOCK_SIZE 50
 
 enum	e_keyset
 {
@@ -182,7 +182,8 @@ typedef struct s_game
 	t_minimap		minimap;
 	t_texture		texture[4];
 	t_ray			*ray_data;
-	int				*wall_pixel;
+	t_vector2_d		*wall_pixel;
+	int				*mixed_trgb;
 	unsigned int	pressed_keyset;
 	unsigned int	floor_color;
 	unsigned int	ceiling_color;
@@ -255,7 +256,6 @@ void			make_minimap_image(t_game *game);
 void			draw_minimap(t_game *game);
 
 // display_texture.c
-void	put_pixel_wall(t_game *game, int idx_x, t_vector2 *wall_line, \
-														t_vector2 *wall_pixel);
+void	put_pixel_wall(t_game *game, int idx_x, t_vector2 *wall_line);
 
 #endif
