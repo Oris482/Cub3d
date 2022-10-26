@@ -263,6 +263,6 @@ void			make_minimap_image(t_game *game);
 void			draw_minimap(t_game *game);
 
 // display_texture.c
-void	put_pixel_wall(t_game *game, int idx_x)
+void	put_pixel_wall(t_game *game, int idx_x);
 
 #endif

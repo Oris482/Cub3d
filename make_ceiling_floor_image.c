@@ -51,13 +51,13 @@ void	draw_ceiling_floor(t_game *game, int x, int wall_y[2], double fog_value)
 	outside_wall.x = x;
 	if (wall_y[START] > 0)
 	{
-		set_range(outside_wall.range_y, wall_y[START], 0);
+		__set_range(outside_wall.range_y, wall_y[START], 0);
 		_pixel_put_to_img(&game->view_data, game->ceiling_color, \
 										outside_wall, fog_value);
 	}
 	if (wall_y[END] < screen_y)
 	{
-		set_range(outside_wall.range_y, wall_y[END], screen_y);
+		__set_range(outside_wall.range_y, wall_y[END], screen_y);
 		_pixel_put_to_img(&game->view_data, game->floor_color, \
 										outside_wall, fog_value);
 	}
