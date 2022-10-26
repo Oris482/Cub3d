@@ -39,3 +39,19 @@ void	remove_newline(char *line)
 		line++;
 	}
 }
+
+void	set_range_double(double *to_set, double floor, double ceil)
+{
+	if (*to_set > ceil)
+		*to_set = ceil;
+	else if (*to_set < floor)
+		*to_set = floor;
+}
+
+void	set_range_int(int *to_set, int floor, int ceil)
+{
+	if (*to_set > ceil)
+		*to_set = ceil;
+	else if (*to_set < floor)
+		*to_set = floor;
+}

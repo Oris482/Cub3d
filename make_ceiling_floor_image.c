@@ -37,7 +37,7 @@ static void	_pixel_put_to_img(t_img_data *view_img, int color, \
 	}
 }
 
-void	set_range(int arg[2], int arg_start, int arg_end)
+void	__set_range(int arg[2], int arg_start, int arg_end)
 {
 	arg[START] = arg_start;
 	arg[END] = arg_end;
