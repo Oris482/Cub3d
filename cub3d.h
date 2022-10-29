@@ -32,7 +32,7 @@
 # define BODY_SIDE_2 0.1
 # define SPEED_MOUSE_H 0.1
 # define SPEED_MOUSE_V 2
-# define FADE_BLOCK_SIZE 50
+# define FADE_BLOCK_SIZE 100
 
 enum	e_keyset
 {
@@ -42,11 +42,9 @@ enum	e_keyset
 	KEYSET_D = 1 << 3,
 	KEYSET_LA = 1 << 4,
 	KEYSET_RA = 1 << 5,
-	KEYSET_UA = 1 << 6,
-	KEYSET_DA = 1 << 7,
-	KEYSET_LSHIFT = 1 << 8,
+	KEYSET_LSHIFT = 1 << 6,
 	KEY_WASD = KEYSET_W | KEYSET_A | KEYSET_S | KEYSET_D,
-	KEY_ARROW = KEYSET_LA | KEYSET_RA | KEYSET_DA | KEYSET_RA
+	KEY_ARROW = KEYSET_LA | KEYSET_RA
 };
 
 enum	e_key_code
@@ -59,9 +57,7 @@ enum	e_key_code
 	KEY_ESC = 53,
 	KEY_LSHIFT = 57,
 	KEY_LA = 123,
-	KEY_RA = 124,
-	KEY_DA = 125,
-	KEY_UA = 126
+	KEY_RA = 124
 };
 
 enum	e_texture_identifier
@@ -139,7 +135,7 @@ typedef struct s_player
 {
 	t_vector2		vec_pos;
 	double			camera_angle_h;
-	double			camera_angle_v;
+	double			vertical_dist_pixel;
 	double			move_speed;
 	double			rotate_speed;
 }	t_player;
@@ -186,9 +182,7 @@ typedef struct s_game
 	t_minimap		minimap;
 	t_texture		texture[4];
 	t_ray			*ray_data;
-	t_vector2		*wall_range;
-	t_vector2_d		*wall_pixel;
-	int				*mixed_trgb;
+	int				*wall_pixel;
 	unsigned int	pressed_keyset;
 	unsigned int	floor_color;
 	unsigned int	ceiling_color;
@@ -199,8 +193,6 @@ void    		multi_free(void *ptr1, void *ptr2, void *ptr3, void *ptr4);
 void			*my_malloc(size_t len);
 void			ft_memset(void *ptr, unsigned char value, size_t size);
 void			remove_newline(char *line);
-void			set_range_double(double *to_set, double floor, double ceil);
-void			set_range_int(int *to_set, int floor, int ceil);
 
 // degree_utils.c
 double			deg2rad(double degree);
@@ -219,7 +211,7 @@ unsigned char	get_g(int trgb);
 unsigned char	get_b(int trgb);
 
 // make_ceiling_floor_image.c
-void			__set_range(int arg[2], int arg_start, int arg_end);
+void			set_range(int arg[2], int arg_start, int arg_end);
 void			draw_ceiling_floor(t_game *game, int x, int wall_y[2], double fog_value);
 
 // check_texture_elements_utils.c
@@ -251,7 +243,7 @@ void	draw_screen(t_game *game);
 // handle_player.c
 double			cut_point(double num, int limiter);
 void			move_player(t_player *player, char **map, unsigned int	pressed_keyset);
-void			rotate_player_key(t_player *player, unsigned int const pressed_keyset);
+void			rotate_player(t_player *player, unsigned int const pressed_keyset);
 void			rotate_player_mouse(t_game *game);
 
 // make_minimap_imgae.c
@@ -263,6 +255,7 @@ void			make_minimap_image(t_game *game);
 void			draw_minimap(t_game *game);
 
 // display_texture.c
-void	put_pixel_wall(t_game *game, int idx_x);
+void	put_pixel_wall(t_game *game, int idx_x, t_vector2 *wall_line, \
+														t_vector2 *wall_pixel);
 
 #endif

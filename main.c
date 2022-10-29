@@ -18,7 +18,7 @@ void	graphic_resource_init(t_game *game)
 		exit_with_err("mlx function error", E_PERM);
 	mlx_get_screen_size(info->mlx_ptr, &info->screen_x, &info->screen_y);
 	info->screen_x *= 0.6;
-	info->screen_y *= 0.6;
+	info->screen_y *= 0.5;
 	info->fov_h = 60.0;
 	info->fov_v = (double)info->screen_y / (double)info->screen_x \
 															* info->fov_h;
@@ -32,14 +32,8 @@ void	graphic_resource_init(t_game *game)
 		&game->view_data.bits_per_pixel, &game->view_data.line_length, \
 		&game->view_data.endian);
 	game->ray_data = (t_ray *)malloc(sizeof(t_ray) * info->screen_x);
-	game->wall_range = \
-			(t_vector2 *)malloc(sizeof(t_vector2) * game->info.screen_x);
-	game->wall_pixel = \
-			(t_vector2_d *)malloc(sizeof(t_vector2_d) * game->info.screen_x);
-	game->mixed_trgb = (int *)calloc(sizeof(int) * 4, \
-		(game->info.screen_x / FADE_BLOCK_SIZE) \
-		* (game->info.screen_y / FADE_BLOCK_SIZE));
-	if (!game->ray_data || !game->wall_range || !game->mixed_trgb)
+	game->wall_pixel = (int *)malloc(sizeof(int) * game->info.screen_x * 2);
+	if (!game->ray_data)
 		exit_with_err("Malloc error", E_NOMEM);
 }
 
@@ -50,7 +44,7 @@ int	main_loop(t_game *game)
 		if (game->pressed_keyset & KEY_WASD)
 			move_player(&game->player, game->info.map, game->pressed_keyset);
 		if (game->pressed_keyset & KEY_ARROW)
-			rotate_player_key(&game->player, game->pressed_keyset);
+			rotate_player(&game->player, game->pressed_keyset);
 	}
 	rotate_player_mouse(game);
 	draw_screen(game);
@@ -88,10 +82,6 @@ int	ft_key_press(int key, t_game *game)
 		*keyset_ptr |= KEYSET_LA;
 	if (key == KEY_RA)
 		*keyset_ptr |= KEYSET_RA;
-	if (key == KEY_DA)
-		*keyset_ptr |= KEYSET_DA;
-	if (key == KEY_UA)
-		*keyset_ptr |= KEYSET_UA;
 	if (key == KEY_LSHIFT)
 		*keyset_ptr |= KEYSET_LSHIFT;
 	return (0);
@@ -113,10 +103,6 @@ int	ft_key_release(int key, t_game *game)
 		*keyset_ptr &= ~KEYSET_LA;
 	if (key == KEY_RA)
 		*keyset_ptr &= ~KEYSET_RA;
-	if (key == KEY_UA)
-		*keyset_ptr &= ~KEYSET_UA;
-	if (key == KEY_DA)
-		*keyset_ptr &= ~KEYSET_DA;
 	if (key == KEY_LSHIFT)
 		*keyset_ptr &= ~KEYSET_LSHIFT;
 	return (0);
@@ -136,7 +122,7 @@ void	player_handle_setting(t_game *game)
 {
 	game->player.move_speed = 0.15;
 	game->player.rotate_speed = 1.5;
-	game->player.camera_angle_v = 0;
+	game->player.vertical_dist_pixel = 0;
 	mlx_mouse_move(game->info.win_ptr, 0, 0);
 }
 
