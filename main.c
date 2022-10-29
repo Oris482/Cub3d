@@ -18,7 +18,7 @@ void	graphic_resource_init(t_game *game)
 		exit_with_err("mlx function error", E_PERM);
 	mlx_get_screen_size(info->mlx_ptr, &info->screen_x, &info->screen_y);
 	info->screen_x *= 0.6;
-	info->screen_y *= 0.5;
+	info->screen_y *= 0.6;
 	info->fov_h = 60.0;
 	info->fov_v = (double)info->screen_y / (double)info->screen_x \
 															* info->fov_h;
@@ -32,8 +32,9 @@ void	graphic_resource_init(t_game *game)
 		&game->view_data.bits_per_pixel, &game->view_data.line_length, \
 		&game->view_data.endian);
 	game->ray_data = (t_ray *)malloc(sizeof(t_ray) * info->screen_x);
-	game->wall_pixel = (int *)malloc(sizeof(int) * game->info.screen_x * 2);
-	if (!game->ray_data)
+	game->wall_pixel = (t_vector2_d *)malloc(sizeof(t_vector2_d) * game->info.screen_x);
+	game->wall_line = (t_vector2 *)malloc(sizeof(t_vector2) * game->info.screen_x);
+	if (!game->ray_data || !game->wall_pixel || !game->wall_line)
 		exit_with_err("Malloc error", E_NOMEM);
 }
 

@@ -266,9 +266,11 @@ void	ray_cast(t_game *game)
 	}
 }
 
-void	calcul_drawpixel(t_game *game, t_ray *ray, t_vector2 *wall_line)
+void	calcul_drawpixel(t_game *game, t_ray *ray, int idx_x)
 {
-	const double	ratio_wall = 1 / ray->wall_distance;
+	const double		ratio_wall = 5 / (ray->wall_distance * 6);
+	t_vector2 * const	wall_line = &game->wall_line[idx_x];
+	t_vector2_d * const	wall_pixel = &game->wall_pixel[idx_x];
 
 	wall_line->x = game->info.screen_y / 2 \
 					- ratio_wall * game->info.screen_y \
@@ -276,6 +278,10 @@ void	calcul_drawpixel(t_game *game, t_ray *ray, t_vector2 *wall_line)
 	wall_line->y = game->info.screen_y / 2 \
 					+ ratio_wall * game->info.screen_y \
 					- game->player.vertical_dist_pixel;
+	wall_pixel->x = wall_line->x;
+	wall_pixel->y = wall_line->y;
+	set_range_int(&wall_pixel->x, 0, game->info.screen_y);
+	set_range_int(&wall_pixel->y, 0, game->info.screen_y);
 }
 
 t_vector2	get_wall_pixel(t_game *game, t_vector2 *wall_line)
@@ -297,10 +303,10 @@ t_vector2	get_wall_pixel(t_game *game, t_vector2 *wall_line)
 	return (ret_vec);
 }
 
-void	put_pixel_ceiling(t_game *game, int	idx_x, t_vector2 *wall_pixel)
+void	put_pixel_ceiling(t_game *game, int	idx_x)
 {
 	t_img_data * const	view_data = &game->view_data;
-	double				fade_distance = wall_pixel->x + game->info.screen_y;
+	t_vector2_d * const	wall_pixel = &game->wall_pixel[idx_x];
 	char				*dst;
 	int					idx_y;
 
@@ -314,7 +320,7 @@ void	put_pixel_ceiling(t_game *game, int	idx_x, t_vector2 *wall_pixel)
 	}
 }
 
-void	put_pixel_floor(t_game *game, int idx_x, t_vector2 *wall_pixel)
+void	put_pixel_floor(t_game *game, int idx_x)
 {
 	t_img_data * const	view_data = &game->view_data;
 	double const		color = game->floor_color;
@@ -322,141 +328,54 @@ void	put_pixel_floor(t_game *game, int idx_x, t_vector2 *wall_pixel)
 	double				gradiant;
 	int					idx_y;
 
-	idx_y = wall_pixel->y;
-	gradiant = 1 - game->ray_data[idx_x].wall_distance * 0.07;
-	if (gradiant > 1)
-		gradiant = 1;
-	else if (gradiant < 0)
-		gradiant = 0;
-
+	idx_y = game->wall_pixel[idx_x].y;
+	gradiant = 0.4 + (0.6 - game->ray_data[idx_x].wall_distance * 0.05);
+	set_range_double(&gradiant, 0, 1);
 	while (idx_y < game->info.screen_y)
 	{
 		dst = view_data->addr + (idx_y * view_data->line_length + \
 							   idx_x * (view_data->bits_per_pixel / 8));
-		// gradiant = 1 - \
-		// 	((wall_pixel->y - idx_y) / (game->info.screen_y - wall_pixel->y));
-		gradiant += (1 - gradiant) / (game->info.screen_y - idx_y);
-		*(unsigned int *)dst = create_trgb(0, get_r(color) * gradiant, \
+		gradiant += (1 - gradiant) * 10 / (game->info.screen_y - idx_y);
+		*(unsigned int *)dst = create_trgb(100, get_r(color) * gradiant, \
 							get_g(color) * gradiant, get_b(color) * gradiant);
 		idx_y++;
 	}
-
-	// idx_y = game->info.screen_y;
-	// gradiant = 1;
-	// while (idx_y >= wall_pixel->y)
-	// {
-	// 	dst = view_data->addr + (idx_y * view_data->line_length + \
-	// 						   idx_x * (view_data->bits_per_pixel / 8));
-
-	// 	*(unsigned int *)dst = create_trgb(0, get_r(color) * gradiant, \
-	// 						get_g(color) * gradiant, get_b(color) * gradiant);
-	// }
 }
 
-void	draw_line(t_game *game, int idx_x, t_vector2 *wall_line)
+void	draw_line(t_game *game, int idx_x)
 {
 	t_vector2	wall_pixel;
-	t_img_data	*view_data;
 	char		*dst;
 	int			idx_y;
 
-	wall_pixel = get_wall_pixel(game, wall_line);
-	view_data = &game->view_data;
-	put_pixel_ceiling(game, idx_x, &wall_pixel);
-	put_pixel_wall(game, idx_x, wall_line, &wall_pixel);
-	put_pixel_floor(game, idx_x, &wall_pixel);
+	put_pixel_ceiling(game, idx_x);
+	put_pixel_wall(game, idx_x);
+	put_pixel_floor(game, idx_x);
 }
 
 void	make_wall(t_game *game)
 {
-	t_vector2	wall_line;
 	int	idx_x;
 
 	idx_x = 0;
 	while (idx_x < game->info.screen_x)
 	{
-		calcul_drawpixel(game, &game->ray_data[idx_x], &wall_line);
-		draw_line(game, idx_x, &wall_line);
+		calcul_drawpixel(game, &game->ray_data[idx_x], idx_x);
+		draw_line(game, idx_x);
 		idx_x++;
-	}
-}
-
-void	make_pixels_fade(t_game *game, int idx_x, int idx_y)
-{
-	t_img_data * const	view_data = &game->view_data;
-	int	mixed_trbg[4];
-	int	end_idx[2];
-	int	ij[2];
-	int	idx_trgb;
-	char	*dst;
-
-	ft_memset(&mixed_trbg, 0, sizeof(int) * 4);
-	end_idx[X] = idx_x + FADE_BLOCK_SIZE;
-	end_idx[Y] = idx_y + FADE_BLOCK_SIZE;
-	if (end_idx[X] >= game->info.screen_x)
-		end_idx[X] = game->info.screen_x;
-	if (end_idx[Y] >= game->info.screen_y)
-		end_idx[Y] = game->info.screen_y;
-	ij[X] = 0;
-	while (idx_x + ij[X] <= end_idx[X])
-	{
-		ij[Y] = 0;
-		while (idx_y + ij[Y] <= end_idx[Y])
-		{
-			idx_trgb = 0;
-			while (idx_trgb < 4)
-			{
-				dst = view_data->addr + (idx_y * view_data->line_length + \
-						idx_x * (view_data->bits_per_pixel) / 8);
-				mixed_trbg[idx_trgb] += *(dst + idx_trgb);
-				idx_trgb++;
-			}
-			ij[Y]++;
-		}
-		ij[X]++;
-	}
-	idx_trgb = 0;
-	while (idx_trgb < 4)
-	{
-		mixed_trbg[idx_trgb] /= (FADE_BLOCK_SIZE * FADE_BLOCK_SIZE);
-		idx_trgb++;
-	}
-	ij[X] = 0;
-	while (idx_x + ij[X] <= end_idx[X])
-	{
-		ij[Y] = 0;
-		while (idx_y + ij[Y] <= end_idx[Y])
-		{
-			dst = view_data->addr + (idx_y * view_data->line_length + \
-					idx_x * (view_data->bits_per_pixel / 8));
-			*(unsigned int *)dst = create_trgb(mixed_trbg[0], mixed_trbg[1], mixed_trbg[2], mixed_trbg[3]);
-			ij[Y]++;
-		}
-		ij[X]++;
-	}
-}
-
-void	make_floor(t_game *game)
-{
-	int	idx_x;
-	int	idx_y;
-
-	idx_x = 0;
-	idx_y = game->wall_pixel[1];
-	while (idx_x < game->info.screen_x / FADE_BLOCK_SIZE)
-	{
-		while (idx_y < game->info.screen_y)
-		{
-			make_pixels_fade(game, idx_x, idx_y);
-			idx_y += FADE_BLOCK_SIZE;
-		}
-		idx_x += FADE_BLOCK_SIZE;
 	}
 }
 
 void	draw_screen(t_game *game)
 {
+	int	idx_x;
+
 	ray_cast(game);
-	make_wall(game);
-	make_floor(game);
+	idx_x = 0;
+	while (idx_x < game->info.screen_x)
+	{
+		calcul_drawpixel(game, &game->ray_data[idx_x], idx_x);
+		draw_line(game, idx_x);
+		idx_x++;
+	}
 }

@@ -22,26 +22,25 @@ unsigned int	get_texture_pixel(t_game *game, int idx_x, \
 											(texture_img->bits_per_pixel / 8)));
 }
 
-void	put_pixel_wall(t_game *game, int idx_x, t_vector2 *wall_line, t_vector2 *wall_pixel)
+void	put_pixel_wall(t_game *game, int idx_x)
 {
 	t_img_data * const	view_data = &game->view_data;
-	double 				gradiant = 1 - game->ray_data[idx_x].wall_distance * 0.07;
-	double 				color;
+	double 				gradiant;
+	double 				pixel;
 	char				*dst;
 	int					cur_idx_y;
 
-	if (gradiant > 1)
-		gradiant = 1;
-	else if (gradiant < 0)
-		gradiant = 0;
-	cur_idx_y = wall_pixel->x;
-	while (cur_idx_y < wall_pixel->y)
+	gradiant = 0.2 + (0.8 - game->ray_data[idx_x].wall_distance * 0.05);
+	set_range_double(&gradiant, 0, 1);
+	cur_idx_y = game->wall_pixel[idx_x].x;
+	while (cur_idx_y < game->wall_pixel[idx_x].y)
 	{
 		dst = view_data->addr + (cur_idx_y * view_data->line_length + \
 								 idx_x * (view_data->bits_per_pixel / 8));
-		color = get_texture_pixel(game, idx_x, wall_line, cur_idx_y);
-		*(unsigned int *)dst = create_trgb(0, get_r(color) * gradiant, \
-							get_g(color) * gradiant, get_b(color) * gradiant);
+		pixel = \
+			get_texture_pixel(game, idx_x, &game->wall_line[idx_x], cur_idx_y);
+		*(unsigned int *)dst = create_trgb(0, get_r(pixel) * gradiant, \
+							get_g(pixel) * gradiant, get_b(pixel) * gradiant);
 		cur_idx_y++;
 	}
 }
