@@ -268,12 +268,10 @@ void	ray_cast(t_game *game)
 
 void	calcul_drawpixel(t_game *game, int idx_x)
 {
-	const double	ratio_wall = 1 / game->ray_data[idx_x].wall_distance;
+	const double	ratio_wall = 1 / (game->ray_data[idx_x].wall_distance * 2);
 
-	game->wall_range[idx_x].x = game->info.screen_y / 2 \
-					- ratio_wall * game->info.screen_y;
-	game->wall_range[idx_x].y = game->info.screen_y / 2 \
-					+ ratio_wall * game->info.screen_y;
+	game->wall_range[idx_x].x = game->info.screen_y * (0.5 - ratio_wall);
+	game->wall_range[idx_x].y = game->info.screen_y * (0.5 + ratio_wall);
 	game->wall_pixel[idx_x].x = game->wall_range[idx_x].x;
 	game->wall_pixel[idx_x].y = game->wall_range[idx_x].y;
 	set_range_int(&game->wall_pixel[idx_x].x, 0, game->info.screen_y);
