@@ -84,13 +84,15 @@ void	rotate_player_mouse(t_game *game)
 	double				ratio_pixel2rad;
 
 	mlx_mouse_get_pos(game->info.win_ptr, &delta_mousepos.x, &delta_mousepos.y);
-	*angle_h = adjust_degree(*angle_h, delta_mousepos.x * SPEED_MOUSE_H);
+	*angle_h = adjust_degree(*angle_h, \
+				(delta_mousepos.x - game->info.screen_x / 2) * SPEED_MOUSE_H);
 	new_vertical_dis_pixel = game->player.vertical_dist_pixel + \
-											delta_mousepos.y * SPEED_MOUSE_V;
+				(delta_mousepos.y - game->info.screen_y / 2) * SPEED_MOUSE_V;
 	if (new_vertical_dis_pixel < -game->info.screen_y)
 		new_vertical_dis_pixel = -game->info.screen_y;
 	else if (new_vertical_dis_pixel > game->info.screen_y)
 		new_vertical_dis_pixel = game->info.screen_y;
 	game->player.vertical_dist_pixel = new_vertical_dis_pixel;
-	mlx_mouse_move(game->info.win_ptr, 0, 0);
+	mlx_mouse_move(game->info.win_ptr, \
+							game->info.screen_x / 2, game->info.screen_y / 2);
 }

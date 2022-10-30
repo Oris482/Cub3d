@@ -57,6 +57,7 @@ enum	e_key_code
 	KEY_J = 38,
 	KEY_K = 40,
 	KEY_L = 37,
+	KEY_M = 46,
 	KEY_EXIT = 17,
 	KEY_ESC = 53,
 	KEY_LSHIFT = 57,
@@ -128,6 +129,7 @@ typedef struct s_info
 	char	**map;
 	int		map_x;
 	int		map_y;
+	int		using_mouse;
 }	t_info;
 
 typedef struct s_controller

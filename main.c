@@ -38,6 +38,26 @@ void	graphic_resource_init(t_game *game)
 		exit_with_err("Malloc error", E_NOMEM);
 }
 
+int	mouse_switch(int key_code, t_game *game)
+{
+	t_info * const	ifo = &game->info;
+	if (key_code == KEY_M)
+	{
+		if (game->info.using_mouse == FALSE)
+		{
+			mlx_mouse_move(ifo->win_ptr, ifo->screen_x / 2, ifo->screen_y / 2);
+			game->info.using_mouse = TRUE;
+			mlx_mouse_hide();
+		}
+		else
+		{
+			game->info.using_mouse = FALSE;
+			mlx_mouse_show();
+		}
+	}
+	return (TRUE);
+}
+
 int	main_loop(t_game *game)
 {
 	if (game->pressed_keyset != 0)
@@ -47,7 +67,8 @@ int	main_loop(t_game *game)
 		if (game->pressed_keyset & KEY_ARROW)
 			rotate_player(&game->player, game->pressed_keyset);
 	}
-	rotate_player_mouse(game);
+	if (game->info.using_mouse == TRUE)
+		rotate_player_mouse(game);
 	draw_screen(game);
 	draw_minimap(game);
 	mlx_sync(MLX_SYNC_IMAGE_WRITABLE, game->view_data.img);
@@ -101,6 +122,8 @@ int	ft_key_press(int key, t_game *game)
 		turn_cardinal_points(key, &game->player);
 	if (key == KEY_LSHIFT)
 		*keyset_ptr |= KEYSET_LSHIFT;
+	if (key == KEY_M)
+		mouse_switch(KEY_M, game);
 	return (0);
 }
 
@@ -129,9 +152,8 @@ void	loop(t_game *game)
 {
 	mlx_loop_hook(game->info.mlx_ptr, main_loop, game);
 	mlx_hook(game->info.win_ptr, KEY_PRESS_EVENT, 1L << 0, ft_key_press, game);
-	mlx_hook(game->info.win_ptr, KEY_RELEASE_EVENT, 1L << 0, ft_key_release, game);
+	mlx_hook(game->info.win_ptr, KEY_RELEASE_EVENT, 1L << 1, ft_key_release, game);
 	mlx_hook(game->info.win_ptr, KEY_EXIT, 0, exit_game, 0);
-	mlx_mouse_hide();
 	mlx_loop(game->info.mlx_ptr);
 }
 
@@ -140,7 +162,10 @@ void	player_handle_setting(t_game *game)
 	game->player.move_speed = 0.15;
 	game->player.rotate_speed = 1.5;
 	game->player.vertical_dist_pixel = 0;
-	mlx_mouse_move(game->info.win_ptr, 0, 0);
+	game->info.using_mouse = TRUE;
+	mlx_mouse_hide();
+	mlx_mouse_move(game->info.win_ptr, \
+							game->info.screen_x / 2, game->info.screen_y / 2);
 }
 
 int	main(int argc, char *argv[])
