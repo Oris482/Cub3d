@@ -60,6 +60,20 @@ int	exit_game(int exit_status)
 	exit(exit_status);
 }
 
+void	turn_cardinal_points(int key, t_player *player)
+{
+	if (key == KEY_H)
+		player->camera_angle_h = 180.0;
+	else if (key == KEY_J)
+		player->camera_angle_h = 90.0;
+	else if (key == KEY_K)
+		player->camera_angle_h = 270.0;
+	else if (key == KEY_L)
+		player->camera_angle_h = 0.0;
+	else
+		return ;
+}
+
 int	ft_key_press(int key, t_game *game)
 {
 	unsigned int * const	keyset_ptr = &game->pressed_keyset;
@@ -81,6 +95,8 @@ int	ft_key_press(int key, t_game *game)
 		*keyset_ptr |= KEYSET_LA;
 	if (key == KEY_RA)
 		*keyset_ptr |= KEYSET_RA;
+	if (key == KEY_H || key == KEY_J || key == KEY_K || key == KEY_L)
+		turn_cardinal_points(key, &game->player);
 	if (key == KEY_LSHIFT)
 		*keyset_ptr |= KEYSET_LSHIFT;
 	return (0);
