@@ -336,8 +336,8 @@ void	put_pixel_floor(t_game *game, int idx_x)
 		dst = view_data->addr + (idx_y * view_data->line_length + \
 							   idx_x * (view_data->bits_per_pixel / 8));
 		gradiant += (1 - gradiant) * 10 / (game->info.screen_y - idx_y);
-		*(unsigned int *)dst = create_trgb(100, get_r(color) * gradiant, \
-							get_g(color) * gradiant, get_b(color) * gradiant);
+		*(unsigned int *)dst = create_trgb(game->player.view_trans, \
+	get_r(color) * gradiant, get_g(color) * gradiant, get_b(color) * gradiant);
 		idx_y++;
 	}
 }
