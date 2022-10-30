@@ -42,9 +42,11 @@ enum	e_keyset
 	KEYSET_D = 1 << 3,
 	KEYSET_LA = 1 << 4,
 	KEYSET_RA = 1 << 5,
-	KEYSET_LSHIFT = 1 << 6,
+	KEYSET_DA = 1 << 6,
+	KEYSET_UA = 1 << 7,
+	KEYSET_LSHIFT = 1 << 8,
 	KEY_WASD = KEYSET_W | KEYSET_A | KEYSET_S | KEYSET_D,
-	KEY_ARROW = KEYSET_LA | KEYSET_RA
+	KEY_ARROW = KEYSET_LA | KEYSET_RA | KEYSET_DA | KEYSET_UA
 };
 
 enum	e_key_code
@@ -57,11 +59,14 @@ enum	e_key_code
 	KEY_J = 38,
 	KEY_K = 40,
 	KEY_L = 37,
+	KEY_M = 46,
 	KEY_EXIT = 17,
 	KEY_ESC = 53,
 	KEY_LSHIFT = 57,
 	KEY_LA = 123,
-	KEY_RA = 124
+	KEY_RA = 124,
+	KEY_DA = 125,
+	KEY_UA = 126
 };
 
 enum	e_texture_identifier
@@ -128,6 +133,7 @@ typedef struct s_info
 	char	**map;
 	int		map_x;
 	int		map_y;
+	int		using_mouse;
 }	t_info;
 
 typedef struct s_controller
@@ -250,7 +256,7 @@ void	draw_screen(t_game *game);
 // handle_player.c
 double			cut_point(double num, int limiter);
 void			move_player(t_player *player, char **map, unsigned int	pressed_keyset);
-void			rotate_player(t_player *player, unsigned int const pressed_keyset);
+void			rotate_player_key(t_game *game, unsigned int const pressed_keyset);
 void			rotate_player_mouse(t_game *game);
 
 // make_minimap_imgae.c

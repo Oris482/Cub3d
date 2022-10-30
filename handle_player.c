@@ -63,9 +63,10 @@ void    move_player(t_player *player, char **map, unsigned int const pressed_key
 	check_wall_collisions(&player->vec_pos, &tmp_pos, map);
 }
 
-void    rotate_player(t_player *player, unsigned int const pressed_keyset)
+void    rotate_player_key(t_game *game, unsigned int const pressed_keyset)
 {
-	double const		rotate_speed = player->rotate_speed;
+	t_player * const	player = &game->player;
+	double const		rotate_speed = game->player.rotate_speed;
 	double				*angle;
 
 	angle = &player->camera_angle_h;
@@ -73,6 +74,18 @@ void    rotate_player(t_player *player, unsigned int const pressed_keyset)
 		*angle = adjust_degree(*angle, -rotate_speed);
 	if (pressed_keyset & KEYSET_RA && !(pressed_keyset & KEYSET_LA))
 		*angle = adjust_degree(*angle, rotate_speed);
+	if (pressed_keyset & KEYSET_DA && !(pressed_keyset & KEYSET_UA))
+	{
+		player->vertical_dist_pixel += 20;
+		if (player->vertical_dist_pixel > game->info.screen_y / 2)
+			player->vertical_dist_pixel = game->info.screen_y / 2;
+	}
+	if (pressed_keyset & KEYSET_UA && !(pressed_keyset & KEYSET_DA))
+	{
+		player->vertical_dist_pixel -= 20;
+		if (player->vertical_dist_pixel < -game->info.screen_y / 2)
+			player->vertical_dist_pixel = -game->info.screen_y / 2;
+	}
 }
 
 void	rotate_player_mouse(t_game *game)
@@ -84,13 +97,13 @@ void	rotate_player_mouse(t_game *game)
 	double				ratio_pixel2rad;
 
 	mlx_mouse_get_pos(game->info.win_ptr, &delta_mousepos.x, &delta_mousepos.y);
-	*angle_h = adjust_degree(*angle_h, delta_mousepos.x * SPEED_MOUSE_H);
+	*angle_h = adjust_degree(*angle_h, \
+				(delta_mousepos.x - game->info.screen_x / 2) * SPEED_MOUSE_H);
 	new_vertical_dis_pixel = game->player.vertical_dist_pixel + \
-											delta_mousepos.y * SPEED_MOUSE_V;
-	if (new_vertical_dis_pixel < -game->info.screen_y)
-		new_vertical_dis_pixel = -game->info.screen_y;
-	else if (new_vertical_dis_pixel > game->info.screen_y)
-		new_vertical_dis_pixel = game->info.screen_y;
+				(delta_mousepos.y - game->info.screen_y / 2) * SPEED_MOUSE_V;
+	set_range_double(&new_vertical_dis_pixel, \
+							-game->info.screen_y / 2, game->info.screen_y / 2);
 	game->player.vertical_dist_pixel = new_vertical_dis_pixel;
-	mlx_mouse_move(game->info.win_ptr, 0, 0);
+	mlx_mouse_move(game->info.win_ptr, \
+							game->info.screen_x / 2, game->info.screen_y / 2);
 }
