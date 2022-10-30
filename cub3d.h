@@ -256,7 +256,7 @@ void	draw_screen(t_game *game);
 // handle_player.c
 double			cut_point(double num, int limiter);
 void			move_player(t_player *player, char **map, unsigned int	pressed_keyset);
-void			rotate_player(t_player *player, unsigned int const pressed_keyset);
+void			rotate_player_key(t_player *player, unsigned int const pressed_keyset);
 void			rotate_player_mouse(t_game *game);
 
 // make_minimap_imgae.c

@@ -65,7 +65,7 @@ int	main_loop(t_game *game)
 		if (game->pressed_keyset & KEY_WASD)
 			move_player(&game->player, game->info.map, game->pressed_keyset);
 		if (game->pressed_keyset & KEY_ARROW)
-			rotate_player(&game->player, game->pressed_keyset);
+			rotate_player_key(&game->player, game->pressed_keyset);
 	}
 	if (game->info.using_mouse == TRUE)
 		rotate_player_mouse(game);
