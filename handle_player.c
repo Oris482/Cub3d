@@ -73,6 +73,10 @@ void    rotate_player(t_player *player, unsigned int const pressed_keyset)
 		*angle = adjust_degree(*angle, -rotate_speed);
 	if (pressed_keyset & KEYSET_RA && !(pressed_keyset & KEYSET_LA))
 		*angle = adjust_degree(*angle, rotate_speed);
+	if (pressed_keyset & KEYSET_DA && !(pressed_keyset & KEYSET_UA))
+		player->vertical_dist_pixel += 10;
+	if (pressed_keyset & KEYSET_UA && !(pressed_keyset & KEYSET_DA))
+		player->vertical_dist_pixel -= 10;
 }
 
 void	rotate_player_mouse(t_game *game)

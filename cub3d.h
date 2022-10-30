@@ -42,9 +42,11 @@ enum	e_keyset
 	KEYSET_D = 1 << 3,
 	KEYSET_LA = 1 << 4,
 	KEYSET_RA = 1 << 5,
-	KEYSET_LSHIFT = 1 << 6,
+	KEYSET_DA = 1 << 6,
+	KEYSET_UA = 1 << 7,
+	KEYSET_LSHIFT = 1 << 8,
 	KEY_WASD = KEYSET_W | KEYSET_A | KEYSET_S | KEYSET_D,
-	KEY_ARROW = KEYSET_LA | KEYSET_RA
+	KEY_ARROW = KEYSET_LA | KEYSET_RA | KEYSET_DA | KEYSET_UA
 };
 
 enum	e_key_code
@@ -62,7 +64,9 @@ enum	e_key_code
 	KEY_ESC = 53,
 	KEY_LSHIFT = 57,
 	KEY_LA = 123,
-	KEY_RA = 124
+	KEY_RA = 124,
+	KEY_DA = 125,
+	KEY_UA = 126
 };
 
 enum	e_texture_identifier

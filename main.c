@@ -118,6 +118,10 @@ int	ft_key_press(int key, t_game *game)
 		*keyset_ptr |= KEYSET_LA;
 	if (key == KEY_RA)
 		*keyset_ptr |= KEYSET_RA;
+	if (key == KEY_DA)
+		*keyset_ptr |= KEYSET_DA;
+	if (key == KEY_UA)
+		*keyset_ptr |= KEYSET_UA;
 	if (key == KEY_H || key == KEY_J || key == KEY_K || key == KEY_L)
 		turn_cardinal_points(key, &game->player);
 	if (key == KEY_LSHIFT)
@@ -143,6 +147,10 @@ int	ft_key_release(int key, t_game *game)
 		*keyset_ptr &= ~KEYSET_LA;
 	if (key == KEY_RA)
 		*keyset_ptr &= ~KEYSET_RA;
+	if (key == KEY_DA)
+		*keyset_ptr &= ~KEYSET_DA;
+	if (key == KEY_UA)
+		*keyset_ptr &= ~KEYSET_UA;
 	if (key == KEY_LSHIFT)
 		*keyset_ptr &= ~KEYSET_LSHIFT;
 	return (0);
