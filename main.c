@@ -102,7 +102,7 @@ void	boost_key_on(t_game *game)
 	game->player.rotate_speed_v *= 2;
 	game->player.rotate_speed_h *= 2;
 	game->player.move_speed *= 2;
-	game->player.view_trans = 220;
+	game->player.view_trans = 180;
 }
 
 int	ft_key_press(int key, t_game *game)
