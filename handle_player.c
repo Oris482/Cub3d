@@ -66,23 +66,24 @@ void    move_player(t_player *player, char **map, unsigned int const pressed_key
 void    rotate_player_key(t_game *game, unsigned int const pressed_keyset)
 {
 	t_player * const	player = &game->player;
-	double const		rotate_speed = game->player.rotate_speed;
+	double const		rotate_speed_h = game->player.rotate_speed_h;
+	double const		rotate_speed_v = game->player.rotate_speed_v;
 	double				*angle;
 
 	angle = &player->camera_angle_h;
 	if (pressed_keyset & KEYSET_LA && !(pressed_keyset & KEYSET_RA))
-		*angle = adjust_degree(*angle, -rotate_speed);
+		*angle = adjust_degree(*angle, -rotate_speed_h);
 	if (pressed_keyset & KEYSET_RA && !(pressed_keyset & KEYSET_LA))
-		*angle = adjust_degree(*angle, rotate_speed);
+		*angle = adjust_degree(*angle, rotate_speed_h);
 	if (pressed_keyset & KEYSET_DA && !(pressed_keyset & KEYSET_UA))
 	{
-		player->vertical_dist_pixel += 20;
+		player->vertical_dist_pixel += rotate_speed_v;
 		if (player->vertical_dist_pixel > game->info.screen_y / 2)
 			player->vertical_dist_pixel = game->info.screen_y / 2;
 	}
 	if (pressed_keyset & KEYSET_UA && !(pressed_keyset & KEYSET_DA))
 	{
-		player->vertical_dist_pixel -= 20;
+		player->vertical_dist_pixel += -rotate_speed_v;
 		if (player->vertical_dist_pixel < -game->info.screen_y / 2)
 			player->vertical_dist_pixel = -game->info.screen_y / 2;
 	}

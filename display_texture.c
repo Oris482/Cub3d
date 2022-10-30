@@ -39,8 +39,8 @@ void	put_pixel_wall(t_game *game, int idx_x)
 								 idx_x * (view_data->bits_per_pixel / 8));
 		pixel = \
 			get_texture_pixel(game, idx_x, &game->wall_line[idx_x], cur_idx_y);
-		*(unsigned int *)dst = create_trgb(0, get_r(pixel) * gradiant, \
-							get_g(pixel) * gradiant, get_b(pixel) * gradiant);
+		*(unsigned int *)dst = create_trgb(game->player.view_trans, \
+	get_r(pixel) * gradiant, get_g(pixel) * gradiant, get_b(pixel) * gradiant);
 		cur_idx_y++;
 	}
 }

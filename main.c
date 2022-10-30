@@ -97,6 +97,14 @@ void	turn_cardinal_points(int key, t_player *player)
 		return ;
 }
 
+void	boost_key_on(t_game *game)
+{
+	game->player.rotate_speed_v *= 2;
+	game->player.rotate_speed_h *= 2;
+	game->player.move_speed *= 2;
+	game->player.view_trans = 220;
+}
+
 int	ft_key_press(int key, t_game *game)
 {
 	unsigned int * const	keyset_ptr = &game->pressed_keyset;
@@ -125,10 +133,21 @@ int	ft_key_press(int key, t_game *game)
 	if (key == KEY_H || key == KEY_J || key == KEY_K || key == KEY_L)
 		turn_cardinal_points(key, &game->player);
 	if (key == KEY_LSHIFT)
+	{
 		*keyset_ptr |= KEYSET_LSHIFT;
+		boost_key_on(game);
+	}
 	if (key == KEY_M)
 		mouse_switch(KEY_M, game);
 	return (0);
+}
+
+void	boost_key_off(t_game *game)
+{
+	game->player.rotate_speed_v /= 2;
+	game->player.rotate_speed_h /= 2;
+	game->player.move_speed /= 2;
+	game->player.view_trans = 0;
 }
 
 int	ft_key_release(int key, t_game *game)
@@ -152,7 +171,10 @@ int	ft_key_release(int key, t_game *game)
 	if (key == KEY_UA)
 		*keyset_ptr &= ~KEYSET_UA;
 	if (key == KEY_LSHIFT)
+	{
 		*keyset_ptr &= ~KEYSET_LSHIFT;
+		boost_key_off(game);
+	}
 	return (0);
 }
 
@@ -167,9 +189,11 @@ void	loop(t_game *game)
 
 void	player_handle_setting(t_game *game)
 {
-	game->player.move_speed = 0.15;
-	game->player.rotate_speed = 1.5;
+	game->player.move_speed = 0.2;
+	game->player.rotate_speed_h = 3.0;
+	game->player.rotate_speed_v = 30;
 	game->player.vertical_dist_pixel = 0;
+	game->player.view_trans = 0;
 	game->info.using_mouse = TRUE;
 	mlx_mouse_hide();
 	mlx_mouse_move(game->info.win_ptr, \

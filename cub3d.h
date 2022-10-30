@@ -62,7 +62,7 @@ enum	e_key_code
 	KEY_M = 46,
 	KEY_EXIT = 17,
 	KEY_ESC = 53,
-	KEY_LSHIFT = 57,
+	KEY_LSHIFT = 257,
 	KEY_LA = 123,
 	KEY_RA = 124,
 	KEY_DA = 125,
@@ -147,7 +147,9 @@ typedef struct s_player
 	double			camera_angle_h;
 	double			vertical_dist_pixel;
 	double			move_speed;
-	double			rotate_speed;
+	double			rotate_speed_h;
+	int				rotate_speed_v;
+	int				view_trans;
 }	t_player;
 
 typedef struct	s_img_data {
