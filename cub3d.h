@@ -32,6 +32,7 @@
 # define BODY_SIDE_2 0.1
 # define SPEED_MOUSE_H 0.1
 # define SPEED_MOUSE_V 2
+# define FADE_BLOCK_SIZE 10
 
 enum	e_keyset
 {
@@ -181,6 +182,8 @@ typedef struct s_game
 	t_minimap		minimap;
 	t_texture		texture[4];
 	t_ray			*ray_data;
+	t_vector2_d		*wall_pixel;
+	t_vector2		*wall_line;
 	unsigned int	pressed_keyset;
 	unsigned int	floor_color;
 	unsigned int	ceiling_color;
@@ -191,6 +194,8 @@ void    		multi_free(void *ptr1, void *ptr2, void *ptr3, void *ptr4);
 void			*my_malloc(size_t len);
 void			ft_memset(void *ptr, unsigned char value, size_t size);
 void			remove_newline(char *line);
+void			set_range_int(int *to_set, int floor, int ceil);
+void			set_range_double(double *to_set, double floor, double ceil);
 
 // degree_utils.c
 double			deg2rad(double degree);
@@ -209,7 +214,7 @@ unsigned char	get_g(int trgb);
 unsigned char	get_b(int trgb);
 
 // make_ceiling_floor_image.c
-void			set_range(int arg[2], int arg_start, int arg_end);
+void			__set_range(int arg[2], int arg_start, int arg_end);
 void			draw_ceiling_floor(t_game *game, int x, int wall_y[2], double fog_value);
 
 // check_texture_elements_utils.c
@@ -253,7 +258,6 @@ void			make_minimap_image(t_game *game);
 void			draw_minimap(t_game *game);
 
 // display_texture.c
-void	put_pixel_wall(t_game *game, int idx_x, t_vector2 *wall_line, \
-														t_vector2 *wall_pixel);
+void	put_pixel_wall(t_game *game, int idx_x);
 
 #endif

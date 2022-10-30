@@ -72,7 +72,7 @@ void	draw_player(t_player *player, t_img_data *view_data, int pps)
 	const int	player_color = create_trgb(0, 0, 0, 255);
 	int			pos[2];
 
-	set_range(pos, player_x, player_y);
+	__set_range(pos, player_x, player_y);
 	put_one_square_pixels_to_img(view_data, pos, pps, player_color);
 }
 

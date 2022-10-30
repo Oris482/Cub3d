@@ -1,9 +1,9 @@
-EA ./path_to_the_east_texture
-WE ./path_to_the_west_texture
-SO ./path_to_the_south_texture
-NO ./path_to_the_north_texture
-F 125,79,69
-C 31,73,87
+EA ./texture/EAST.png
+WE ./texture/WEST.png
+SO ./texture/SOUTH.png
+NO ./texture/NORTH.png
+C 125,79,69
+F 27,135,209
 
         111111111111111111111111
         1000000000110000000000001
