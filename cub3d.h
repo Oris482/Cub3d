@@ -1,7 +1,5 @@
 #ifndef CUB3D_H
 # define CUB3D_H
-# define SIZE_WIN_X 400
-# define SIZE_WIN_Y (SIZE_WIN_X * 3 / 4)
 # define KEY_PRESS_EVENT 2
 # define KEY_RELEASE_EVENT 3
 
@@ -158,16 +156,16 @@ typedef struct s_player
 	int				view_trans;
 }	t_player;
 
-typedef struct	s_img_data
+typedef struct s_img_data
 {
 	void	*img;
 	char	*addr;
 	int		bits_per_pixel;
 	int		line_length;
 	int		endian;
-}   t_img_data;
+}	t_img_data;
 
-typedef struct	s_texture
+typedef struct s_texture
 {
 	t_img_data	img_data;
 	char		*filename;
@@ -211,14 +209,13 @@ typedef struct s_game
 }	t_game;
 
 // utils.c
-void    		multi_free(void *ptr1, void *ptr2, void *ptr3, void *ptr4);
+void			multi_free(void *ptr1, void *ptr2, void *ptr3, void *ptr4);
 void			*my_malloc(size_t len);
 void			ft_memset(void *ptr, unsigned char value, size_t size);
 void			remove_newline(char *line);
 void			set_range_int(int *to_set, int floor, int ceil);
 void			set_range_double(double *to_set, double floor, double ceil);
 int				exit_game(int exit_status);
-
 
 // degree_utils.c
 double			deg2rad(double degree);
@@ -238,7 +235,8 @@ unsigned char	get_b(int trgb);
 
 // make_ceiling_floor_image.c
 void			set_range(int arg[2], int arg_start, int arg_end);
-void			draw_ceiling_floor(t_game *game, int x, int wall_y[2], double fog_value);
+void			draw_ceiling_floor(t_game *game, int x, int wall_y[2], \
+															double fog_value);
 
 // check_texture_elements_utils.c
 char			*get_filename_from_path(char *filename);
@@ -263,61 +261,63 @@ void			check_map_surrounded_by_wall(char **map, int end_x, int end_y);
 void			check_argv(int argc, char *argv[], t_game *game);
 
 // ray_casting.c
-void	init_ray(t_game *game);
-void	draw_screen(t_game *game);
+void			init_ray(t_game *game);
+void			draw_screen(t_game *game);
 
 // handle_player.c
 double			cut_point(double num, int limiter);
-void			move_player(t_player *player, char **map, unsigned int	pressed_keyset);
-void			rotate_player_key(t_game *game, unsigned int const pressed_keyset);
+void			move_player(t_player *player, char **map, \
+												unsigned int pressed_keyset);
+void			rotate_player_key(t_game *game, \
+											unsigned int const pressed_keyset);
 void			rotate_player_mouse(t_game *game);
 
 // make_minimap_imgae.c
 void			put_one_square_pixels_to_img(t_img_data *img_data, int pos[2], \
-													int pps, unsigned int color);
+												int pps, unsigned int color);
 void			make_minimap_image(t_game *game);
 
 // draw_minimap.c
 void			draw_minimap(t_game *game);
 
 // display_texture.c
-void	put_pixel_wall(t_game *game, int idx_x);
+void			put_pixel_wall(t_game *game, int idx_x);
 
 // setting_ray_1.c
-void	set_ray_step(t_vector2 *vec_pos, t_ray *ray, t_vector2 *step);
-void	set_dist(t_vector2 *pos, double cast_angle, \
+void			set_ray_step(t_vector2 *vec_pos, t_ray *ray, t_vector2 *step);
+void			set_dist(t_vector2 *pos, double cast_angle, \
 								t_vector2 *side_dist, t_vector2 *delta_dist);
-void	set_ray_hit_point(t_vector2 *cast_pos, t_ray *ray);
-void	set_wall_distance(t_player *player_info, t_ray *ray);
+void			set_ray_hit_point(t_vector2 *cast_pos, t_ray *ray);
+void			set_wall_distance(t_player *player_info, t_ray *ray);
 
 // calcul_ray.c
-void	calcul_texture_x_point(t_vector2 *cast_point, t_ray *ray);
-void	calcul_hitpoint_dist(t_ray *ray, int last_step, \
+void			calcul_texture_x_point(t_vector2 *cast_point, t_ray *ray);
+void			calcul_hitpoint_dist(t_ray *ray, int last_step, \
 								t_vector2 *side_dist, t_vector2 *delta_dist);
-void	calcul_drawpixel(t_game *game, t_ray *ray, int idx_x);
-void	get_hit_wall_side(t_ray *ray, int last_step);
-int		ray_travel(t_ray *ray, t_vector2 *step, \
+void			calcul_drawpixel(t_game *game, t_ray *ray, int idx_x);
+void			get_hit_wall_side(t_ray *ray, int last_step);
+int				ray_travel(t_ray *ray, t_vector2 *step, \
 					t_vector2 *side_dist, t_vector2 *delta_dist);
 
 // draw_pixel.c
-void		put_pixel_floor(t_game *game, int idx_x);
-void		put_pixel_ceiling(t_game *game, int	idx_x);
-t_vector2	get_wall_pixel(t_game *game, t_vector2 *wall_line);
-void		draw_line(t_game *game, int idx_x);
+void			put_pixel_floor(t_game *game, int idx_x);
+void			put_pixel_ceiling(t_game *game, int idx_x);
+t_vector2		get_wall_pixel(t_game *game, t_vector2 *wall_line);
+void			draw_line(t_game *game, int idx_x);
 
 // control_player.c
-void	turn_cardinal_points(int key, t_player *player);
-void	boost_key_off(t_game *game);
-void	boost_key_on(t_game *game);
-int		mouse_switch(int key_code, t_game *game);
+void			turn_cardinal_points(int key, t_player *player);
+void			boost_key_off(t_game *game);
+void			boost_key_on(t_game *game);
+int				mouse_switch(int key_code, t_game *game);
 
 // init.c
-void	malloc_resources(t_game *game);
-void	graphic_resource_init(t_game *game);
-void	player_handle_setting(t_game *game);
+void			malloc_resources(t_game *game);
+void			graphic_resource_init(t_game *game);
+void			player_handle_setting(t_game *game);
 
 // key_control.c
-int		ft_key_press(int key, t_game *game);
-int		ft_key_release(int key, t_game *game);
+int				ft_key_press(int key, t_game *game);
+int				ft_key_release(int key, t_game *game);
 
 #endif
