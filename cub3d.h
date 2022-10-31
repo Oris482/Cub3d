@@ -30,7 +30,6 @@
 # define BODY_SIDE_2 0.1
 # define SPEED_MOUSE_H 0.1
 # define SPEED_MOUSE_V 2
-# define FADE_BLOCK_SIZE 10
 
 enum	e_keyset
 {
