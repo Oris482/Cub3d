@@ -14,7 +14,8 @@ SRCS	= main.c	\
 			string_utils.c	\
 			get_next_line.c	\
 			get_next_line_utils.c	\
-			utils.c	\
+			utils_1.c	\
+			utils_2.c	\
 			check_map_elements.c	\
 			check_map_elements_utils.c	\
 			check_texture_elements.c	\
@@ -24,7 +25,13 @@ SRCS	= main.c	\
 			draw_minimap.c	\
 			degree_utils.c	\
 			ray_casting.c	\
-			display_texture.c
+			setting_ray.c	\
+			calcul_ray.c	\
+			draw_pixel.c	\
+			display_texture.c	\
+			control_player.c	\
+			init.c	\
+			key_control.c
 
 OBJS = ${SRCS:.c=.o}
 

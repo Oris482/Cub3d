@@ -16,7 +16,8 @@ double	cut_point(double num, int limiter)
 	return ((double)((int)(num * handler)) / handler * sign);
 }
 
-void	check_wall_collisions(t_vector2 *player_pos, t_vector2 *tmp_pos, char **map)
+void	check_wall_collisions(t_vector2 *player_pos, \
+												t_vector2 *tmp_pos, char **map)
 {
 	t_vector2	check_coordin;
 
@@ -34,7 +35,8 @@ void	check_wall_collisions(t_vector2 *player_pos, t_vector2 *tmp_pos, char **map
 		player_pos->x = tmp_pos->x;
 }
 
-void    move_player(t_player *player, char **map, unsigned int const pressed_keyset)
+void	move_player(t_player *player, char **map, \
+											unsigned int const pressed_keyset)
 {
 	double const		angle = player->camera_angle_h;
 	double const		move_speed = player->move_speed;
@@ -58,12 +60,12 @@ void    move_player(t_player *player, char **map, unsigned int const pressed_key
 		tmp_pos.x += move_speed \
 			* cut_point(cos(deg2rad(adjust_degree(angle, 90.0 * sign))), 6);
 		tmp_pos.y += move_speed \
-			* cut_point(sin(deg2rad(adjust_degree(angle, 90.0 * sign))), 6);		
+			* cut_point(sin(deg2rad(adjust_degree(angle, 90.0 * sign))), 6);
 	}
 	check_wall_collisions(&player->vec_pos, &tmp_pos, map);
 }
 
-void    rotate_player_key(t_game *game, unsigned int const pressed_keyset)
+void	rotate_player_key(t_game *game, unsigned int const pressed_keyset)
 {
 	t_player * const	player = &game->player;
 	double const		rotate_speed_h = game->player.rotate_speed_h;
@@ -91,7 +93,7 @@ void    rotate_player_key(t_game *game, unsigned int const pressed_keyset)
 
 void	rotate_player_mouse(t_game *game)
 {
-	t_vector2_d	delta_mousepos;
+	t_vector2_d			delta_mousepos;
 	double * const		angle_h = &game->player.camera_angle_h;
 	double				new_camera_angle_h;
 	double				new_vertical_dis_pixel;

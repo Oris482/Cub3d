@@ -31,7 +31,8 @@ static void	_check_map_elements_flag(char *line, unsigned int *elements_flag, \
 			_set_init_player(line[map_x], player, map_x, map_y);
 			*elements_flag |= PLAYER_ELEMENT;
 		}
-		else if (line[map_x] == RODE || line[map_x] == WALL || line[map_x] == NONE)
+		else if (line[map_x] == RODE || line[map_x] == WALL || \
+												line[map_x] == NONE)
 			;
 		else
 			exit_with_err("invalid map element", E_PERM);

@@ -21,7 +21,8 @@ char	*get_map_first_line(int fd)
 		}
 		else if (*cursor != WALL)
 			exit_with_err("invalid map", E_PERM);
-		while (*cursor && (*cursor == WALL || *cursor == NONE || *cursor == '\n'))
+		while (*cursor && \
+						(*cursor == WALL || *cursor == NONE || *cursor == '\n'))
 			cursor++;
 		if (*cursor == '\0')
 			return (line);

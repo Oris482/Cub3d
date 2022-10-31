@@ -36,7 +36,7 @@ void	put_pixels_to_minimap_img(t_info *info, t_minimap *minimap)
 		idx_x = 0;
 		while (idx_x < info->map_x)
 		{
-			__set_range(pos, idx_x * pps, idx_y * pps);
+			set_range(pos, idx_x * pps, idx_y * pps);
 			if (info->map[idx_y][idx_x] == WALL)
 				put_one_square_pixels_to_img(&minimap->map_img_data, pos, \
 												pps, create_trgb(0, 0, 0, 0));
@@ -57,7 +57,7 @@ void	calculate_minimap_size(t_info *info, t_minimap *minimap)
 	double			minimap_size[2];
 	const int		screen_x = info->screen_x;
 	const int		screen_y = info->screen_y;
-	
+
 	printf("Calculate minimap size based on screen size\n");
 	minimap_size[X] = info->map_x;
 	minimap_size[Y] = info->map_y;

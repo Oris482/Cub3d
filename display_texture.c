@@ -25,8 +25,8 @@ unsigned int	get_texture_pixel(t_game *game, int idx_x, \
 void	put_pixel_wall(t_game *game, int idx_x)
 {
 	t_img_data * const	view_data = &game->view_data;
-	double 				gradiant;
-	double 				pixel;
+	double				gradiant;
+	double				pixel;
 	char				*dst;
 	int					cur_idx_y;
 
@@ -36,7 +36,7 @@ void	put_pixel_wall(t_game *game, int idx_x)
 	while (cur_idx_y < game->wall_pixel[idx_x].y)
 	{
 		dst = view_data->addr + (cur_idx_y * view_data->line_length + \
-								 idx_x * (view_data->bits_per_pixel / 8));
+								idx_x * (view_data->bits_per_pixel / 8));
 		pixel = \
 			get_texture_pixel(game, idx_x, &game->wall_line[idx_x], cur_idx_y);
 		*(unsigned int *)dst = create_trgb(game->player.view_trans, \
