@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   init.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/11/02 15:59:46 by jaemjeon          #+#    #+#             */
+/*   Updated: 2022/11/02 15:59:47 by jaemjeon         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 #include "mlx.h"
 
@@ -14,7 +26,7 @@ void	malloc_resources(t_game *game)
 
 void	graphic_resource_init(t_game *game)
 {
-	t_info * const	info = &game->info;
+	t_info *const	info = &game->info;
 	int				idx;
 
 	ft_memset(game, 0, sizeof(t_game));

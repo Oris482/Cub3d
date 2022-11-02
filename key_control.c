@@ -1,7 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   key_control.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/11/02 15:59:49 by jaemjeon          #+#    #+#             */
+/*   Updated: 2022/11/02 16:00:38 by jaemjeon         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 #include "mlx.h"
 
-void	set_keyset(unsigned int * const keyset_ptr, int key)
+void	set_keyset(unsigned int *const keyset_ptr, int key)
 {
 	if (key == KEY_A)
 		*keyset_ptr |= KEYSET_A;
@@ -23,7 +35,7 @@ void	set_keyset(unsigned int * const keyset_ptr, int key)
 
 int	ft_key_press(int key, t_game *game)
 {
-	unsigned int * const	keyset_ptr = &game->pressed_keyset;
+	unsigned int *const	keyset_ptr = &game->pressed_keyset;
 
 	if (key == KEY_ESC)
 	{
@@ -45,7 +57,7 @@ int	ft_key_press(int key, t_game *game)
 
 int	ft_key_release(int key, t_game *game)
 {
-	unsigned int * const	keyset_ptr = &game->pressed_keyset;
+	unsigned int *const	keyset_ptr = &game->pressed_keyset;
 
 	if (key == KEY_A)
 		*keyset_ptr &= ~KEYSET_A;

@@ -2,7 +2,7 @@
 
 void	put_pixel_floor(t_game *game, int idx_x)
 {
-	t_img_data * const	view_data = &game->view_data;
+	t_img_data *const	view_data = &game->view_data;
 	double const		color = game->floor_color;
 	char				*dst;
 	double				gradiant;
@@ -24,8 +24,8 @@ void	put_pixel_floor(t_game *game, int idx_x)
 
 void	put_pixel_ceiling(t_game *game, int idx_x)
 {
-	t_img_data * const	view_data = &game->view_data;
-	t_vector2_d * const	wall_pixel = &game->wall_pixel[idx_x];
+	t_img_data *const	view_data = &game->view_data;
+	t_vector2_d *const	wall_pixel = &game->wall_pixel[idx_x];
 	char				*dst;
 	int					idx_y;
 

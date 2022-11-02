@@ -1,9 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   display_texture.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/11/02 16:00:27 by jaemjeon          #+#    #+#             */
+/*   Updated: 2022/11/02 16:00:38 by jaemjeon         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 
 unsigned int	get_texture_pixel(t_game *game, int idx_x, \
 										t_vector2 *wall_line, int cur_idx_y)
 {
-	t_ray * const	cur_ray = &game->ray_data[idx_x];
+	t_ray *const	cur_ray = &game->ray_data[idx_x];
 	t_img_data		*texture_img;
 	t_vector2		ratio_pos_texture;
 	int				texture_idx_x;
@@ -24,7 +36,7 @@ unsigned int	get_texture_pixel(t_game *game, int idx_x, \
 
 void	put_pixel_wall(t_game *game, int idx_x)
 {
-	t_img_data * const	view_data = &game->view_data;
+	t_img_data *const	view_data = &game->view_data;
 	double				gradiant;
 	double				pixel;
 	char				*dst;

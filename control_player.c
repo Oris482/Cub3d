@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   control_player.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/11/02 16:00:36 by jaemjeon          #+#    #+#             */
+/*   Updated: 2022/11/02 16:00:38 by jaemjeon         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 #include "mlx.h"
 
@@ -33,7 +45,7 @@ void	boost_key_on(t_game *game)
 
 int	mouse_switch(int key_code, t_game *game)
 {
-	t_info * const	info = &game->info;
+	t_info *const	info = &game->info;
 
 	if (key_code == KEY_M)
 	{

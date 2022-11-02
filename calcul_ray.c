@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   calcul_ray.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/11/02 15:59:53 by jaemjeon          #+#    #+#             */
+/*   Updated: 2022/11/02 16:00:38 by jaemjeon         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 
 void	calcul_texture_x_point(t_vector2 *cast_point, t_ray *ray)
@@ -24,8 +36,8 @@ void	calcul_hitpoint_dist(t_ray *ray, int last_step, \
 void	calcul_drawpixel(t_game *game, t_ray *ray, int idx_x)
 {
 	const double		ratio_wall = 5 / (ray->wall_distance * 6);
-	t_vector2 * const	wall_line = &game->wall_line[idx_x];
-	t_vector2_d * const	wall_pixel = &game->wall_pixel[idx_x];
+	t_vector2 *const	wall_line = &game->wall_line[idx_x];
+	t_vector2_d *const	wall_pixel = &game->wall_pixel[idx_x];
 
 	wall_line->x = game->info.screen_y / 2 \
 					- ratio_wall * game->info.screen_y \
