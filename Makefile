@@ -1,3 +1,15 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: jaesjeon <jaesjeon@student.42seoul.kr>     +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2022/11/03 12:03:16 by jaesjeon          #+#    #+#              #
+#    Updated: 2022/11/03 12:03:17 by jaesjeon         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
 CC = cc
 NAME = cub3d
 CFLAGS = -Wall -Wextra -Werror
@@ -53,9 +65,6 @@ $(MLX_LIB) :
 clean :
 	make -C ${MLX_DIR} clean
 	rm -f ${OBJS}
-
-
-
 
 fclean : clean
 	rm -f ${NAME}
