@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   check_map_elements.c                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jaesjeon <jaesjeon@student.42seoul.kr>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/11/03 11:56:47 by jaesjeon          #+#    #+#             */
+/*   Updated: 2022/11/03 11:56:47 by jaesjeon         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 #include "ft_string.h"
 
@@ -31,7 +43,8 @@ static void	_check_map_elements_flag(char *line, unsigned int *elements_flag, \
 			_set_init_player(line[map_x], player, map_x, map_y);
 			*elements_flag |= PLAYER_ELEMENT;
 		}
-		else if (line[map_x] == RODE || line[map_x] == WALL || line[map_x] == NONE)
+		else if (line[map_x] == RODE || line[map_x] == WALL || \
+												line[map_x] == NONE)
 			;
 		else
 			exit_with_err("invalid map element", E_PERM);

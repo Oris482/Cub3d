@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   check_map_elements_utils.c                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jaesjeon <jaesjeon@student.42seoul.kr>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/11/03 11:56:41 by jaesjeon          #+#    #+#             */
+/*   Updated: 2022/11/03 11:56:41 by jaesjeon         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 #include "ft_string.h"
 
@@ -21,7 +33,8 @@ char	*get_map_first_line(int fd)
 		}
 		else if (*cursor != WALL)
 			exit_with_err("invalid map", E_PERM);
-		while (*cursor && (*cursor == WALL || *cursor == NONE || *cursor == '\n'))
+		while (*cursor && \
+						(*cursor == WALL || *cursor == NONE || *cursor == '\n'))
 			cursor++;
 		if (*cursor == '\0')
 			return (line);

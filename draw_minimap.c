@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   draw_minimap.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jaesjeon <jaesjeon@student.42seoul.kr>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/11/03 11:57:39 by jaesjeon          #+#    #+#             */
+/*   Updated: 2022/11/03 11:57:39 by jaesjeon         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 #include "mlx.h"
 
@@ -40,13 +52,14 @@ void	draw_ray_line(double center[2], t_img_data *view_data, \
 		else
 			break ;
 		pos[X] = pos[X] + cut_point(cos(deg2rad(camera_angle_h)), 6) + \
-			cut_point(cos(deg2rad(adjust_degree(camera_angle_h, ray_angle))), 6);
+		cut_point(cos(deg2rad(adjust_degree(camera_angle_h, ray_angle))), 6);
 		pos[Y] = pos[Y] + cut_point(sin(deg2rad(camera_angle_h)), 6) + \
-			cut_point(sin(deg2rad(adjust_degree(camera_angle_h, ray_angle))), 6);
+		cut_point(sin(deg2rad(adjust_degree(camera_angle_h, ray_angle))), 6);
 	}
 }
 
-void	draw_camera_angle_h(t_player *player, t_img_data *view_data, int pps, double fov_h)
+void	draw_camera_angle_h(t_player *player, t_img_data *view_data, \
+														int pps, double fov_h)
 {
 	const double	camera_angle_h = player->camera_angle_h;
 	double			ray_center[2];
@@ -72,7 +85,7 @@ void	draw_player(t_player *player, t_img_data *view_data, int pps)
 	const int	player_color = create_trgb(0, 0, 0, 255);
 	int			pos[2];
 
-	__set_range(pos, player_x, player_y);
+	set_range(pos, player_x, player_y);
 	put_one_square_pixels_to_img(view_data, pos, pps, player_color);
 }
 

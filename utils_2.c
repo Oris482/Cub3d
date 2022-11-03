@@ -1,30 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   degree_utils.c                                     :+:      :+:    :+:   */
+/*   utils_2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jaesjeon <jaesjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/11/03 11:57:27 by jaesjeon          #+#    #+#             */
-/*   Updated: 2022/11/03 11:57:28 by jaesjeon         ###   ########.fr       */
+/*   Created: 2022/11/02 15:59:58 by jaemjeon          #+#    #+#             */
+/*   Updated: 2022/11/03 11:59:59 by jaesjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <math.h>
+#include <stdlib.h>
 
-double	deg2rad(double degree)
+void	set_range_int(int *to_set, int floor, int ceil)
 {
-	return ((degree) * M_PI / 180.0);
+	if (*to_set < floor)
+		*to_set = floor;
+	else if (*to_set > ceil)
+		*to_set = ceil;
 }
 
-double	adjust_degree(double base_degree, double offset_degree)
+void	set_range_double(double *to_set, double floor, double ceil)
 {
-	double	ret_degree;
+	if (*to_set < floor)
+		*to_set = floor;
+	else if (*to_set > ceil)
+		*to_set = ceil;
+}
 
-	ret_degree = base_degree + offset_degree;
-	if (ret_degree >= 360.0)
-		return (ret_degree - 360.0);
-	if (ret_degree < 0)
-		return (ret_degree + 360.0);
-	return (ret_degree);
+int	exit_game(int exit_status)
+{
+	exit(exit_status);
 }

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   check_texture_elements.c                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jaesjeon <jaesjeon@student.42seoul.kr>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/11/03 11:57:01 by jaesjeon          #+#    #+#             */
+/*   Updated: 2022/11/03 11:57:15 by jaesjeon         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 #include "mlx.h"
 #include "ft_string.h"
@@ -23,8 +35,6 @@ static void	_set_wall_texture(t_game *game, int element_identifier, \
 		mlx_destroy_image(game->info.mlx_ptr, target->img_data.img);
 	target->img_data.img = mlx_png_file_to_image(game->info.mlx_ptr, \
 				texture_file, &target->texture_width, &target->texture_height);
-	// target->img_data.img = mlx_xpm_file_to_image(game->info.mlx_ptr, \
-	// 			texture_file, &target->texture_width, &target->texture_height);
 	if (target->img_data.img == NULL)
 		exit_with_err("can't open texture file", E_PERM);
 	target->img_data.addr = mlx_get_data_addr(target->img_data.img, \
@@ -52,7 +62,7 @@ static void	_set_floor_ceiling_color(t_game *game, int element_identifier, \
 			exit_with_err("floor, ceiling color value error", E_PERM);
 		color_value[idx] = get_color_value(&rgb_str);
 		idx++;
-		if (idx <=B && *rgb_str == ',')
+		if (idx <= B && *rgb_str == ',')
 			rgb_str++;
 	}
 	while (*rgb_str && (*rgb_str == ' ' || *rgb_str == '\t'))
