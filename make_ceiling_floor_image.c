@@ -1,5 +1,17 @@
-#include "../mlx/mlx.h"
-#include "../cub3d.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   make_ceiling_floor_image.c                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jaesjeon <jaesjeon@student.42seoul.kr>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/11/03 11:58:37 by jaesjeon          #+#    #+#             */
+/*   Updated: 2022/11/03 11:58:47 by jaesjeon         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "cub3d.h"
+#include "mlx.h"
 #include <stdio.h>
 
 static void	_pixel_put_to_img(t_img_data *view_img, int color, \
