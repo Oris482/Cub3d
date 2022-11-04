@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/02 16:00:27 by jaemjeon          #+#    #+#             */
-/*   Updated: 2022/11/02 16:00:38 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2022/11/03 20:11:13 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	put_pixel_wall(t_game *game, int idx_x)
 
 	gradiant = 0.2 + (0.8 - game->ray_data[idx_x].wall_distance * 0.05);
 	set_range_double(&gradiant, 0, 1);
-	cur_idx_y = game->wall_pixel[idx_x].x;
+	cur_idx_y = ceil(game->wall_pixel[idx_x].x);
 	while (cur_idx_y < game->wall_pixel[idx_x].y)
 	{
 		dst = view_data->addr + (cur_idx_y * view_data->line_length + \
