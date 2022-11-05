@@ -1,7 +1,7 @@
-EA ./texture/unkown1.png
-WE ./texture/unkown2.png
-SO ./texture/unkown3.png
-NO ./texture/unkown4.png
+WE ./texture/unknown1.png
+EA ./texture/unknown1.png
+SO ./texture/unknown1.png
+NO ./texture/unknown1.png
 C 125,79,69
 F 27,135,209
 

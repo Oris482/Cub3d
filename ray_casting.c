@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/02 16:00:01 by jaemjeon          #+#    #+#             */
-/*   Updated: 2022/11/02 16:00:38 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2022/11/05 12:31:49 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,19 +71,6 @@ void	ray_cast(t_game *game)
 			cast_angle -= 360.0;
 		game->ray_data[idx_x].cast_angle = cast_angle;
 		cast_sigle_ray(game, &game->ray_data[idx_x]);
-		idx_x++;
-	}
-}
-
-void	make_wall(t_game *game)
-{
-	int	idx_x;
-
-	idx_x = 0;
-	while (idx_x < game->info.screen_x)
-	{
-		calcul_drawpixel(game, &game->ray_data[idx_x], idx_x);
-		draw_line(game, idx_x);
 		idx_x++;
 	}
 }

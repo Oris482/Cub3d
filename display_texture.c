@@ -6,7 +6,7 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/02 16:00:27 by jaemjeon          #+#    #+#             */
-/*   Updated: 2022/11/03 20:11:13 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2022/11/05 12:46:01 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,15 +30,15 @@ unsigned int	get_texture_pixel(t_game *game, int idx_x, \
 	texture_idx_x *= ratio_pos_texture.x;
 	texture_idx_y *= ratio_pos_texture.y;
 	return (*(unsigned int *)(texture_img->addr + \
-			texture_idx_y * texture_img->line_length + texture_idx_x * \
-											(texture_img->bits_per_pixel / 8)));
+			(texture_idx_y * texture_img->line_length) + \
+				(texture_idx_x * (texture_img->bits_per_pixel / 8))));
 }
 
 void	put_pixel_wall(t_game *game, int idx_x)
 {
 	t_img_data *const	view_data = &game->view_data;
 	double				gradiant;
-	double				pixel;
+	unsigned int		pixel;
 	char				*dst;
 	int					cur_idx_y;
 

@@ -6,14 +6,14 @@
 #    By: jaesjeon <jaesjeon@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/03 12:03:16 by jaesjeon          #+#    #+#              #
-#    Updated: 2022/11/03 12:03:17 by jaesjeon         ###   ########.fr        #
+#    Updated: 2022/11/05 12:33:16 by jaemjeon         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC = cc
 NAME = cub3d
 CFLAGS = -Wall -Wextra -Werror
-CFLAGS = -g
+CFLAGS = #-fsanitize=address -g3
 MLX_DIR = mlx
 LFLAGS = -L${MLX_DIR} -lmlx -framework OpenGL -framework AppKit
 IFLAGS = -I${MLX_DIR} -I. -I..
