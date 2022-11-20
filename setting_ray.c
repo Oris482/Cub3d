@@ -6,11 +6,12 @@
 /*   By: jaesjeon <jaesjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/03 11:59:24 by jaemjeon          #+#    #+#             */
-/*   Updated: 2022/11/03 11:59:39 by jaesjeon         ###   ########.fr       */
+/*   Updated: 2022/11/12 09:51:19 by jaesjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+#include <math.h>
 
 void	set_ray_step(t_vector2 *vec_pos, t_ray *ray, t_vector2 *step)
 {

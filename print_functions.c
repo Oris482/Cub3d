@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   print_functions.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: jaesjeon <jaesjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/11 19:05:36 by jaesjeon          #+#    #+#             */
-/*   Updated: 2022/10/23 00:17:37 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2022/11/12 19:11:42 by jaesjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-#include "ft_string.h"
+#include <stdio.h>
+#include <unistd.h>
 
 void	exit_with_err(char *custom_msg, int exit_code)
 {

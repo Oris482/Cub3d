@@ -3,13 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   string_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaesjeon <jaesjeon@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/03 11:59:42 by jaesjeon          #+#    #+#             */
-/*   Updated: 2022/11/03 11:59:43 by jaesjeon         ###   ########.fr       */
+/*   Updated: 2022/11/13 09:59:59 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "cub3d.h"
 #include "ft_string.h"
 
 size_t	ft_strlen(const char *s)
@@ -58,8 +59,8 @@ int	ft_strcmp(const char *s1, const char *s2)
 char	*ft_substr(const char *start, const char *end)
 {
 	size_t	len;
+	size_t	idx;
 	char	*ret;
-	int		idx;
 
 	len = end - start;
 	if (len == 0)
@@ -78,7 +79,7 @@ char	*ft_substr(const char *start, const char *end)
 char	*ft_strcpy(const char *s)
 {
 	size_t	len;
-	int		idx;
+	size_t	idx;
 	char	*ret;
 
 	len = ft_strlen(s);

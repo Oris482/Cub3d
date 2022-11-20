@@ -6,14 +6,12 @@
 /*   By: jaesjeon <jaesjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/03 11:57:47 by jaesjeon          #+#    #+#             */
-/*   Updated: 2022/11/03 11:57:54 by jaesjeon         ###   ########.fr       */
+/*   Updated: 2022/11/12 19:06:25 by jaesjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FT_STRING_H
 # define FT_STRING_H
-# include <stdlib.h>
-# include "cub3d.h"
 # include "get_next_line.h"
 
 // get_next_line.c

@@ -6,13 +6,11 @@
 /*   By: jaesjeon <jaesjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/03 11:58:37 by jaesjeon          #+#    #+#             */
-/*   Updated: 2022/11/03 11:58:47 by jaesjeon         ###   ########.fr       */
+/*   Updated: 2022/11/12 19:07:29 by jaesjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-#include "mlx.h"
-#include <stdio.h>
 
 static void	_pixel_put_to_img(t_img_data *view_img, int color, \
 					t_outside_wall_info outside_wall, double base_transperency)
