@@ -1,6 +1,6 @@
-EA ./path_to_the_east_texture
-WE ./path_to_the_west_texture
-SO ./path_to_the_south_texture
+EA ./texture/EAST.png
+WE ./texture/WEST.png
+SO ./texture/SOUTH.png
 NO ./no_file
 F 10,225,11
 C 225,10,2

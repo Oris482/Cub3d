@@ -6,12 +6,12 @@
 /*   By: jaesjeon <jaesjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/03 11:59:53 by jaesjeon          #+#    #+#             */
-/*   Updated: 2022/11/03 11:59:53 by jaesjeon         ###   ########.fr       */
+/*   Updated: 2022/11/12 19:01:53 by jaesjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "cub3d.h"
 #include <stdlib.h>
-#include "ft_string.h"
 
 void	multi_free(void *ptr1, void *ptr2, void *ptr3, void *ptr4)
 {

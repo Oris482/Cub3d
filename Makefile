@@ -6,18 +6,18 @@
 #    By: jaesjeon <jaesjeon@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/03 12:03:16 by jaesjeon          #+#    #+#              #
-#    Updated: 2022/11/03 12:03:17 by jaesjeon         ###   ########.fr        #
+#    Updated: 2022/11/13 13:17:19 by jaesjeon         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC = cc
-NAME = cub3d
-CFLAGS = -Wall -Wextra -Werror
-CFLAGS = -g
-MLX_DIR = mlx
+NAME = cub3D
+CFLAGS = -Wall -Wextra -Werror -O2
+MLX_DIR = $(CURDIR)/mlx
 LFLAGS = -L${MLX_DIR} -lmlx -framework OpenGL -framework AppKit
-IFLAGS = -I${MLX_DIR} -I. -I..
-MLX_LIB = libmlx.dylib
+IFLAGS = -I${MLX_DIR} -I.
+MLX_LIB_NAME = libmlx.dylib
+MLX_LIB = $(MLX_DIR)/$(MLX_LIB_NAME)
 SRCS	= main.c	\
 			handle_player.c	\
 			make_ceiling_floor_image.c	\
@@ -54,7 +54,7 @@ all : ${NAME}
 
 $(NAME) : ${OBJS} ${MLX_LIB}
 	${CC} ${CFLAGS} -o ${NAME} ${OBJS} ${LFLAGS}
-	install_name_tool -change ${MLX_LIB} $(CURDIR)/${MLX_DIR}/${MLX_LIB} ${NAME}
+	install_name_tool -change ${MLX_LIB_NAME} ${MLX_LIB} ${NAME}
 
 m1 :
 	arch -x86_64 make all
@@ -63,10 +63,10 @@ $(MLX_LIB) :
 	make -C ${MLX_DIR} all
 
 clean :
-	make -C ${MLX_DIR} clean
 	rm -f ${OBJS}
 
 fclean : clean
+	make -C ${MLX_DIR} clean
 	rm -f ${NAME}
 
 .PHONY : all clean fclean bonus re

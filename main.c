@@ -3,21 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: jaesjeon <jaesjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/02 16:00:12 by jaemjeon          #+#    #+#             */
-/*   Updated: 2022/11/02 16:00:38 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2022/11/12 19:07:17 by jaesjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "mlx.h"
 #include "cub3d.h"
-#include <stdlib.h>
-#include <unistd.h>
-#include <stdio.h>
-#include <string.h>
-#include <errno.h>
-#include <math.h>
+#include "mlx.h"
 
 int	main_loop(t_game *game)
 {
@@ -25,7 +19,7 @@ int	main_loop(t_game *game)
 	{
 		if (game->pressed_keyset & KEY_WASD)
 			move_player(&game->player, game->info.map, game->pressed_keyset);
-		if (game->pressed_keyset & KEY_ARROW)
+		if (game->info.using_mouse == FALSE && game->pressed_keyset & KEY_ARROW)
 			rotate_player_key(game, game->pressed_keyset);
 	}
 	if (game->info.using_mouse == TRUE)

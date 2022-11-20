@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: jaesjeon <jaesjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/02 15:59:46 by jaemjeon          #+#    #+#             */
-/*   Updated: 2022/11/02 15:59:47 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2022/11/13 13:13:39 by jaesjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ void	malloc_resources(t_game *game)
 void	graphic_resource_init(t_game *game)
 {
 	t_info *const	info = &game->info;
-	int				idx;
 
 	ft_memset(game, 0, sizeof(t_game));
 	info->mlx_ptr = mlx_init();
@@ -53,13 +52,10 @@ void	graphic_resource_init(t_game *game)
 
 void	player_handle_setting(t_game *game)
 {
-	game->player.move_speed = 0.2;
-	game->player.rotate_speed_h = 3.0;
+	game->player.move_speed = 0.1;
+	game->player.rotate_speed_h = 1.5;
 	game->player.rotate_speed_v = 30;
 	game->player.vertical_dist_pixel = 0;
 	game->player.view_trans = 0;
-	game->info.using_mouse = TRUE;
-	mlx_mouse_hide();
-	mlx_mouse_move(game->info.win_ptr, \
-							game->info.screen_x / 2, game->info.screen_y / 2);
+	game->info.using_mouse = FALSE;
 }

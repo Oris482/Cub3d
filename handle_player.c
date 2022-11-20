@@ -6,12 +6,13 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/02 16:00:23 by jaemjeon          #+#    #+#             */
-/*   Updated: 2022/11/02 16:00:38 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2022/11/13 09:58:54 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 #include "mlx.h"
+#include <math.h>
 
 double	cut_point(double num, int limiter)
 {
@@ -107,9 +108,7 @@ void	rotate_player_mouse(t_game *game)
 {
 	t_vector2_d		delta_mousepos;
 	double *const	angle_h = &game->player.camera_angle_h;
-	double			new_camera_angle_h;
 	double			new_vertical_dis_pixel;
-	double			ratio_pixel2rad;
 
 	mlx_mouse_get_pos(game->info.win_ptr, &delta_mousepos.x, &delta_mousepos.y);
 	*angle_h = adjust_degree(*angle_h, \

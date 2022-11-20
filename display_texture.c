@@ -6,11 +6,12 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/02 16:00:27 by jaemjeon          #+#    #+#             */
-/*   Updated: 2022/11/03 20:11:13 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2022/11/13 09:51:10 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+#include <math.h>
 
 unsigned int	get_texture_pixel(t_game *game, int idx_x, \
 										t_vector2 *wall_line, int cur_idx_y)
@@ -38,7 +39,7 @@ void	put_pixel_wall(t_game *game, int idx_x)
 {
 	t_img_data *const	view_data = &game->view_data;
 	double				gradiant;
-	double				pixel;
+	unsigned int		pixel;
 	char				*dst;
 	int					cur_idx_y;
 

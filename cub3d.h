@@ -6,18 +6,17 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/02 16:03:19 by jaemjeon          #+#    #+#             */
-/*   Updated: 2022/11/02 16:03:34 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2022/11/13 10:02:47 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_H
 # define CUB3D_H
+
+# include <stdlib.h>
+
 # define KEY_PRESS_EVENT 2
 # define KEY_RELEASE_EVENT 3
-
-# include <math.h>
-# include <stdlib.h>
-# include <stdio.h>
 
 # define ERROR -1
 # define SUCCESS 1
@@ -96,14 +95,15 @@ enum	e_texture_elements
 	NO_TEXTURE = 1 << 3,
 	FLOOR_COLOR = 1 << 4,
 	CEILING_COLOR = 1 << 5,
-	ALL_TEXTURE_ELEMENTS = 0b00111111
+	ALL_TEXTURE_ELEMENTS = EA_TEXTURE | WE_TEXTURE | SO_TEXTURE | NO_TEXTURE \
+							| FLOOR_COLOR | CEILING_COLOR
 };
 
 enum	e_map_elements
 {
 	WALL_ELEMENT = 1 << 0,
 	PLAYER_ELEMENT = 1 << 1,
-	ALL_MAP_ELEMENTS = 0b00000011
+	ALL_MAP_ELEMENTS = WALL_ELEMENT | PLAYER_ELEMENT
 };
 
 enum	e_exit_status
@@ -150,11 +150,6 @@ typedef struct s_info
 	int		map_y;
 	int		using_mouse;
 }	t_info;
-
-typedef struct s_controller
-{
-	unsigned int	pressed_keyset;
-}	t_controller;
 
 typedef struct s_player
 {
@@ -302,7 +297,7 @@ void			set_ray_hit_point(t_vector2 *cast_pos, t_ray *ray);
 void			set_wall_distance(t_player *player_info, t_ray *ray);
 
 // calcul_ray.c
-void			calcul_texture_x_point(t_vector2 *cast_point, t_ray *ray);
+void			calcul_texture_x_point(t_ray *ray);
 void			calcul_hitpoint_dist(t_ray *ray, int last_step, \
 								t_vector2 *side_dist, t_vector2 *delta_dist);
 void			calcul_drawpixel(t_game *game, t_ray *ray, int idx_x);

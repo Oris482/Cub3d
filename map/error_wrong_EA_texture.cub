@@ -1,7 +1,7 @@
 EA ./no_file
-WE ./path_to_the_west_texture
-SO ./path_to_the_south_texture
-NO ./path_to_the_north_texture
+WE ./texture/WEST.png
+SO ./texture/SOUTH.png
+NO ./texture/NORTH.png
 F 10,225,11
 C 225,10,2
 

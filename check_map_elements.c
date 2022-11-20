@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_map_elements.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaesjeon <jaesjeon@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/03 11:56:47 by jaesjeon          #+#    #+#             */
-/*   Updated: 2022/11/03 11:56:47 by jaesjeon         ###   ########.fr       */
+/*   Updated: 2022/11/13 10:00:30 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,13 +67,16 @@ void	read_map(int fd, t_info *info, t_player *player)
 		_check_map_elements_flag(line, &elements_flag, player, info->map_y);
 		info->map_y++;
 		linked_map = add_line_to_list(linked_map, line);
-		if (info->map_x < ft_strlen(line))
+		if ((size_t)info->map_x < ft_strlen(line))
 			info->map_x = ft_strlen(line);
 		line = get_next_line(fd);
 	}
 	if (elements_flag != ALL_MAP_ELEMENTS)
 		exit_with_err("missing map element", E_PERM);
 	linked_map_to_arr(linked_map, info);
+	if (info->map_x * 3 > info->screen_x * 0.4 \
+		|| info->map_y * 3 > info->screen_y * 0.4)
+		exit_with_err("map is too big", E_PERM);
 }
 
 void	check_map_surrounded_by_wall(char **map, int end_x, int end_y)

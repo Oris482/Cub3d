@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   make_minimap_image.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaesjeon <jaesjeon@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/03 11:58:32 by jaesjeon          #+#    #+#             */
-/*   Updated: 2022/11/03 11:58:33 by jaesjeon         ###   ########.fr       */
+/*   Updated: 2022/11/13 10:01:19 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 #include "mlx.h"
+#include <stdio.h>
 
 void	put_one_square_pixels_to_img(t_img_data *img_data, int pos[2], \
 												int pps, unsigned int color)
@@ -66,22 +67,22 @@ void	put_pixels_to_minimap_img(t_info *info, t_minimap *minimap)
 
 void	calculate_minimap_size(t_info *info, t_minimap *minimap)
 {
-	double			minimap_size[2];
 	const int		screen_x = info->screen_x;
 	const int		screen_y = info->screen_y;
+	int *const		pps = &minimap->pixel_per_square;
 
 	printf("Calculate minimap size based on screen size\n");
-	minimap_size[X] = info->map_x;
-	minimap_size[Y] = info->map_y;
-	while (minimap_size[X] < (screen_x * 0.3) && \
-									minimap_size[Y] < (screen_y * 0.3))
+	*pps = 3;
+	while (42)
 	{
-		minimap_size[X] *= 1.01;
-		minimap_size[Y] *= 1.01;
+		if (info->map_x * *pps > screen_x * 0.4 \
+			|| info->map_y * *pps > screen_y * 0.3)
+			break ;
+		else
+			*pps += 2;
 	}
-	minimap->width = info->map_x * (int)(minimap_size[X] / info->map_x);
-	minimap->height = info->map_y * (int)(minimap_size[Y] / info->map_y);
-	minimap->pixel_per_square = minimap_size[X] / info->map_x;
+	minimap->width = info->map_x * *pps;
+	minimap->height = info->map_y * *pps;
 	printf("Minimap size\t\t:\t%d X %d\n", minimap->width, minimap->height);
 	printf("pixels per one square\t:\t%d\n", minimap->pixel_per_square);
 }
@@ -90,7 +91,6 @@ void	make_minimap_image(t_game *game)
 {
 	t_minimap	*minimap;
 	t_img_data	*map_img_data;
-	t_img_data	*player_img_data;
 
 	minimap = &game->minimap;
 	map_img_data = &minimap->map_img_data;

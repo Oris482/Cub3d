@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw_pixel.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaesjeon <jaesjeon@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/03 11:57:42 by jaesjeon          #+#    #+#             */
-/*   Updated: 2022/11/03 11:57:43 by jaesjeon         ###   ########.fr       */
+/*   Updated: 2022/11/13 10:03:01 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,9 @@ void	put_pixel_floor(t_game *game, int idx_x)
 							idx_x * (view_data->bits_per_pixel / 8));
 		gradiant += (1 - gradiant) * 10 / (game->info.screen_y - idx_y);
 		*(unsigned int *)dst = create_trgb(game->player.view_trans, \
-	get_r(color) * gradiant, get_g(color) * gradiant, get_b(color) * gradiant);
+											get_r(color) * gradiant, \
+											get_g(color) * gradiant, \
+											get_b(color) * gradiant);
 		idx_y++;
 	}
 }
@@ -72,10 +74,6 @@ t_vector2	get_wall_pixel(t_game *game, t_vector2 *wall_line)
 
 void	draw_line(t_game *game, int idx_x)
 {
-	t_vector2	wall_pixel;
-	char		*dst;
-	int			idx_y;
-
 	put_pixel_ceiling(game, idx_x);
 	put_pixel_wall(game, idx_x);
 	put_pixel_floor(game, idx_x);

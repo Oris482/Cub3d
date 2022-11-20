@@ -6,13 +6,14 @@
 /*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/02 15:59:53 by jaemjeon          #+#    #+#             */
-/*   Updated: 2022/11/03 20:11:16 by jaemjeon         ###   ########.fr       */
+/*   Updated: 2022/11/13 10:02:35 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+#include <math.h>
 
-void	calcul_texture_x_point(t_vector2 *cast_point, t_ray *ray)
+void	calcul_texture_x_point(t_ray *ray)
 {
 	if (ray->hit_wall_side == EA)
 		ray->hit_texture_point = ray->hit_idx_y + 1 - ray->hit_point.y;
@@ -45,8 +46,8 @@ void	calcul_drawpixel(t_game *game, t_ray *ray, int idx_x)
 	wall_line->y = game->info.screen_y / 2 \
 					+ ratio_wall * game->info.screen_y \
 					- game->player.vertical_dist_pixel;
-	wall_pixel->x = wall_line->x;
-	wall_pixel->y = wall_line->y;
+	wall_pixel->x = ceil(wall_line->x);
+	wall_pixel->y = ceil(wall_line->y);
 	set_range_int(&wall_pixel->x, 0, game->info.screen_y);
 	set_range_int(&wall_pixel->y, 0, game->info.screen_y);
 }

@@ -6,7 +6,7 @@
 /*   By: jaesjeon <jaesjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/03 11:56:41 by jaesjeon          #+#    #+#             */
-/*   Updated: 2022/11/03 11:56:41 by jaesjeon         ###   ########.fr       */
+/*   Updated: 2022/11/12 10:16:49 by jaesjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ void	linked_map_to_arr(t_linked_map *linked_map, t_info *info)
 	int				y;
 	t_linked_map	*tmp;
 
-	if (info->map_y < 3)
+	if (info->map_x < 3 || info->map_y < 3)
 		exit_with_err("invalid map", E_PERM);
 	info->map = (char **)my_malloc(sizeof(char *) * info->map_y);
 	y = 0;

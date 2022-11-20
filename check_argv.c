@@ -6,14 +6,14 @@
 /*   By: jaesjeon <jaesjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/03 11:56:31 by jaesjeon          #+#    #+#             */
-/*   Updated: 2022/11/03 11:56:37 by jaesjeon         ###   ########.fr       */
+/*   Updated: 2022/11/12 19:02:31 by jaesjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-#include "mlx.h"
-#include <fcntl.h>
 #include "ft_string.h"
+#include <fcntl.h>
+#include <stdio.h>
 
 void	check_argv(int argc, char *argv[], t_game *game)
 {

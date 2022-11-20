@@ -30,14 +30,14 @@ ERROR=( "map/wrong_extension"                       \
 		"map/error_not_surrounded_by_wall_map2.cub" \
 		)
 
-my_cub3d()
+my_cub3D()
 {
 	echo
 	echo "CASE : $i"
 	echo ---------------------------
 	echo
     cat "$i"
-	./cub3d "$i"
+	./cub3D "$i"
 	echo
 	echo ---------------------------
 	echo
@@ -45,5 +45,5 @@ my_cub3d()
 
 for i in "${ERROR[@]}"
 do
-	my_cub3d
+	my_cub3D
 done

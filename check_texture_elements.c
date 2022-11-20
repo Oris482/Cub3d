@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_texture_elements.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaesjeon <jaesjeon@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: jaemjeon <jaemjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/03 11:57:01 by jaesjeon          #+#    #+#             */
-/*   Updated: 2022/11/03 11:57:15 by jaesjeon         ###   ########.fr       */
+/*   Updated: 2022/11/13 10:00:50 by jaemjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ static void	_set_wall_texture(t_game *game, int element_identifier, \
 												char *texture_file)
 {
 	t_texture	*target;
-	t_img_data	*target_img;
 
 	target = &game->texture[element_identifier];
 	if (target->filename)
